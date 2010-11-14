@@ -49,6 +49,12 @@ class Kohana_View {
 			return new View(FALSE, $data);
 
 		$class = 'View_'.strtr($file, '/', '_');
+
+		if ( ! class_exists($class))
+		{
+			$class = 'View';
+		}
+
 		return new $class($file, $data);
 	}
 

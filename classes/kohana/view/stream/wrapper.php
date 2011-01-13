@@ -91,10 +91,10 @@ class Kohana_View_Stream_Wrapper
 		}
 
 		/**
-		 * Convert <?= ?> to long-form <?php echo ?> and <? ?> to <?php ?>
+		 * Convert <?= ?> to long-form <?php echo ?>
 		 *
 		 */
-		$regex = '/<\?(\=|php echo)(.+?)\?>/';
+		$regex = '/<\?\=(.+?)\?>/';
 		$this->_data = preg_replace_callback($regex, array($this, '_escape_val'), $this->_data);
 
 		/**
@@ -116,9 +116,9 @@ class Kohana_View_Stream_Wrapper
 	protected function _escape_val($matches)
 	{
 		// Use __get() directly on the class
-		$var = str_replace('$', '$this->var_', $matches[2]);
+		$var = str_replace('$', '$this->var_', $matches[1]);
 
-		if (substr(trim($matches[2]), 0, 1) != $this->_raw_output_char)
+		if (substr(trim($matches[1]), 0, 1) != $this->_raw_output_char)
 			return '<?php echo '.$this->_encode_method.'('.$var.'); ?>';
 		else // Remove the "turn off escape" character
 			return '<?php echo '.substr(trim($var), strlen($this->_raw_output_char), strlen($var)-1).'; ?>';

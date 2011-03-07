@@ -57,6 +57,32 @@ class Kohana_View_Model {
 			stream_wrapper_register('kohana.view', 'View_Stream_Wrapper');
 		}
 
+		// Import the view variables to local namespace
+		foreach (get_object_vars($this) as $variable_name => $value) 
+		{
+			if (strpos('mm'.$variable_name, 'var_') === 2)
+			{
+				$var_name = str_replace('var_', '', $variable_name);
+				if (! isset($$var_name))
+				{
+					$$var_name = $value;
+				}
+			}
+		}
+
+		// Import the functions starting with var_
+		foreach (get_class_methods($this) as $method_name) 
+		{
+			if (strpos('mm'.$method_name, 'var_') === 2)
+			{
+				$var_name = str_replace('var_', '', $method_name);
+				if (! isset($$var_name))
+				{
+					$$var_name = $this->$method_name();
+				}
+			}
+		}
+
 		// Capture the view output
 		ob_start();
 

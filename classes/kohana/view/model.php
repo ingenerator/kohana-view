@@ -60,7 +60,7 @@ class Kohana_View_Model {
 		// Import the view variables to local namespace
 		foreach (get_object_vars($this) as $variable_name => $value) 
 		{
-			if (strpos('mm'.$variable_name, 'var_') === 2)
+			if (strpos($variable_name, 'var_') === 0)
 			{
 				$var_name = str_replace('var_', '', $variable_name);
 				if (! isset($$var_name))
@@ -73,7 +73,7 @@ class Kohana_View_Model {
 		// Import the functions starting with var_
 		foreach (get_class_methods($this) as $method_name) 
 		{
-			if (strpos('mm'.$method_name, 'var_') === 2)
+			if (strpos($method_name, 'var_') === 0)
 			{
 				$var_name = str_replace('var_', '', $method_name);
 				if (! isset($$var_name))

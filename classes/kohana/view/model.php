@@ -121,14 +121,14 @@ class Kohana_View_Model {
 			$foo = explode('_', get_class($this));
 			array_shift($foo);
 			$file = strtolower(implode('/', $foo));
-			$this->set_filename($file);
 		}
-		elseif ($file !== FALSE)
+		
+		if ($file !== FALSE)
 		{
 			$this->set_filename($file);
 		}
 
-		if ( $data !== NULL)
+		if ($data !== NULL)
 		{
 			// Add the values to the current data
 			$this->set($data);

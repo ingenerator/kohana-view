@@ -118,7 +118,10 @@ class Kohana_View_Stream_Wrapper
 		// Use __get() directly on the class
 		$var = str_replace('$', '$this->var_', $matches[1]);
 
-		if (substr(trim($matches[1]), 0, 1) != $this->_raw_output_char)
+                // Remove trailing ; characters
+                $var = trim($var, ';');
+
+                if (substr(trim($matches[1]), 0, 1) != $this->_raw_output_char)
 			return '<?php echo '.$this->_encode_method.'('.$var.'); ?>';
 		else // Remove the "turn off escape" character
 			return '<?php echo '.substr(trim($var), strlen($this->_raw_output_char), strlen($var)-1).'; ?>';

@@ -115,16 +115,20 @@ class Kohana_View_Stream_Wrapper
 	 */
 	protected function _escape_val($matches)
 	{
-		// Use __get() directly on the class
-		$var = str_replace('$', '$this->var_', $matches[1]);
+            // Start by trimming the echoed string
+            $var = trim($matches[1]);
+
+            // Map everything except temporary view variables to the view class
+            // There may be multiple $ eg <?=$forename." ".$surname;
+            $var = preg_replace('/\$(?!tmp_|this->)/','$this->var_', $var);
 
                 // Remove trailing ; characters
                 $var = trim($var, ';');
 
-                if (substr(trim($matches[1]), 0, 1) != $this->_raw_output_char)
+                if (substr($var, 0, 1) != $this->_raw_output_char)
 			return '<?php echo '.$this->_encode_method.'('.$var.'); ?>';
 		else // Remove the "turn off escape" character
-			return '<?php echo '.substr(trim($var), strlen($this->_raw_output_char), strlen($var)-1).'; ?>';
+			return '<?php echo '.substr($var, strlen($this->_raw_output_char), strlen($var)-1).'; ?>';
 	}
 
 	/**

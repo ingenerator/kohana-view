@@ -122,13 +122,18 @@ class Kohana_View_Stream_Wrapper
             // There may be multiple $ eg <?=$forename." ".$surname;
             $var = preg_replace('/\$(?!tmp_|this->)/','$this->var_', $var);
 
-                // Remove trailing ; characters
-                $var = trim($var, ';');
+            // Remove trailing ; characters
+            $var = trim($var, ';');
 
-                if (substr($var, 0, 1) != $this->_raw_output_char)
-			return '<?php echo '.$this->_encode_method.'('.$var.'); ?>';
-		else // Remove the "turn off escape" character
-			return '<?php echo '.substr($var, strlen($this->_raw_output_char), strlen($var)-1).'; ?>';
+            if (substr($var, 0, 1) != $this->_raw_output_char)
+            {
+                return '<?php echo '.$this->_encode_method.'('.$var.'); ?>';
+            }
+            else
+            {
+                // Remove the "turn off escape" character
+                return '<?php echo '.substr($var, strlen($this->_raw_output_char), strlen($var)-1).'; ?>';
+            }
 	}
 
 	/**

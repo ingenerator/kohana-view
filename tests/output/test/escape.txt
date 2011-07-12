@@ -1,0 +1,14 @@
+<!--Raw Output-->
+<h1>Test</h1>
+<!--Unescaped class var-->
+<h2>foobar</h2>
+<!--Escaped class var-->
+&lt;h2&gt;foobar&lt;/h2&gt;
+<!--Unescaped class var with ;-->
+<h2>foobar</h2>
+<!--Escaped class var with ;-->
+&lt;h2&gt;foobar&lt;/h2&gt;
+<!--Loop with local var -->
+&lt;h2&gt;foobar&lt;/h2&gt;1
+&lt;h2&gt;foobar&lt;/h2&gt;2
+&lt;h2&gt;foobar&lt;/h2&gt;3

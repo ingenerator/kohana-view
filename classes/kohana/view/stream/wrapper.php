@@ -89,12 +89,12 @@ class Kohana_View_Stream_Wrapper
 			$this->_stat = stat($path);
 			return false;
 		}
-
+                
 		/**
-		 * Convert <?= ?> to long-form <?php echo ?>
+                 * Escape all variables and convert <?= ?> to long-form <?php echo ?>
 		 *
 		 */
-		$regex = '/<\?\=(.+?)\?>/';
+		$regex = '/<\?(\=|php)?(.+?)\?>/';
 		$this->_data = preg_replace_callback($regex, array($this, '_escape_val'), $this->_data);
 
 		/**
@@ -116,14 +116,20 @@ class Kohana_View_Stream_Wrapper
 	protected function _escape_val($matches)
 	{
             // Start by trimming the echoed string
-            $var = trim($matches[1]);
+            $code = trim($matches[2]);
 
-            // Map everything except temporary view variables to the view class
-            // There may be multiple $ eg <?=$forename." ".$surname;
-            $var = preg_replace('/\$(?!tmp_|this->)/','$this->var_', $var);
+            // Then map all variables within the codeblock to the view class
+            $code = preg_replace('/\$(?!tmp_|this->)([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]+)/',
+                    '$this->var_$1', $code);
+
+            // If this block is not the special <?= block return
+            if ($matches[1] !== '=')
+            {
+                return '<?php '. $code . '?>';
+            }
 
             // Remove trailing ; characters
-            $var = trim($var, ';');
+            $var = trim($code, ';');
 
             if (substr($var, 0, 1) != $this->_raw_output_char)
             {

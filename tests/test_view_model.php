@@ -42,6 +42,7 @@ class View_Model_Test extends Kohana_Unittest_TestCase
         $this->assertTrue($view->called);
         $this->assertFalse($view->not_called);
     }
+
 }
 
 class View_Test_Escape extends View_Model
@@ -49,6 +50,11 @@ class View_Test_Escape extends View_Model
     public function var_foo()
     {
         return '<h2>foobar</h2>';
+    }
+
+    public function var_array()
+    {
+        return array('1','2','3');
     }
 }
 

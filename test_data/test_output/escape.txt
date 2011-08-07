@@ -12,3 +12,6 @@
 &lt;h2&gt;foobar&lt;/h2&gt;1
 &lt;h2&gt;foobar&lt;/h2&gt;2
 &lt;h2&gt;foobar&lt;/h2&gt;3
+
+<!--Conditional with shorttags -->
+<h2>foobar</h2>

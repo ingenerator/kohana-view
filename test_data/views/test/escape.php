@@ -13,7 +13,13 @@
 <?=$foo;?>
 
 <!--Loop with local var -->
-<?php foreach (array('1','2','3') as $tmp_array_var):?>
+<?php foreach ($array as $tmp_array_var):?>
 <?=$foo . $tmp_array_var;?>
 
 <?php endforeach; ?>
+
+<!--Conditional with shorttags -->
+<?if ($foo != 'ok'):?>
+<?php echo $foo;?>
+
+<?endif;?>

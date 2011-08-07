@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Tests View_Model functionality
  *
@@ -7,10 +6,32 @@
  */
 class View_Model_Test extends Kohana_Unittest_TestCase
 {
+    protected static $old_modules = array();
+
+    /**
+     * Setups the filesystem for test view files
+     */
+    public static function setupBeforeClass()
+    {
+        self::$old_modules = Kohana::modules();        
+        $new_modules = self::$old_modules+array(
+                'test_views' => realpath(dirname(__FILE__).'/../test_data/')
+        );                
+        Kohana::modules($new_modules);
+    }
+
+    /**
+     * Restores the module list
+     */
+    public static function teardownAfterClass()
+    {
+        Kohana::modules(self::$old_modules);
+    }
+
     public function test_escape()
     {
         $view = new View_Test_Escape();
-	$expected = file_get_contents(Kohana::find_file('tests', 'output/test/escape', 'txt'));
+	$expected = file_get_contents(Kohana::find_file('test_output', 'escape', 'txt'));
 	$this->assertSame($expected, $view->render());
     }
 

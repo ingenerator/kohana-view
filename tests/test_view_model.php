@@ -59,13 +59,13 @@ class View_Test_RuntimeMethods extends View_Model
 
     public function var_called()
     {
-        $called = true;
-        return true;
+        $this->called = true;
+        return "called";
     }
 
     public function var_not_called()
     {
-        $not_called = true;
-        return true;
+        $this->not_called = true;
+        return "not_called";
     }
 }

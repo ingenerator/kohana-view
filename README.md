@@ -1,7 +1,7 @@
 Kohana-View
 ============
 
-**[View builds]((http://travis-ci.org/acoulton/kohana-view) | master: ![Build status - master branch](https://secure.travis-ci.org/acoulton/kohana-view.png?branch=3.2/master) | 
+**[View builds](http://travis-ci.org/acoulton/kohana-view) | master: ![Build status - master branch](https://secure.travis-ci.org/acoulton/kohana-view.png?branch=master) | develop: ![Build status - develop branch](https://secure.travis-ci.org/acoulton/kohana-view.png?branch=develop) | 
 overall: ![Build Status - overall](https://secure.travis-ci.org/acoulton/kohana-view.png)**
 
 Kohana-View_Model is a replacement for the default Kohana v3 class.

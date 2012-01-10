@@ -64,7 +64,7 @@ class Kohana_View_Stream_Wrapper
 	 * Raw output character. Prepend this on any echo variables to
 	 * turn off auto encoding of the output
 	 */
-	protected $_raw_output_char = '^';
+	protected $_raw_output_char = '!';
 
 	/**
 	 * The encoding method to use on view output. Only use the method name

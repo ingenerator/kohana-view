@@ -1,13 +1,13 @@
 <!--Raw Output-->
 <h1>Test</h1>
 <!--Unescaped class var-->
-<?=^$foo?>
+<?=!$foo?>
 
 <!--Escaped class var-->
 <?=$foo?>
 
 <!--Unescaped class var with ;-->
-<?=^$foo;?>
+<?=!$foo;?>
 
 <!--Escaped class var with ;-->
 <?=$foo;?>

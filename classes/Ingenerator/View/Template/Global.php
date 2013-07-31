@@ -10,11 +10,11 @@ defined('SYSPATH') or die('No direct script access.');
  *
  * @package    ViewModel
  * @category   Template
- * @author     Andrew Coulton <andrewnfcoulton@gmail.com>
- * @copyright  (c) 2011 Andrew Coulton
- * @license    http://kohanaphp.com/license
+ * @author     Andrew Coulton <andrew@ingenerator.com>
+ * @copyright  (c) 2011-13 inGenerator Ltd
+ * @license    http://kohanaframework.ord/license
  */
-abstract class AndrewC_View_Template_Global extends View_Model
+abstract class Ingenerator_View_Template_Global extends View_Model
 {
     public $var_title = 'Page title';
 }

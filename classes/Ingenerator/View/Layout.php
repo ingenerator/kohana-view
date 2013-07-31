@@ -16,11 +16,11 @@ defined('SYSPATH') or die('No direct script access.');
  *
  * @package    ViewModel
  * @category   Template
- * @author     Andrew Coulton <andrewnfcoulton@gmail.com>
- * @copyright  (c) 2011 Andrew Coulton
- * @license    http://kohanaphp.com/license
+ * @author     Andrew Coulton <andrew@ingenerator.com>
+ * @copyright  (c) 2011-13 inGenerator Ltd
+ * @license    http://kohanaframework.org/license
  */
-abstract class AndrewC_View_Layout extends View_Model
+abstract class Ingenerator_View_Layout extends View_Model
 {
     // The name of the template model to use
     public $template = 'global';

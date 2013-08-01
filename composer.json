@@ -1,0 +1,43 @@
+{
+    "name":        "ingenerator/kohana-view",
+    "type":        "kohana-module",
+    "description": "PHP class based views for the Kohana framework",
+    "homepage":    "https://github.com/ingenerator/kohana-view",
+    "licence":     "BSD-3-Clause",
+    "keywords":    ["kohana", "view-model"],
+    "authors": [
+        {
+            "name":     "Andrew Coulton",
+            "homepage": "https://github.com/acoulton",
+            "role":     "developer / maintainer"
+        },
+        {
+            "name":     "David Pommer",
+            "homepage": "https://github.com/dyron",
+            "role":     "original developer"
+        },
+        {
+            "name":     "Jeremy Bush",
+            "homepage": "https://github.com/zombor",
+            "role":     "original developer"
+        }
+    ],
+    "support": {
+        "issues":   "https://github.com/ingenerator/kohana-view/issues",
+        "source":   "https://github.com/ingenerator/kohana-view"
+    },
+    "require": {
+        "composer/installers": "~1.0",
+        "kohana/core":         "dev-ingenerator-master",
+        "php":                 ">=5.3.3"
+    },
+    "require-dev": {
+        "ingenerator/koharness": "dev-master",
+        "kohana/unittest":       "dev-ingenerator-master"
+    },
+    "repositories": [
+        {"type": "vcs", "url": "https://github.com/ingenerator/kohana-core"},
+        {"type": "vcs", "url": "https://github.com/ingenerator/kohana-unittest"},
+        {"type": "vcs", "url": "https://github.com/ingenerator/koharness"}
+    ]
+}

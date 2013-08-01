@@ -3,7 +3,7 @@
     "type":        "kohana-module",
     "description": "PHP class based views for the Kohana framework",
     "homepage":    "https://github.com/ingenerator/kohana-view",
-    "licence":     "BSD-3-Clause",
+    "license":     "BSD-3-Clause",
     "keywords":    ["kohana", "view-model"],
     "authors": [
         {
@@ -37,7 +37,6 @@
     },
     "repositories": [
         {"type": "vcs", "url": "https://github.com/ingenerator/kohana-core"},
-        {"type": "vcs", "url": "https://github.com/ingenerator/kohana-unittest"},
-        {"type": "vcs", "url": "https://github.com/ingenerator/koharness"}
+        {"type": "vcs", "url": "https://github.com/ingenerator/kohana-unittest"}
     ]
 }

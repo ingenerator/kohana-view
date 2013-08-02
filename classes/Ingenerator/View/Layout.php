@@ -128,7 +128,9 @@ abstract class Ingenerator_View_Layout extends View_Model
      *
      * If manually set true or false, the class will respect this value.
      *
-     * @uses Request::$is_ajax
+     * @uses Request::is_ajax
+     * @uses Request::current()
+     *
      * @param boolean $use_template
      * @return boolean If called as getter
      * @return View_Layout If called as setter
@@ -149,7 +151,7 @@ abstract class Ingenerator_View_Layout extends View_Model
         }
 
         // Guess based on is_ajax
-        if (Request::$is_ajax)
+        if (Request::current()->is_ajax())
         {
             return false;
         }

@@ -31,8 +31,8 @@ class View_Model_Test extends Kohana_Unittest_TestCase
     public function test_escape()
     {
         $view = new View_Test_Escape();
-	$expected = file_get_contents(Kohana::find_file('test_output', 'escape', 'txt'));
-	$this->assertSame($expected, $view->render());
+		$expected = file_get_contents(Kohana::find_file('test_output', 'escape', 'txt'));
+		$this->assertSame($expected, $view->render());
     }
 
     public function test_methods_on_render()
@@ -43,6 +43,33 @@ class View_Model_Test extends Kohana_Unittest_TestCase
         $this->assertFalse($view->not_called);
     }
 
+	public function test_maps_variables_to_class_fields_and_methods()
+	{
+		$view = new View_Test_VarMapping();
+
+		$expected = file_get_contents(Kohana::find_file('test_output', 'varmapping', 'txt'));
+		$this->assertSame($expected, $view->render());
+	}
+
+}
+
+class View_Test_VarMapping extends View_Model
+{
+	protected $var_protected = 'protected';
+
+	public $var_public = 'public';
+
+	public $class_only = 'class_only';
+
+	public function var_function()
+	{
+		return 'function';
+	}
+
+	public function class_only_func()
+	{
+		return 'class-only-func';
+	}
 }
 
 class View_Test_Escape extends View_Model

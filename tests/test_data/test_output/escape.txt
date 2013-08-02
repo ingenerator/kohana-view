@@ -15,3 +15,6 @@
 
 <!--Conditional with shorttags -->
 <h2>foobar</h2>
+
+<!--Access to property within PHP code block - property mapped but *not* escaped -->
+<h2>foobar</h2>

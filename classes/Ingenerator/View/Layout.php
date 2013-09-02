@@ -23,7 +23,7 @@ defined('SYSPATH') or die('No direct script access.');
 abstract class Ingenerator_View_Layout extends View_Model
 {
     // The name of the template model to use
-    public $template = 'global';
+    public $template = 'Global';
 
     // Whether to render the view within the template or not, null for auto
     protected $_use_template = null;

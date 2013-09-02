@@ -23,3 +23,8 @@
 <?php echo $foo;?>
 
 <?endif;?>
+
+<!--Access to property within PHP code block - property mapped but *not* escaped -->
+<?php
+   echo $foo;
+?>

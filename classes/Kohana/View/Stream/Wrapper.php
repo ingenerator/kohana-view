@@ -94,7 +94,7 @@ class Kohana_View_Stream_Wrapper
                  * Escape all variables and convert <?= ?> to long-form <?php echo ?>
 		 *
 		 */
-		$regex = '/<\?(\=|php)?(.+?)\?>/';
+		$regex = '/<\?(\=|php)?(.+?)\?>/s';
 		$this->_data = preg_replace_callback($regex, array($this, '_escape_val'), $this->_data);
 
 		/**

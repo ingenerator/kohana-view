@@ -35,9 +35,5 @@
         "ingenerator/koharness": "dev-master",
         "kohana/unittest":       "3.3.*"
     },
-    "minimum-stability": "dev",
-    "repositories": [
-        {"type": "vcs", "url": "https://github.com/kohana/core"},
-        {"type": "vcs", "url": "https://github.com/kohana/unittest"}
-    ]
+    "minimum-stability": "dev"
 }

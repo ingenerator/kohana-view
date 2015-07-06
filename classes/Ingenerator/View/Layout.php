@@ -151,13 +151,16 @@ abstract class Ingenerator_View_Layout extends View_Model
         }
 
         // Guess based on is_ajax
-        if (Request::current()->is_ajax())
+        if (Request::current())
         {
-            return false;
-        }
-        else
-        {
-            return true;
+            if (Request::current()->is_ajax())
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
     }
 

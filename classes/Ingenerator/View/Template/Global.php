@@ -1,5 +1,5 @@
 <?php
-defined('SYSPATH') or die('No direct script access.');
+
 /**
  * A basic view model for the global page template, used by [View_Layout] as
  * the page container. You can extend this class in your application, or indeed

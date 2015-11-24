@@ -1,5 +1,5 @@
 <?php
-defined('SYSPATH') or die('No direct script access.');
+
 /**
  * The View_Layout class provides a view model for views that are designed to be
  * rendered within a consistent page layout - similar to Kohana's [Controller_Template]

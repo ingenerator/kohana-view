@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php
 /**
  * Basic global template view, rendered by the View_Template_Global class.
  *

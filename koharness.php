@@ -9,6 +9,5 @@
 return array(
   'modules' => array(
     'kohana-view' => __DIR__,
-    'unittest'    => __DIR__.'/modules/unittest',
   )
 );

@@ -15,6 +15,8 @@ cache:
     - $HOME/.composer/cache
 
 before_script:
+  # Disable xdebug, we're not using it and it slows composer
+  - phpenv config-rm xdebug.ini
   # Ensure composer is up to date and install dependencies
   - composer self-update
   - composer install --prefer-dist

@@ -30,7 +30,7 @@
         "composer/installers": "~1.0",
         "kohana/core":         "3.3.*",
         "php":                 "^5.5",
-        "phpunit/phpunit": "^4.5"
+        "phpunit/phpunit": "^4.8"
     },
     "require-dev": {
         "kohana/koharness": "dev-master"

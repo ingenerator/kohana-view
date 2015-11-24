@@ -32,8 +32,8 @@
         "php":                 ">=5.3.3"
     },
     "require-dev": {
-        "ingenerator/koharness": "dev-master",
-        "kohana/unittest":       "3.3.*"
+        "kohana/koharness": "dev-master",
+        "kohana/unittest":  "3.3.*"
     },
     "minimum-stability": "dev"
 }

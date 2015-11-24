@@ -1,12 +1,25 @@
 # Configuration file for Travis CI test environment
 language: php
+sudo:     false
 php:
   - 5.3
 
+# Don't build feature branches etc, as they will be covered by PRs
+branches:
+  only:
+    - /^[0-9\.]+\.x$/
+
+cache:
+  directories:
+    - vendor
+    - $HOME/.composer/cache
+
 before_script:
+  # Disable xdebug, we're not using it and it slows composer
+  - phpenv config-rm xdebug.ini
   # Ensure composer is up to date and install dependencies
   - composer self-update
-  - composer install --dev
+  - composer install --prefer-dist
   # Generate the koharness Kohana default application
   - vendor/bin/koharness
 

@@ -25,4 +25,4 @@ before_script:
 
 
 # Run the View tests against the koharnessed application in /tmp/koharness
-script: cd /tmp/koharness && phpunit --bootstrap=modules/unittest/bootstrap.php --group=view_model modules/unittest/tests.php
+script: vendor/bin/phpunit

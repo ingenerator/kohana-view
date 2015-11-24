@@ -4,7 +4,7 @@
  *
  * @group view_model
  */
-class View_Model_Test extends Kohana_Unittest_TestCase
+class View_Model_Test extends PHPUnit_Framework_TestCase
 {
     protected static $old_modules = array();
 
@@ -15,7 +15,7 @@ class View_Model_Test extends Kohana_Unittest_TestCase
     {
         self::$old_modules = Kohana::modules();        
         $new_modules = self::$old_modules+array(
-                'test_views' => realpath(dirname(__FILE__).'/test_data/')
+                'test_views' => TEST_ROOT_PATH.'test_data'
         );                
         Kohana::modules($new_modules);
     }

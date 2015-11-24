@@ -1,5 +1,6 @@
 # Configuration file for Travis CI test environment
 language: php
+sudo:     false
 php:
   - 5.3
 
@@ -8,10 +9,15 @@ branches:
   only:
     - /^[0-9\.]+\.x$/
 
+cache:
+  directories:
+    - vendor
+    - $HOME/.composer/cache
+
 before_script:
   # Ensure composer is up to date and install dependencies
   - composer self-update
-  - composer install --dev
+  - composer install --prefer-dist
   # Generate the koharness Kohana default application
   - vendor/bin/koharness
 

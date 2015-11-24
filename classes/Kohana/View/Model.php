@@ -133,8 +133,7 @@ class Kohana_View_Model {
 		}
 		else
 		{
-			throw new Kohana_Exception('View variable is not set: :var',
-				array(':var' => $key));
+			throw new Kohana_Exception('View variable is not set: :var', [':var' => $key]);
 		}
 	}
 
@@ -187,9 +186,9 @@ class Kohana_View_Model {
 	{
 		if (($path = Kohana::find_file('views', $file)) === FALSE)
 		{
-			throw new Kohana_View_Exception('The requested view :file could not be found', array(
+			throw new Kohana_View_Exception('The requested view :file could not be found', [
 				':file' => $file,
-			));
+			]);
 		}
 
 		// Store the file path locally

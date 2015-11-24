@@ -3,6 +3,7 @@
 Major rewrite to support namespaces, dependency injection and better separation of concerns. Key breaking changes:
 
 * Supports PHP >= 5.5
+* No longer supports transparent extension of classes - use your service container
 * ViewFactory has been removed - creating views should be the responsibility of your service container or similar.
 
 ## 1.0.0

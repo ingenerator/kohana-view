@@ -12,35 +12,6 @@
  */
 class Kohana_View_Model {
 
-	// View filename
-	protected $_file;
-
-	/**
-	 * Returns a new raw View object. If you do not define the "file" parameter,
-	 * you must call [View::set_filename].
-	 *
-	 *     $view = View::factory($file);
-	 *
-	 * @param   string  view filename
-	 * @param   array   array of values
-	 * @return  View
-	 */
-	public static function factory($file = NULL, array $data = NULL)
-	{
-		// Return a raw view object if no template is specified.
-		if ($file === FALSE)
-			return new View(FALSE, $data);
-
-		$class = 'View_'.strtr($file, '/', '_');
-
-		if ( ! class_exists($class))
-		{
-			$class = 'View';
-		}
-
-		return new $class($file, $data);
-	}
-
 	/**
 	 * Captures the output that is generated when a view is included.
 	 * The view data will be extracted to make local variables.
@@ -75,38 +46,6 @@ class Kohana_View_Model {
 
 		// Get the captured output and close the buffer
 		return ob_get_clean();
-	}
-
-	/**
-	 * Sets the initial view filename and local data. Views should almost
-	 * always only be created using [View::factory].
-	 *
-	 *     $view = new View($file);
-	 *
-	 * @param   string  view filename
-	 * @param   array   array of values
-	 * @return  void
-	 * @uses    View::set_filename
-	 */
-	public function __construct($file = NULL, array $data = NULL)
-	{
-		if ($file === NULL)
-		{
-			$foo = explode('_', get_class($this));
-			array_shift($foo);
-			$file = strtolower(implode('/', $foo));
-		}
-		
-		if ($file !== FALSE)
-		{
-			$this->set_filename($file);
-		}
-
-		if ($data !== NULL)
-		{
-			// Add the values to the current data
-			$this->set($data);
-		}
 	}
 
 	/**

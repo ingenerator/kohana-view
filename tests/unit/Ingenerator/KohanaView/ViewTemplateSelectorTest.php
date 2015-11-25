@@ -100,6 +100,10 @@ class ViewModelDummy implements ViewModel
         return new $class_name;
     }
 
+    public function display(array $variables)
+    {
+    }
+
 }
 
 class FixedTemplateViewModelStub extends ViewModelDummy implements TemplateSpecifyingViewModel

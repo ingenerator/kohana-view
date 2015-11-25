@@ -49,49 +49,6 @@ class Kohana_View_Model {
 	}
 
 	/**
-	 * Magic method, searches for the given variable and returns its value.
-	 * Local variables will be returned before global variables.
-	 *
-	 *     $value = $view->foo;
-	 *
-	 * [!!] If the variable has not yet been set, an exception will be thrown.
-	 *
-	 * @param   string  variable name
-	 * @return  mixed
-	 * @throws  Kohana_Exception
-	 */
-	public function __get($key)
-	{
-		if (method_exists($this, $key))
-		{
-			return $this->$key();
-		}
-		elseif (property_exists($this, $key))
-		{
-			return $this->$key;
-		}
-		else
-		{
-			throw new Kohana_Exception('View variable is not set: :var', [':var' => $key]);
-		}
-	}
-
-	/**
-	 * Magic method, calls [View::set] with the same parameters.
-	 *
-	 *     $view->foo = 'something';
-	 *
-	 * @param   string  variable name
-	 * @param   mixed   value
-	 * @return  void
-	 */
-	public function __set($key, $value)
-	{
-		$this->set($key, $value);
-	}
-
-
-	/**
 	 * Magic method, returns the output of [View::render].
 	 *
 	 * @return  string
@@ -137,59 +94,6 @@ class Kohana_View_Model {
 	}
 
 	/**
-	 * Assigns a variable by name. Assigned values will be available as a
-	 * variable within the view file:
-	 *
-	 *     // This value can be accessed as $foo within the view
-	 *     $view->set('foo', 'my value');
-	 *
-	 * You can also use an array to set several values at once:
-	 *
-	 *     // Create the values $food and $beverage in the view
-	 *     $view->set(array('food' => 'bread', 'beverage' => 'water'));
-	 *
-	 * @param   string   variable name or an array of variables
-	 * @param   mixed    value
-	 * @return  $this
-	 */
-	public function set($key, $value = NULL)
-	{
-		if (is_array($key))
-		{
-			foreach ($key as $name => $value)
-			{
-				$this->{$name} = $value;
-			}
-		}
-		else
-		{
-			$this->{$key} = $value;
-		}
-
-		return $this;
-	}
-
-	/**
-	 * Assigns a value by reference. The benefit of binding is that values can
-	 * be altered without re-setting them. It is also possible to bind variables
-	 * before they have values. Assigned values will be available as a
-	 * variable within the view file:
-	 *
-	 *     // This reference can be accessed as $ref within the view
-	 *     $view->bind('ref', $bar);
-	 *
-	 * @param   string   variable name
-	 * @param   mixed    referenced variable
-	 * @return  $this
-	 */
-	public function bind($key, & $value)
-	{
-		$this->{$key} =& $value;
-
-		return $this;
-	}
-
-	/**
 	 * Renders the view object to a string. Global and local data are merged
 	 * and extracted to create local variables within the view file.
 	 *
@@ -205,15 +109,6 @@ class Kohana_View_Model {
 	 */
 	public function render($file = NULL)
 	{
-		if ($file !== NULL)
-		{
-			$this->set_filename($file);
-		}
-
-		if (empty($this->_file))
-		{
-			throw new Kohana_View_Exception('You must set the file to use within your view before rendering');
-		}
 
 		// Combine local and global data and capture the output
 		return $this->capture($this->_file);

@@ -1,5 +1,0 @@
-protected
-public
-function
-
-protectedpublicokok

@@ -40,7 +40,7 @@ class PageLayoutRenderer
     protected $use_layout;
 
     /**
-     * @var HTMLRenderer
+     * @var Renderer
      */
     protected $view_renderer;
 

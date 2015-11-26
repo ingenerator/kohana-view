@@ -143,7 +143,7 @@ class CFSTemplateManagerTest extends \PHPUnit_Framework_TestCase
 
     protected function newSubject()
     {
-        return new CFSTemplateManager($this->cfs_wrapper, $this->compiler, $this->options);
+        return new CFSTemplateManager($this->compiler, $this->options, $this->cfs_wrapper);
     }
 
     /**

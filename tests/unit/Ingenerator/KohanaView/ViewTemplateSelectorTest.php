@@ -7,8 +7,10 @@
  */
 namespace test\unit\Ingenerator\KohanaView;
 
-use Ingenerator\KohanaView\TemplateSpecifyingViewModel;
 use Ingenerator\KohanaView\ViewModel;
+use Ingenerator\KohanaView\ViewTemplateSelector;
+use test\mock\ViewModel\FixedTemplateViewModelStub;
+use test\mock\ViewModel\ViewModelDummy;
 
 class ViewTemplateSelectorTest extends \PHPUnit_Framework_TestCase
 {
@@ -61,69 +63,12 @@ class ViewTemplateSelectorTest extends \PHPUnit_Framework_TestCase
 
 
     /**
-     * @return \Ingenerator\KohanaView\ViewTemplateSelector
+     * @return ViewTemplateSelector
      */
     protected function newSubject()
     {
-        return new \Ingenerator\KohanaView\ViewTemplateSelector;
+        return new ViewTemplateSelector;
     }
 }
 
 
-class ViewModelDummy implements ViewModel
-{
-    /**
-     * Create an instance with any arbitrary class name
-     *
-     * @param string $class_name
-     *
-     * @return ViewModelDummy
-     */
-    public static function make($class_name)
-    {
-        if (class_exists($class_name)) {
-            $instance = new $class_name;
-            \PHPUnit_Framework_Assert::assertInstanceOf(__CLASS__, $instance);
-            return $instance;
-        }
-
-        $simple_class = trim(strrchr($class_name, '\\') ?: $class_name, '\\');
-        $namespace    = trim(substr($class_name, 0, -strlen($simple_class)), '\\');
-        $definition   = sprintf(
-            "%s class %s extends %s {}",
-            $namespace ? "namespace $namespace;" : "",
-            $simple_class,
-            '\\'.__CLASS__
-        );
-        eval($definition);
-
-        return new $class_name;
-    }
-
-    public function display(array $variables)
-    {
-    }
-
-}
-
-class FixedTemplateViewModelStub extends ViewModelDummy implements TemplateSpecifyingViewModel
-{
-    /**
-     * @var
-     */
-    private $template;
-
-    public function __construct($template)
-    {
-        $this->template = $template;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTemplateName()
-    {
-        return $this->template;
-    }
-
-}

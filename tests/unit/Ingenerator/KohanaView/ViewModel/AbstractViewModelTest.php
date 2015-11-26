@@ -42,6 +42,7 @@ class AbstractViewModelTest extends \PHPUnit_Framework_TestCase
      */
     public function test_it_throws_if_attempting_to_read_undefined_property()
     {
+        /** @noinspection PhpUndefinedFieldInspection */
         $this->newSubject()->some_undefined_var;
     }
 
@@ -107,7 +108,8 @@ class AbstractViewModelTest extends \PHPUnit_Framework_TestCase
     public function test_its_display_method_does_not_require_dynamically_set_variables()
     {
         $subject = $this->newSubject();
-        $ok      = $subject->lazy_calculated_value;
+        /** @noinspection PhpUnusedLocalVariableInspection */
+        $ok = $subject->lazy_calculated_value;
         $subject->display(['some_defined_var' => 'ok']);
     }
 
@@ -119,7 +121,7 @@ class AbstractViewModelTest extends \PHPUnit_Framework_TestCase
 }
 
 /**
- * @property-read string some_defined_var
+ * @property      string some_defined_var      // also really @property-read, but suppress the IDE warning
  * @property-read string some_dynamic_var
  * @property-read string lazy_calculated_value
  */

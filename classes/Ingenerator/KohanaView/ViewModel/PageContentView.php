@@ -13,8 +13,8 @@ use Ingenerator\KohanaView\ViewModel;
 /**
  * Interface for a view intended to be the main body view on a page.
  *
- * @see AbstractPageContentView
- * @see PageLayoutView
+ * @see     AbstractPageContentView
+ * @see     PageLayoutView
  *
  * @package Ingenerator\KohanaView\ViewModel
  */

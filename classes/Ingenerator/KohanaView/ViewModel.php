@@ -19,6 +19,7 @@ interface ViewModel
 
     /**
      * @param  array $variables
+     *
      * @return void
      */
     public function display(array $variables);

@@ -136,7 +136,7 @@ PHP
         );
 
         $this->givenFileWithContent(
-            'module/views/test/custom_view.php',
+            'module/views/test/custom.php',
             'View with <?=$view->html_string;?>, <?=!$view->html_string;?>, <?php echo $view->html_string;?>'
         );
 

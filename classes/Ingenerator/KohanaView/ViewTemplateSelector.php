@@ -8,6 +8,8 @@ namespace Ingenerator\KohanaView;
  *   View_Model_Something_WithMixedCase => model/something/with_mixed_case
  *   \View\Stuff\In\NameSpace\Thing     => stuff/in/name_space/thing
  *   \Other\View\Hierarchy              => other/view/hierarchy
+ *   \Other\View\HierarchyView          => other/view/hierarchy
+ *   \Other\View\HierarchyViewModel     => other/view/hierarchy
  *
  * Views can also implement TemplateSpecifyingViewModel to provide a custom template file name when required.
  *
@@ -65,12 +67,11 @@ class ViewTemplateSelector
      */
     protected function calculateTemplateFromClassName(ViewModel $view)
     {
-        $template = preg_replace('/\\\\|_/', '/', get_class($view));
+        $template = get_class($view);
+        $template = preg_replace('/\\\\|_/', '/', $template);
+        $template = preg_replace('#(^view/?(model)?/)|(?<!/)(view/?(model)?$)#i', '', $template);
         $template = preg_replace('/([a-z])([A-Z])/', '\1_\2', $template);
         $template = strtolower($template);
-        if (substr($template, 0, 5) === 'view/') {
-            $template = substr($template, 5);
-        }
 
         return $template;
     }

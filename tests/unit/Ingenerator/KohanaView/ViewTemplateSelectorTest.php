@@ -21,11 +21,17 @@ class ViewTemplateSelectorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @testWith ["View_Model_With_Underscored_Class_Name", "model/with/underscored/class/name"]
-     *           ["View\\Model\\With\\Namespaced\\Classname", "model/with/namespaced/classname"]
+     * @testWith ["View_Model_With_Underscored_Class_Name", "with/underscored/class/name"]
+     *           ["View\\Model\\With\\Namespaced\\Classname", "with/namespaced/classname"]
+     *           ["View\\With\\Namespaced\\Classname", "with/namespaced/classname"]
+     *           ["ViewModel\\With\\Namespaced\\Classname", "with/namespaced/classname"]
      *           ["Model\\Without\\View_In_Name", "model/without/view/in/name"]
      *           ["Model\\WithMixed\\CaseName", "model/with_mixed/case_name"]
      *           ["Model\\WithMixed\\UpperNAME", "model/with_mixed/upper_name"]
+     *           ["Some\\Namespaced\\DefaultView", "some/namespaced/default"]
+     *           ["Some\\Namespaced\\View", "some/namespaced/view"]
+     *           ["Some_Underscore_DefaultView", "some/underscore/default"]
+     *           ["Some_Underscore_DefaultViewModel", "some/underscore/default"]
      */
     public function test_by_default_it_selects_template_from_view_class_name($class_name, $expect_template)
     {

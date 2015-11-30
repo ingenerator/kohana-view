@@ -91,6 +91,23 @@ abstract class AbstractViewModel implements ViewModel
      */
     public function display(array $variables)
     {
+        if ($errors = $this->validateDisplayVariables($variables)) {
+            throw new \InvalidArgumentException(
+                "Invalid variables provided to ".static::class."::display()"
+                ."\n - ".implode("\n - ", $errors)
+            );
+        }
+
+        $this->variables = $variables;
+    }
+
+    /**
+     * @param array $variables
+     *
+     * @return string[] of errors
+     */
+    protected function validateDisplayVariables(array $variables)
+    {
         $errors             = [];
         $provided_variables = array_keys($variables);
         foreach (array_diff($provided_variables, $this->expect_var_names) as $unexpected_var) {
@@ -100,18 +117,12 @@ abstract class AbstractViewModel implements ViewModel
                 $errors[] = "'$unexpected_var' is not expected";
             }
         }
+
         foreach (array_diff($this->expect_var_names, $provided_variables) as $missing_var) {
             $errors[] = "'$missing_var' is missing";
         }
 
-        if ( ! empty($errors)) {
-            throw new \InvalidArgumentException(
-                "Invalid variables provided to ".static::class."::display()"
-                ."\n - ".implode("\n - ", $errors)
-            );
-        }
-
-        $this->variables = $variables;
+        return $errors;
     }
 
 }

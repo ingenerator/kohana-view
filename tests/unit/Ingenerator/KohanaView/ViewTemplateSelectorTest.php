@@ -52,7 +52,7 @@ class ViewTemplateSelectorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \UnexpectedValueException
+     * @expectedException \Ingenerator\KohanaView\Exception\UnspecifiedTemplateNameException
      */
     public function test_it_throws_if_template_specifying_view_does_not_specify_a_template()
     {
@@ -60,7 +60,7 @@ class ViewTemplateSelectorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \UnexpectedValueException
+     * @expectedException \Ingenerator\KohanaView\Exception\UnspecifiedTemplateNameException
      */
     public function test_it_throws_if_template_specifying_view_returns_non_string_template_name()
     {

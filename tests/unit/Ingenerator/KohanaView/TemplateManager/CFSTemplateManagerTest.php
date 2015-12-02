@@ -56,7 +56,7 @@ class CFSTemplateManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
+     * @expectedException \Ingenerator\KohanaView\Exception\TemplateCacheException
      * @expectedExceptionMessage Cannot create template cache directory
      */
     public function test_it_throws_if_it_cannot_create_cache_dir()
@@ -68,7 +68,7 @@ class CFSTemplateManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
+     * @expectedException \Ingenerator\KohanaView\Exception\TemplateCacheException
      * @expectedExceptionMessage Cannot write to compiled template path
      */
     public function test_it_throws_if_it_cannot_create_compiled_file()
@@ -80,7 +80,7 @@ class CFSTemplateManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \Ingenerator\KohanaView\Exception\TemplateNotFoundException
      */
     public function test_it_throws_if_no_source_template_for_uncompiled_template_name()
     {

@@ -7,6 +7,7 @@
  */
 namespace Ingenerator\KohanaView\ViewModel\PageLayout;
 
+use Ingenerator\KohanaView\Exception\UnassignedViewVarException;
 use Ingenerator\KohanaView\TemplateSpecifyingViewModel;
 
 class StaticPageContentView extends AbstractPageContentView implements TemplateSpecifyingViewModel
@@ -21,9 +22,7 @@ class StaticPageContentView extends AbstractPageContentView implements TemplateS
     public function getTemplateName()
     {
         if ( ! $this->variables['page_path']) {
-            throw new \BadMethodCallException(
-                'Call '.static::class.'::display(["page_path" => "name/of/view"]) before rendering static views'
-            );
+            throw UnassignedViewVarException::forVariable(static::class, 'page_path', 'name/of/view');
         }
 
         return $this->variables['page_path'];

@@ -8,6 +8,7 @@
 namespace Ingenerator\KohanaView\Renderer;
 
 
+use Ingenerator\KohanaView\Exception\TemplateNotFoundException;
 use Ingenerator\KohanaView\Renderer;
 use Ingenerator\KohanaView\TemplateManager;
 use Ingenerator\KohanaView\ViewModel;
@@ -86,7 +87,7 @@ class HTMLRenderer implements Renderer
         // A user's own error handler may throw an exception here if the include fails - which we will bubble as-is.
         // If they have not configured an error handler, we need to throw an exception of our own.
         if ($anon_capture($view, $this, $template_path) === FALSE) {
-            throw new \UnexpectedValueException('Failed to include template '.$template_path);
+            throw TemplateNotFoundException::forFullPath($template_path);
         }
     }
 

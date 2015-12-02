@@ -1,6 +1,8 @@
 <?php
 namespace Ingenerator\KohanaView;
 
+use Ingenerator\KohanaView\Exception\UnspecifiedTemplateNameException;
+
 /**
  * The ViewTemplateSelector maps ViewModel classes to the appropriate template file. By default this is done by
  * converting the class name to a lowercased file path such that:
@@ -45,16 +47,11 @@ class ViewTemplateSelector
         $template   = $view->getTemplateName();
         $view_class = get_class($view);
         if ( ! $template) {
-            throw new \UnexpectedValueException(
-                "$view_class::getTemplateName() must return a template name, empty value returned"
-            );
+            throw UnspecifiedTemplateNameException::forEmptyValue($view_class);
         }
 
         if ( ! is_string($template)) {
-            $type = is_object($template) ? get_class($template) : gettype($template);
-            throw new \UnexpectedValueException(
-                "$view_class::getTemplateName() must return a string template name, $type value returned"
-            );
+            throw UnspecifiedTemplateNameException::forNonStringValue($view_class, $template);
         }
 
         return $template;

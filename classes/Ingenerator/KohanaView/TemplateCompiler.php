@@ -7,6 +7,8 @@
 
 namespace Ingenerator\KohanaView;
 
+use Ingenerator\KohanaView\Exception\InvalidTemplateContentException;
+
 /**
  * The TemplateCompiler takes a plain PHP template string and processes it to add automatic variable escaping within
  * PHP short echo tags, before returning the compiled template. You can optionally prefix your variables to mark that
@@ -59,7 +61,7 @@ class TemplateCompiler
     public function compile($source)
     {
         if ( ! $source) {
-            throw new \InvalidArgumentException('Cannot compile empty template');
+            throw InvalidTemplateContentException::forEmptyTemplate();
         }
 
         return preg_replace_callback('/<\?=(.+?)(;|\?>)/s', [$this, 'compilePhpShortTag'], $source);
@@ -85,10 +87,7 @@ class TemplateCompiler
             $compiled = "<?='';$var;";
 
         } elseif ($this->startsWith($var, $escape_method)) {
-            // Try to help user to avoid accidental double-escaping
-            throw new \InvalidArgumentException(
-                "Invalid implicit double-escape in template - remove $escape_method from {$matches[0]} or mark as raw"
-            );
+            throw InvalidTemplateContentException::containsImplicitDoubleEscape($escape_method, $matches[0]);
 
         } else {
             // Escape the value before echoing

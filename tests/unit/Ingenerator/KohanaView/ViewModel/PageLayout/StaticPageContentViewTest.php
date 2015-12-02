@@ -39,7 +39,7 @@ class StaticPageContentViewTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \BadMethodCallException
+     * @expectedException \Ingenerator\KohanaView\Exception\UnassignedViewVarException
      */
     public function test_it_throws_if_page_path_not_set_before_get_template_name()
     {

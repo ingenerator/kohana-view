@@ -157,14 +157,14 @@ class HTMLRendererTest extends \PHPUnit_Framework_TestCase
      * @expectedException \ErrorException
      * @expectedExceptionMessage path/to/undefined/file
      */
-    public function test_it_throws_if_template_is_not_found()
+    public function test_it_generates_error_if_template_is_not_found()
     {
         $this->template_manager->setTemplatePath(vfsStream::url('/path/to/undefined/file'));
         $this->newSubject()->render(new ViewModelDummy);
     }
 
     /**
-     * @expectedException \RuntimeException
+     * @expectedException \Ingenerator\KohanaView\Exception\TemplateNotFoundException
      * @expectedExceptionMessage path/to/undefined/file
      */
     public function test_it_throws_if_inclusion_fails_even_with_error_reporting_off()

@@ -6,6 +6,9 @@
  */
 namespace Ingenerator\KohanaView\ViewModel;
 
+use Ingenerator\KohanaView\Exception\InvalidDisplayVariablesException;
+use Ingenerator\KohanaView\Exception\InvalidViewVarAssignmentException;
+use Ingenerator\KohanaView\Exception\UndefinedViewVarException;
 use Ingenerator\KohanaView\ViewModel;
 
 /**
@@ -69,7 +72,7 @@ abstract class AbstractViewModel implements ViewModel
 
             return $this->$method();
         } else {
-            throw new \BadMethodCallException(static::class." does not define a '$name' field");
+            throw UndefinedViewVarException::forClassAndVar(static::class, $name);
         }
     }
 
@@ -81,7 +84,7 @@ abstract class AbstractViewModel implements ViewModel
      */
     public function __set($name, $value)
     {
-        throw new \BadMethodCallException(static::class.' variables are read-only, cannot assign '.$name);
+        throw InvalidViewVarAssignmentException::forReadOnlyVar(static::class, $name);
     }
 
     /**
@@ -92,10 +95,7 @@ abstract class AbstractViewModel implements ViewModel
     public function display(array $variables)
     {
         if ($errors = $this->validateDisplayVariables($variables)) {
-            throw new \InvalidArgumentException(
-                "Invalid variables provided to ".static::class."::display()"
-                ."\n - ".implode("\n - ", $errors)
-            );
+            throw InvalidDisplayVariablesException::passedToDisplay(static::class, $errors);
         }
 
         $this->variables = $variables;

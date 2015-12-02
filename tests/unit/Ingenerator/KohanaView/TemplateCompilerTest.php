@@ -23,7 +23,7 @@ class TemplateCompilerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \Ingenerator\KohanaView\Exception\InvalidTemplateContentException
      */
     public function test_it_throws_if_template_empty()
     {
@@ -123,7 +123,7 @@ PHP;
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \Ingenerator\KohanaView\Exception\InvalidTemplateContentException
      */
     public function test_it_throws_if_template_already_escapes_value_in_short_tags()
     {

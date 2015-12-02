@@ -37,7 +37,7 @@ class AbstractViewModelTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \BadMethodCallException
+     * @expectedException \Ingenerator\KohanaView\Exception\UndefinedViewVarException
      * @expectedExceptionMessage TestViewModel does not define a 'some_undefined_var' field
      */
     public function test_it_throws_if_attempting_to_read_undefined_property()
@@ -47,7 +47,7 @@ class AbstractViewModelTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \BadMethodCallException
+     * @expectedException \Ingenerator\KohanaView\Exception\InvalidViewVarAssignmentException
      * @expectedExceptionMessage TestViewModel variables are read-only, cannot assign some_defined_var
      */
     public function test_it_throws_if_attempting_to_set_any_undefined_externally()
@@ -74,7 +74,7 @@ class AbstractViewModelTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \Ingenerator\KohanaView\Exception\InvalidDisplayVariablesException
      * @expectedExceptionMessage 'random_var' is not expected
      */
     public function test_its_display_method_throws_on_unexpected_values()
@@ -83,7 +83,7 @@ class AbstractViewModelTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \Ingenerator\KohanaView\Exception\InvalidDisplayVariablesException
      * @expectedExceptionMessage 'some_defined_var' is missing
      */
     public function test_its_display_method_throws_on_missing_values()
@@ -92,7 +92,7 @@ class AbstractViewModelTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \Ingenerator\KohanaView\Exception\InvalidDisplayVariablesException
      * @expectedExceptionMessage 'some_dynamic_var' conflicts with ::var_some_dynamic_var()
      */
     public function test_its_display_method_throws_if_variables_conflict_with_variable_methods()

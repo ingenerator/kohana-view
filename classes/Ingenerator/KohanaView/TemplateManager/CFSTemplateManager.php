@@ -7,6 +7,8 @@
 
 namespace Ingenerator\KohanaView\TemplateManager;
 
+use Ingenerator\KohanaView\Exception\TemplateCacheException;
+use Ingenerator\KohanaView\Exception\TemplateNotFoundException;
 use Ingenerator\KohanaView\TemplateCompiler;
 use Ingenerator\KohanaView\TemplateManager;
 
@@ -103,7 +105,7 @@ class CFSTemplateManager implements TemplateManager
     protected function requireSourceFileContent($template_name)
     {
         if ( ! $source_file = $this->cascading_files->find_file('views', $template_name)) {
-            throw new \InvalidArgumentException("Cannot find template source file 'views/$template_name'");
+            throw TemplateNotFoundException::forSourcePath('views/'.$template_name);
         }
 
         return file_get_contents($source_file);
@@ -126,11 +128,11 @@ class CFSTemplateManager implements TemplateManager
     {
         if (is_dir($path)) {
             if ( ! is_writeable($path)) {
-                throw new \RuntimeException("Cannot write to compiled template path '$path'");
+                throw TemplateCacheException::pathNotWriteable($path);
             }
         } else {
             if ( ! mkdir($path, 0777, TRUE)) {
-                throw new \RuntimeException("Cannot create template cache directory in '$path'");
+                throw TemplateCacheException::cannotCreateDirectory($path);
             }
         }
     }

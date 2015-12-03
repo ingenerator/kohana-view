@@ -1,5 +1,9 @@
 ## Unreleased
 
+## 2.0.1
+
+* Corrected the phpunit dependency specification in composer.json - it is only required for development.
+
 ## 2.0.0
 
 Major rewrite to support namespaces, dependency injection and better separation of concerns. This is a

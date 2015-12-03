@@ -17,8 +17,8 @@ class InvalidDisplayVariablesException extends \InvalidArgumentException
 {
 
     /**
-     * @param string $view_class
-     * @param string $errors
+     * @param string   $view_class
+     * @param string[] $errors
      *
      * @return static
      */

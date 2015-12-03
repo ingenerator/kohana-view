@@ -39,7 +39,7 @@ class ViewTemplateSelector
     /**
      * @param TemplateSpecifyingViewModel $view
      *
-     * @return mixed
+     * @return string
      * @throws \UnexpectedValueException if no template is provided
      */
     protected function validateSpecifiedTemplateName(TemplateSpecifyingViewModel $view)

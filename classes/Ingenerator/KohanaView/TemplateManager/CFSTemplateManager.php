@@ -56,7 +56,7 @@ class CFSTemplateManager implements TemplateManager
      *
      * @param TemplateCompiler $compiler
      * @param array            $options
-     * @param CFSWrapper       $cascading_files
+     * @param null|CFSWrapper  $cascading_files
      */
     public function __construct(TemplateCompiler $compiler, array $options, CFSWrapper $cascading_files = NULL)
     {

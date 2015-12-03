@@ -33,7 +33,12 @@
         "phpunit/phpunit": "^4.8"
     },
     "require-dev": {
-        "kohana/koharness": "dev-master"
+        "kohana/koharness": "dev-master",
+        "mikey179/vfsStream": "^1.6",
+        "zeelot/kohana-dependencies": "0.7.x-dev@dev"
+    },
+    "suggest": {
+        "zeelot/kohana-dependencies": "Dependency Injection container for Kohana 3.x"
     },
     "minimum-stability": "dev"
 }

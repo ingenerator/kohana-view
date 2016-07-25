@@ -125,6 +125,16 @@ class CFSTemplateManagerTest extends \PHPUnit_Framework_TestCase
         $this->compiler->assertCompiledOnce('Raw template content');
     }
 
+    public function test_its_source_template_path_is_configurable()
+    {
+        $this->options['template_dir']  = 'templates';
+        $this->givenFile('module/templates/any/template_file.php', 'This is raw view in templates');
+
+        $compiled_url = $this->newSubject()->getPath('any/template_file');
+        $this->compiler->assertCompiledOnce('This is raw view in templates');
+        $this->assertCompiledToFile($compiled_url);
+    }
+
     public function setUp()
     {
         $this->compiler             = new SpyingTemplateCompiler;

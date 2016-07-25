@@ -1,5 +1,9 @@
 ## Unreleased
 
+## 2.1.0
+* Made the template directory (within the CFS) configurable - eg to allow templates
+  in /templates etc rather than /views.
+
 ## 2.0.1
 
 * Corrected the phpunit dependency specification in composer.json - it is only required for development.

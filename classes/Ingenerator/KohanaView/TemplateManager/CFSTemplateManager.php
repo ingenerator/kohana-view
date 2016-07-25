@@ -50,9 +50,15 @@ class CFSTemplateManager implements TemplateManager
     protected $recompile_always;
 
     /**
+     * @var string
+     */
+    protected $template_dir;
+
+    /**
      * Valid options:
-     * * cache_dir => the path where compiled templates will be cached
+     * * cache_dir        => the path where compiled templates will be cached
      * * recompile_always => whether to recompile each template on every execution,
+     * * template_dir     => directory (in the cascading filesystem) to search for templates
      *
      * @param TemplateCompiler $compiler
      * @param array            $options
@@ -64,6 +70,7 @@ class CFSTemplateManager implements TemplateManager
         $this->compiler         = $compiler;
         $this->cache_dir        = rtrim($options['cache_dir'], '/');
         $this->recompile_always = \Arr::get($options, 'recompile_always', FALSE);
+        $this->template_dir     = rtrim(\Arr::get($options, 'template_dir', 'views'), '/');
     }
 
     /**
@@ -104,8 +111,8 @@ class CFSTemplateManager implements TemplateManager
      */
     protected function requireSourceFileContent($template_name)
     {
-        if ( ! $source_file = $this->cascading_files->find_file('views', $template_name)) {
-            throw TemplateNotFoundException::forSourcePath('views/'.$template_name);
+        if ( ! $source_file = $this->cascading_files->find_file($this->template_dir, $template_name)) {
+            throw TemplateNotFoundException::forSourcePath($this->template_dir.'/'.$template_name);
         }
 
         return file_get_contents($source_file);

@@ -1,5 +1,10 @@
 ## Unreleased
 
+## 3.0.0
+* AbstractViewModel now supports default variables, which can be declared in the view model class,
+  overridden as optional arguments to the display method, and are reinitialised to default for each
+  display call. May be breaking if your child classes define their own `default_variables` property.
+
 ## 2.1.0
 * Made the template directory (within the CFS) configurable - eg to allow templates
   in /templates etc rather than /views.

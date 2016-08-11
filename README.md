@@ -241,6 +241,41 @@ class Controller_Welcome extends Controller // Look, extend any controller! No m
 Advanced examples
 -----------------
 
+### Default variables
+
+As standard, Views require that the array passed to `AbstractViewModel->display()` contains values for all defined variables.
+This is to ensure that the view model is always in the correct state even if it is rendered multiple times (as often happens
+with partials and sub-views).
+
+You can define optional view variables by populating the `$default_variables` array in your ViewModel. Note that these 
+defaults **will be reassigned** to the `$variables` array on every call to `->display()` to ensure that they are always in
+expected state.
+
+```php
+class View_Something extends AbstractViewModel {
+  protected $default_variables = [
+    'title' => 'My page title',
+  ];
+
+  protected $variables = [
+    'caption' => NULL
+  ];
+
+}
+
+print $view->title;    // 'My page title'
+print $view->caption;  // ''
+
+$view->display(['caption' => 'Something', 'title' => 'A title']);
+print $view->title;    // 'A title'
+print $view->caption;  // 'Something'
+
+$view->display(['caption' => 'Something else']);
+print $view->title;    // 'My page title'
+print $view->caption;  // 'Something else'
+
+```
+
 ### Caching variables
 
 Views that extend `AbstractViewModel` expose all the variables in their `$variables` array and also any dynamic

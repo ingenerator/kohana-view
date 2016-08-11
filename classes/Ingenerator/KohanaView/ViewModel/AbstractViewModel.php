@@ -40,6 +40,12 @@ use Ingenerator\KohanaView\ViewModel;
  */
 abstract class AbstractViewModel implements ViewModel
 {
+
+    /**
+     * @var array Variables that will be set back to defaults on each display unless a new value is passed
+     */
+    protected $default_variables = [];
+
     /**
      * @var array The actual view data
      */
@@ -52,6 +58,8 @@ abstract class AbstractViewModel implements ViewModel
 
     public function __construct()
     {
+        $this->variables = array_merge($this->default_variables, $this->variables);
+
         // Assign the expect_var_names to ensure that we don't accidentally start requiring compiled fields
         $this->expect_var_names = array_keys($this->variables);
     }
@@ -94,6 +102,9 @@ abstract class AbstractViewModel implements ViewModel
      */
     public function display(array $variables)
     {
+        // Reinstate default variables to ensure they are in expected state when using view in a loop
+        $variables = array_merge($this->default_variables, $variables);
+
         if ($errors = $this->validateDisplayVariables($variables)) {
             throw InvalidDisplayVariablesException::passedToDisplay(static::class, $errors);
         }

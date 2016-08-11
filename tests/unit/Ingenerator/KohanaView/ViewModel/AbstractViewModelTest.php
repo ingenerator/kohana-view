@@ -24,6 +24,11 @@ class AbstractViewModelTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('expected value', $this->newSubject()->some_defined_var);
     }
 
+    public function test_it_provides_magic_read_access_to_defined_default_variables()
+    {
+        $this->assertEquals('default value', $this->newSubject()->some_defaulted_var);
+    }
+
     public function test_it_provides_magic_read_access_to_protected_var_methods()
     {
         $this->assertEquals('expected dynamic', $this->newSubject()->some_dynamic_var);
@@ -45,6 +50,7 @@ class AbstractViewModelTest extends \PHPUnit_Framework_TestCase
         /** @noinspection PhpUndefinedFieldInspection */
         $this->newSubject()->some_undefined_var;
     }
+
 
     /**
      * @expectedException \Ingenerator\KohanaView\Exception\InvalidViewVarAssignmentException
@@ -91,6 +97,33 @@ class AbstractViewModelTest extends \PHPUnit_Framework_TestCase
         $this->newSubject()->display([]);
     }
 
+    public function test_its_display_method_can_override_default_values()
+    {
+        $subject = $this->newSubject();
+        $subject->display(
+            [
+                'some_defined_var'   => 'required',
+                'some_defaulted_var' => 'custom',
+            ]
+        );
+        $this->assertSame('custom', $subject->some_defaulted_var);
+    }
+
+    public function test_its_display_method_reinitialises_default_values_if_not_present()
+    {
+        $subject = $this->newSubject();
+        $subject->display(
+            [
+                'some_defined_var'   => 'required',
+                'some_defaulted_var' => 'custom',
+            ]
+        );
+
+        $subject->display(['some_defined_var' => 'custom2']);
+        $this->assertSame('custom2', $subject->some_defined_var);
+        $this->assertSame('default value', $subject->some_defaulted_var);
+    }
+
     /**
      * @expectedException \Ingenerator\KohanaView\Exception\InvalidDisplayVariablesException
      * @expectedExceptionMessage 'some_dynamic_var' conflicts with ::var_some_dynamic_var()
@@ -127,6 +160,10 @@ class AbstractViewModelTest extends \PHPUnit_Framework_TestCase
  */
 class TestViewModel extends AbstractViewModel
 {
+
+    protected $default_variables = [
+        'some_defaulted_var' => 'default value',
+    ];
 
     protected $variables = [
         'some_defined_var' => 'expected value',

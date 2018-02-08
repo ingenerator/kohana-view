@@ -37,7 +37,6 @@ class TemplateCompiler
      * @var array
      */
     protected $options = [
-        'raw_output_prefix' => '!',
         'escape_method'     => 'HTML::chars',
     ];
 
@@ -64,6 +63,10 @@ class TemplateCompiler
             throw InvalidTemplateContentException::forEmptyTemplate();
         }
 
+        if (preg_match('/<?php echo/', $source)) {
+            throw InvalidTemplateContentException::hasLegacyPhpEcho();
+        }
+
         return preg_replace_callback('/<\?=(.+?)(;|\?>)/s', [$this, 'compilePhpShortTag'], $source);
     }
 
@@ -77,17 +80,21 @@ class TemplateCompiler
         $var               = trim($matches[1]);
         $terminator        = $matches[2];
         $escape_method     = $this->options['escape_method'];
-        $raw_output_prefix = $this->options['raw_output_prefix'];
 
-        if ($this->startsWith($var, $raw_output_prefix)) {
+        if (preg_match('#^raw\((.+)\)$#', $var, $raw_parts)) {
             // Remove prefix and echo unescaped
-            $compiled = '<?='.trim(substr($var, strlen($raw_output_prefix))).';';
+            $compiled = '<?='.$raw_parts[1].';';
         } elseif ($this->startsWith($var, '//')) {
             // Echo an empty string to prevent the comment causing a parse error
             $compiled = "<?='';$var;";
 
         } elseif ($this->startsWith($var, $escape_method)) {
-            throw InvalidTemplateContentException::containsImplicitDoubleEscape($escape_method, $matches[0]);
+            throw InvalidTemplateContentException::containsImplicitDoubleEscape(
+                $escape_method,
+                $matches[0]
+            );
+        } elseif ($this->startsWith($var, '!')) {
+            throw InvalidTemplateContentException::hasLegacyRawEscapePrefix($matches[0]);
 
         } else {
             // Escape the value before echoing

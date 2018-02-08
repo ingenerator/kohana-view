@@ -137,7 +137,7 @@ PHP
 
         $this->givenFileWithContent(
             'module/views/test/custom.php',
-            'View with <?=$view->html_string;?>, <?=!$view->html_string;?>, <?php echo $view->html_string;?>'
+            'View with <?=$view->html_string;?>, <?=raw($view->html_string);?>'
         );
 
         $dependencies = $this->givenDependenciesBootstrapped();
@@ -149,7 +149,7 @@ PHP
         /** @var $view ViewModel */
 
         $this->assertSame(
-            'View with &lt;p&gt;Stuff&amp;Things&lt;/p&gt;, <p>Stuff&Things</p>, <p>Stuff&Things</p>',
+            'View with &lt;p&gt;Stuff&amp;Things&lt;/p&gt;, <p>Stuff&Things</p>',
             $this->getHTMLRenderer($dependencies)->render($view)
         );
     }

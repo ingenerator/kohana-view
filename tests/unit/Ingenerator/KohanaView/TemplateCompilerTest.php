@@ -63,7 +63,7 @@ PHP;
     {
         $source = <<<'PHP'
             <html>
-                <head><title><?php echo $view->some_var;?></title></head>
+                <head><title><?php $foo = 'you shouldn\'t do this but whatever';?></title></head>
                 <body>
                 <h1>some code</h1>
                 </body>
@@ -101,7 +101,7 @@ PHP;
 
     /**
      * @testWith ["<?=$foo; //comment?>", "<?=HTML::chars($foo); //comment?>"]
-     *           ["<?=!$foo; //comment?>", "<?=$foo; //comment?>"]
+     *           ["<?=raw($foo); //comment?>", "<?php echo($foo); //comment?>"]
      *           ["<?=//$foo?>", "<?='';//$foo;?>"]
      *           ["<?=//$foo;?>", "<?='';//$foo;?>"]
      */
@@ -111,11 +111,11 @@ PHP;
     }
 
     /**
-     * @testWith ["<?=!$foo;?>", "<?=$foo;?>"]
-     *           ["<?=!$foo?>", "<?=$foo;?>"]
-     *           ["<?= ! $foo;?>", "<?=$foo;?>"]
-     *           ["<?=! $foo;?>", "<?=$foo;?>"]
-     *           ["<?= ! HTML::chars($foo);?>", "<?=HTML::chars($foo);?>"]
+     * @testWith ["<?=raw($foo);?>", "<?php echo($foo);?>"]
+     *           ["<?=raw($foo)?>", "<?php echo($foo);?>"]
+     *           ["<?= raw($foo);?>", "<?php echo($foo);?>"]
+     *           ["<?= raw(HTML::chars($foo));?>", "<?php echo(HTML::chars($foo));?>"]
+     *           ["<?=raw(do(lots(of(nested(things()))))) ;?>", "<?php echo(do(lots(of(nested(things())))));?>"]
      */
     public function test_it_does_not_escape_short_echo_tags_when_marked_as_raw($source, $expect)
     {
@@ -131,27 +131,28 @@ PHP;
     }
 
     /**
-     * @testWith ["~"]
-     *           ["raw"]
+     * @expectedException \Ingenerator\KohanaView\Exception\InvalidTemplateContentException
      */
-    public function test_its_raw_output_character_is_configurable($prefix)
+    public function test_it_throws_if_template_uses_old_style_raw_exclamation_mark_prefix()
     {
-        $this->options['raw_output_prefix'] = $prefix;
-        $this->assertSame(
-            '<?=HTML::chars($foo);?><?=HTML::chars(!$baz);?><?=$bar;?>',
-            $this->newSubject()->compile(
-                '<?=$foo;?><?=!$baz;?><?='.$prefix.'$bar;?>'
-            )
-        );
+        $this->newSubject()->compile('<?=!$var;?>');
+    }
+
+    /**
+     * @expectedException \Ingenerator\KohanaView\Exception\InvalidTemplateContentException
+     */
+    public function test_it_throws_if_template_uses_old_style_native_php_echo()
+    {
+        $this->newSubject()->compile('<p><?php echo $raw_content;?></p>');
     }
 
     public function test_its_escape_method_is_configurable()
     {
         $this->options['escape_method'] = 'MyEscape::thing';
         $this->assertSame(
-            '<?=MyEscape::thing($foo);?><?=$bar;?>',
+            '<?=MyEscape::thing($foo);?><?php echo($bar);?>',
             $this->newSubject()->compile(
-                '<?=$foo;?><?=!$bar;?>'
+                '<?=$foo;?><?=raw($bar);?>'
             )
         );
     }
@@ -167,9 +168,9 @@ PHP;
 <div class="stuff"><h1><?=$view->title;?> <small><?=$caption;?></small></h1>
  <h2><?=Date::format($anything);?></h2>
  <?php if ($foo):?>
-    <?php echo $foo;?>
+    <?=raw($foo);?>
  <?php endif;?>
- <?=!$view->render($child_view);?>
+ <?=raw($view->render($child_view));?>
 </div>
 PHP;
         $expected = <<<'PHP'
@@ -181,12 +182,53 @@ PHP;
 <div class="stuff"><h1><?=HTML::chars($view->title);?> <small><?=HTML::chars($caption);?></small></h1>
  <h2><?=HTML::chars(Date::format($anything));?></h2>
  <?php if ($foo):?>
-    <?php echo $foo;?>
+    <?php echo($foo);?>
  <?php endif;?>
- <?=$view->render($child_view);?>
+ <?php echo($view->render($child_view));?>
 </div>
 PHP;
-        $this->assertSame($expected, $this->newSubject()->compile($source));
+        $this->assertEquals($expected, $this->newSubject()->compile($source));
+    }
+
+    public function test_it_compiles_complex_template_with_multiline_raw_call()
+    {
+        $source = <<<'PHP'
+<?php
+    <td>
+        <?=raw(Button::link(
+            [
+                'href'           => $employment['employment_url'],
+                'title'          => $employment['link_title'],
+                'disallowed_msg' => 'You do not have permission to view this employment',
+                'icon'           => 'fa-file',
+                'caption'        => 'View',
+                'class'          => 'info',
+                'class_always'   => 'btn-xs btn-block'
+            ]
+        )); ?>
+        <?=raw(our(content(here('yikes'))));?>
+    </td>
+PHP;
+
+        $expect = <<<'PHP'
+<?php
+    <td>
+        <?php echo(Button::link(
+            [
+                'href'           => $employment['employment_url'],
+                'title'          => $employment['link_title'],
+                'disallowed_msg' => 'You do not have permission to view this employment',
+                'icon'           => 'fa-file',
+                'caption'        => 'View',
+                'class'          => 'info',
+                'class_always'   => 'btn-xs btn-block'
+            ]
+        )); ?>
+        <?php echo(our(content(here('yikes'))));?>
+    </td>
+PHP;
+
+        $this->assertEquals($expect, $this->newSubject()->compile($source));
     }
 
     protected function newSubject()

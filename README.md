@@ -98,9 +98,8 @@ customise this.
      <?=$view->name;?> - notice how I HTML escaped your name?
    </h1>
    <div class="alert alert-danger">
-     Never render user-provided content unescaped like this: <?= ! $view->name;?>. Don't do it with pure PHP echo
-     either like this <?php echo $view->name; ?>. Just do that if you're including other views or known-safe HTML
-     content.
+     Never render user-provided content unescaped like this: <?= raw($view->name);?>. Just do that if you're including 
+     other views or known-safe HTML content.
    </div>
  </body>
 </html>
@@ -200,7 +199,7 @@ class View_HelloWorld extends Ingenerator\KohanaView\ViewModel\PageLayout\Abstra
 ?>
 <html>
   <head><title><?=$view->title;?></title></head>
-  <body><?= ! $view->body_html; // Good usecase for rendering unescaped content?></body>
+  <body><?=raw($view->body_html); // Good usecase for rendering unescaped content?></body>
 </html>
 ```
 
@@ -346,7 +345,7 @@ class View_Container {
 ?>
 <?php foreach($view->users as $user):?>
   <?php $view->face_widget->display(['user' => $user]);?>
-  <?= ! $renderer->render($view); // Note ! prefix to render unescaped HTML ?>
+  <?=raw($renderer->render($view)); // Note rendering unescaped HTML ?>
 <?php endforeach; ?>
 ```
 

@@ -28,6 +28,20 @@ class InvalidTemplateContentException extends \InvalidArgumentException
         );
     }
 
+    public static function hasLegacyRawEscapePrefix($source_fragment)
+    {
+        return new static(
+            "Invalid legacy-style <?=! raw escape prefix in template, please change `$source_fragment` to use `<?=raw()`"
+        );
+    }
+
+    public static function hasLegacyPhpEcho()
+    {
+        return new static(
+            "Invalid legacy-style use of `<?php echo` to avoid automatic escaping : use `<?=raw()` instead"
+        );
+    }
+
     public static function forEmptyTemplate()
     {
         return new static('Cannot compile empty template');

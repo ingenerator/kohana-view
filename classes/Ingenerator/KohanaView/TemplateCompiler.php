@@ -37,8 +37,7 @@ class TemplateCompiler
      * @var array
      */
     protected $options = [
-        'raw_output_prefix' => '!',
-        'escape_method'     => 'HTML::chars',
+        'escape_method' => 'HTML::chars',
     ];
 
     /**
@@ -64,6 +63,10 @@ class TemplateCompiler
             throw InvalidTemplateContentException::forEmptyTemplate();
         }
 
+        if (preg_match('/<?php echo/', $source)) {
+            throw InvalidTemplateContentException::hasLegacyPhpEcho();
+        }
+
         return preg_replace_callback('/<\?=(.+?)(;|\?>)/s', [$this, 'compilePhpShortTag'], $source);
     }
 
@@ -74,20 +77,24 @@ class TemplateCompiler
      */
     protected function compilePhpShortTag($matches)
     {
-        $var               = trim($matches[1]);
-        $terminator        = $matches[2];
-        $escape_method     = $this->options['escape_method'];
-        $raw_output_prefix = $this->options['raw_output_prefix'];
+        $var           = trim($matches[1]);
+        $terminator    = $matches[2];
+        $escape_method = $this->options['escape_method'];
 
-        if ($this->startsWith($var, $raw_output_prefix)) {
-            // Remove prefix and echo unescaped
-            $compiled = '<?='.trim(substr($var, strlen($raw_output_prefix))).';';
+        if ($this->startsWith($var, 'raw(')) {
+            // Use a plain php echo
+            $compiled = '<?php echo('.substr($var, strlen('raw(')).';';
         } elseif ($this->startsWith($var, '//')) {
             // Echo an empty string to prevent the comment causing a parse error
             $compiled = "<?='';$var;";
 
         } elseif ($this->startsWith($var, $escape_method)) {
-            throw InvalidTemplateContentException::containsImplicitDoubleEscape($escape_method, $matches[0]);
+            throw InvalidTemplateContentException::containsImplicitDoubleEscape(
+                $escape_method,
+                $matches[0]
+            );
+        } elseif ($this->startsWith($var, '!')) {
+            throw InvalidTemplateContentException::hasLegacyRawEscapePrefix($matches[0]);
 
         } else {
             // Escape the value before echoing

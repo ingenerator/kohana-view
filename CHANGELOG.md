@@ -1,5 +1,10 @@
 ## Unreleased
 
+* [BREAKING] Rewrite handling of 'raw' content to bypass escaping : now use `<?=raw('<em>some html</em>)`
+  instead of either the `<?=!` or `<?php echo` approaches used in the past. Makes the unescaped content
+  more visible in templates and easier to follow. Templates will now throw an exception if they include 
+  either of the old-style variations. 
+
 ## 3.0.0
 * AbstractViewModel now supports default variables, which can be declared in the view model class,
   overridden as optional arguments to the display method, and are reinitialised to default for each

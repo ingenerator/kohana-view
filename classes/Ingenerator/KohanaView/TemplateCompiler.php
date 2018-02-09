@@ -37,7 +37,7 @@ class TemplateCompiler
      * @var array
      */
     protected $options = [
-        'escape_method'     => 'HTML::chars',
+        'escape_method' => 'HTML::chars',
     ];
 
     /**
@@ -77,13 +77,13 @@ class TemplateCompiler
      */
     protected function compilePhpShortTag($matches)
     {
-        $var               = trim($matches[1]);
-        $terminator        = $matches[2];
-        $escape_method     = $this->options['escape_method'];
+        $var           = trim($matches[1]);
+        $terminator    = $matches[2];
+        $escape_method = $this->options['escape_method'];
 
-        if (preg_match('#^raw\((.+)\)$#', $var, $raw_parts)) {
-            // Remove prefix and echo unescaped
-            $compiled = '<?='.$raw_parts[1].';';
+        if ($this->startsWith($var, 'raw(')) {
+            // Use a plain php echo
+            $compiled = '<?php echo('.substr($var, strlen('raw(')).';';
         } elseif ($this->startsWith($var, '//')) {
             // Echo an empty string to prevent the comment causing a parse error
             $compiled = "<?='';$var;";

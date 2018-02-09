@@ -101,7 +101,7 @@ PHP;
 
     /**
      * @testWith ["<?=$foo; //comment?>", "<?=HTML::chars($foo); //comment?>"]
-     *           ["<?=raw($foo); //comment?>", "<?=$foo; //comment?>"]
+     *           ["<?=raw($foo); //comment?>", "<?php echo($foo); //comment?>"]
      *           ["<?=//$foo?>", "<?='';//$foo;?>"]
      *           ["<?=//$foo;?>", "<?='';//$foo;?>"]
      */
@@ -111,11 +111,11 @@ PHP;
     }
 
     /**
-     * @testWith ["<?=raw($foo);?>", "<?=$foo;?>"]
-     *           ["<?=raw($foo)?>", "<?=$foo;?>"]
-     *           ["<?= raw($foo);?>", "<?=$foo;?>"]
-     *           ["<?= raw(HTML::chars($foo));?>", "<?=HTML::chars($foo);?>"]
-     *           ["<?=raw(do(lots(of(nested(things()))))) ;?>", "<?=do(lots(of(nested(things()))));?>"]
+     * @testWith ["<?=raw($foo);?>", "<?php echo($foo);?>"]
+     *           ["<?=raw($foo)?>", "<?php echo($foo);?>"]
+     *           ["<?= raw($foo);?>", "<?php echo($foo);?>"]
+     *           ["<?= raw(HTML::chars($foo));?>", "<?php echo(HTML::chars($foo));?>"]
+     *           ["<?=raw(do(lots(of(nested(things()))))) ;?>", "<?php echo(do(lots(of(nested(things())))));?>"]
      */
     public function test_it_does_not_escape_short_echo_tags_when_marked_as_raw($source, $expect)
     {
@@ -150,7 +150,7 @@ PHP;
     {
         $this->options['escape_method'] = 'MyEscape::thing';
         $this->assertSame(
-            '<?=MyEscape::thing($foo);?><?=$bar;?>',
+            '<?=MyEscape::thing($foo);?><?php echo($bar);?>',
             $this->newSubject()->compile(
                 '<?=$foo;?><?=raw($bar);?>'
             )
@@ -182,12 +182,53 @@ PHP;
 <div class="stuff"><h1><?=HTML::chars($view->title);?> <small><?=HTML::chars($caption);?></small></h1>
  <h2><?=HTML::chars(Date::format($anything));?></h2>
  <?php if ($foo):?>
-    <?=$foo;?>
+    <?php echo($foo);?>
  <?php endif;?>
- <?=$view->render($child_view);?>
+ <?php echo($view->render($child_view));?>
 </div>
 PHP;
-        $this->assertSame($expected, $this->newSubject()->compile($source));
+        $this->assertEquals($expected, $this->newSubject()->compile($source));
+    }
+
+    public function test_it_compiles_complex_template_with_multiline_raw_call()
+    {
+        $source = <<<'PHP'
+<?php
+    <td>
+        <?=raw(Button::link(
+            [
+                'href'           => $employment['employment_url'],
+                'title'          => $employment['link_title'],
+                'disallowed_msg' => 'You do not have permission to view this employment',
+                'icon'           => 'fa-file',
+                'caption'        => 'View',
+                'class'          => 'info',
+                'class_always'   => 'btn-xs btn-block'
+            ]
+        )); ?>
+        <?=raw(our(content(here('yikes'))));?>
+    </td>
+PHP;
+
+        $expect = <<<'PHP'
+<?php
+    <td>
+        <?php echo(Button::link(
+            [
+                'href'           => $employment['employment_url'],
+                'title'          => $employment['link_title'],
+                'disallowed_msg' => 'You do not have permission to view this employment',
+                'icon'           => 'fa-file',
+                'caption'        => 'View',
+                'class'          => 'info',
+                'class_always'   => 'btn-xs btn-block'
+            ]
+        )); ?>
+        <?php echo(our(content(here('yikes'))));?>
+    </td>
+PHP;
+
+        $this->assertEquals($expect, $this->newSubject()->compile($source));
     }
 
     protected function newSubject()

@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 4.0.0 (2018-02-09)
+
 * [BREAKING] Rewrite handling of 'raw' content to bypass escaping : now use `<?=raw('<em>some html</em>)`
   instead of either the `<?=!` or `<?php echo` approaches used in the past. Makes the unescaped content
   more visible in templates and easier to follow. Templates will now throw an exception if they include 

@@ -1,5 +1,9 @@
 ## Unreleased
 
+## 4.1.0 (2018-09-04)
+
+* Adds support for PHP ^7.2
+
 ## 4.0.0 (2018-02-09)
 
 * [BREAKING] Rewrite handling of 'raw' content to bypass escaping : now use `<?=raw('<em>some html</em>)`

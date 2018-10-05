@@ -9,6 +9,7 @@ namespace Ingenerator\KohanaView\Renderer;
 
 
 use Ingenerator\KohanaView\Renderer;
+use Ingenerator\KohanaView\ViewModel\NestedChildView;
 use Ingenerator\KohanaView\ViewModel\PageContentView;
 use Ingenerator\KohanaView\ViewModel\PageLayoutView;
 
@@ -63,10 +64,33 @@ class PageLayoutRenderer
     public function render(PageContentView $content_view)
     {
         $content = $this->view_renderer->render($content_view);
-        if ($this->shouldUseLayout()) {
-            return $this->renderInLayout($content_view->var_page(), $content);
-        } else {
+        if ( ! $this->shouldUseLayout()) {
             return $content;
+        }
+
+        if ($content_view instanceof NestedChildView) {
+            $parent = $content_view->getParentView();
+        } else {
+            $parent = $content_view->var_page();
+        }
+
+        return $this->renderParent($parent, $content);
+    }
+
+    /**
+     * @param PageLayoutView $parent
+     * @param string         $content
+     *
+     * @return string
+     */
+    protected function renderParent(PageLayoutView $parent, $content_html)
+    {
+        $parent->setBodyHTML($content_html);
+
+        if ($parent instanceof NestedChildView) {
+            return $this->render($parent);
+        } else {
+            return $this->view_renderer->render($parent);
         }
     }
 
@@ -84,19 +108,6 @@ class PageLayoutRenderer
         } else {
             return TRUE;
         }
-    }
-
-    /**
-     * @param PageLayoutView $layout
-     * @param string         $content
-     *
-     * @return string
-     */
-    protected function renderInLayout(PageLayoutView $layout, $content)
-    {
-        $layout->setBodyHTML($content);
-
-        return $this->view_renderer->render($layout);
     }
 
     /**

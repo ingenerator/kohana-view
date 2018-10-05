@@ -9,6 +9,7 @@ namespace Ingenerator\KohanaView\ViewModel\PageLayout;
 
 
 use Ingenerator\KohanaView\ViewModel\AbstractViewModel;
+use Ingenerator\KohanaView\ViewModel\NestedChildView;
 use Ingenerator\KohanaView\ViewModel\PageContentView;
 use Ingenerator\KohanaView\ViewModel\PageLayoutView;
 
@@ -24,7 +25,7 @@ use Ingenerator\KohanaView\ViewModel\PageLayoutView;
  *
  * @package Ingenerator\KohanaView\ViewModel\PageLayout
  */
-abstract class AbstractPageContentView extends AbstractViewModel implements PageContentView
+abstract class AbstractPageContentView extends AbstractViewModel implements PageContentView, NestedChildView
 {
 
     /**
@@ -42,6 +43,11 @@ abstract class AbstractPageContentView extends AbstractViewModel implements Page
      * @return PageLayoutView
      */
     public function var_page()
+    {
+        return $this->page_view;
+    }
+
+    public function getParentView()
     {
         return $this->page_view;
     }

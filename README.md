@@ -153,47 +153,95 @@ Page Layout / Page Content
 --------------------------
 
 Kohana-view provides out-of-the-box support for the common case where you have a number of page content views that you
-want to render as the body content of one (or a small number of) shared page layout view(s). This is the usecase covered
-by Kohana's stock Controller_Template. With KohanaView you can implement the same behaviour but with a controller that
-extends any base class, using the `PageLayoutRenderer`. This renderer has all the same functionality as the old
-Controller_Template, including automatically rendering only the content for an AJAX request and the ability to explicitly
-set whether or not the layout should be rendered.
+want to render within a (or possibly a chain of) containing page layout view(s). This is similar to Kohana's stock 
+Controller_Template, except that it supports a recursive rendering model where each view can be contained in another up 
+to the final overall site template.
 
-To use `PageLayoutRenderer` you need two views - one implementing `PageLayoutView` and one implementing
-`PageContentView`:
+For example, this would allow you to have a set of content-area views, a view that renders any of these content areas 
+inside a layout with a sidebar and a main area, and a further parent view that renders your overall page header/footer/
+etc. As with the old Controller_Template, for AJAX requests the renderer by default only renders the content-area view
+and not any of the containing template(s) - this can be customised. This also means you can have your controller extend 
+any arbitrary base class.
+
+To use `PageLayoutRenderer` you need a minimum of two views - one implementing `PageLayoutView` and one implementing
+`PageContentView`. Note that these interfaces are now deprecated in favour of the more flexible `NestedChildView` and 
+`NestedParentView` and will be removed in a future release.
+
+You may want to extend from the provided `AbstractIntermediateLayoutView` and `AbstractNestedChildView` though this is 
+in no way compulsory. Your top-level page view should be an instance of `PageLayoutView`.
 
 ```php
 <?php
-// application/classes/View/Layout.php
+namespace View\Layout;
+
 /**
  * @property-read string $body_html
  * @propery-read  string $title
  */
-class View_Layout extends Ingenerator\KohanaView\ViewModel\PageLayout\AbstractPageLayoutView
+class SitePageTemplateView extends Ingenerator\KohanaView\ViewModel\PageLayout\AbstractPageLayoutView
 {
 }
 ```
 
 ```php
 <?php
-// application/classes/View/HelloWorld.php
+namespace View\Layout;
+
 /**
- * @property-read View_Layout $page
- * @property-read string      $name
+ * @property-read ViewModel $sidebar  
  */
-class View_HelloWorld extends Ingenerator\KohanaView\ViewModel\PageLayout\AbstractPageContentView
+class ContentWithSidebarLayoutView extends Ingenerator\KohanaView\ViewModel\PageLayout\AbstractIntermediateLayoutView
+{
+    public function __construct(SitePageTemplateView $page, ViewModel $sidebar) 
+    {
+        parent::__construct($page);
+        $this->sidebar = $sidebar;
+    }
+    
+    protected function var_sidebar()
+    {
+        return $this->sidebar;
+    }
+}
+```
+
+```php
+<?php
+namespace View\Layout;
+
+class SidebarView extends AbstractViewModel
+{
+    // Whatever you want it to show
+}
+```
+
+```php
+<?php
+namespace View\Pages;
+
+/**
+ * @property-read View\Layout\SitePageTemplateView $page
+ * @property-read string                           $name
+ */
+class HelloWorldView extends Ingenerator\KohanaView\ViewModel\PageLayout\AbstractNestedChildView
 {
   protected $variables = [
     'name' => NULL
   ];
+  
+  protected function var_page()
+  {
+      // If you want to make this available to set things from the view : it's not required
+      return $this->getUltimatePageView();
+  }
 }
 ```
 
 ```php
 <?php
-//application/views/layout.php
+//application/views/site_page_template.php
 /**
- * @var \View_Layout                                  $view
+ * @var \View\Layout\SitePageTemplateView $view
  * @var \Ingenerator\KohanaView\Renderer\HTMLRenderer $renderer
  */
 ?>
@@ -205,9 +253,23 @@ class View_HelloWorld extends Ingenerator\KohanaView\ViewModel\PageLayout\Abstra
 
 ```php
 <?php
-//application/views/hello_world.php
+//application/views/content_with_sidebar_layout.php
 /**
- * @var \View_HelloWorld                              $view
+ * @var \View\Layout\ContentWithSidebarLayout $view
+ * @var \Ingenerator\KohanaView\Renderer\HTMLRenderer $renderer
+ */
+?>
+<div class="row">
+  <div class="sidebar"><?=raw($renderer->render($view->sidebar));?></div>
+  <div class="content"><?=raw($view->child_html);?></div>
+</div>
+```
+
+```php
+<?php
+//application/views/pages/hello_world.php
+/**
+ * @var \View\Pages\HelloWorldView                    $view
  * @var \Ingenerator\KohanaView\Renderer\HTMLRenderer $renderer
  */
 // You can do this here if you want to keep templatey-type stuff together
@@ -224,8 +286,12 @@ class Controller_Welcome extends Controller // Look, extend any controller! No m
   public function action_index()
   {
     // You probably want to put your views into the dependency container too
-    $layout  = new View_Layout;
-    $content = new View_HelloWorld($layout);
+    $content = new HelloWorldView(
+        new ContentWithSidebarLayoutView(
+            new SitePageTemplateView(),
+            new SidebarView()
+        )
+    );
     $content->display(['name' => $this->request->query('name')]);
     $renderer = new \Ingenerator\KohanaView\Renderer\PageLayoutRenderer(
       $this->dependencies->get('kohanaview.renderer.html'),

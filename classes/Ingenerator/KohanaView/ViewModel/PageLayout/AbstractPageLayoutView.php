@@ -23,7 +23,7 @@ use Ingenerator\KohanaView\ViewModel\AbstractViewModel;
  *
  * @package Ingenerator\KohanaView\ViewModel\PageLayoutView
  */
-abstract class AbstractPageLayoutView extends AbstractViewModel implements ViewModel\PageLayoutView
+abstract class AbstractPageLayoutView extends AbstractViewModel implements ViewModel\PageLayoutView, ViewModel\NestedParentView
 {
 
     /**
@@ -50,6 +50,11 @@ abstract class AbstractPageLayoutView extends AbstractViewModel implements ViewM
      * @return void
      */
     public function setBodyHTML($html)
+    {
+        $this->variables['body_html'] = $html;
+    }
+
+    public function setChildHtml($html)
     {
         $this->variables['body_html'] = $html;
     }

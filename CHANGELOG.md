@@ -1,5 +1,8 @@
 ## Unreleased
 
+* Adds support for recursively chained view-models rather than the previous fixed limit of content and
+  page template. 
+
 ## 4.1.0 (2018-09-04)
 
 * Adds support for PHP ^7.2

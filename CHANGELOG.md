@@ -1,5 +1,10 @@
 ## Unreleased
 
+* Add the `kohanaview.renderer.page_layout` dependency definition to the dependencies configuration. 
+  There is a very small chance this will be breaking, if you are using our DI container but not our 
+  standard kohana core dependency config. If so, you may need to add an explicit definition for 
+  kohana.request (pointing to Request::initial() )to your project's definitions. It seemed such an edge
+  we thought the risk was small enough to justify including in a non-breaking release.
 * Adds support for recursively chained view-models rather than the previous fixed limit of content and
   page template. 
 

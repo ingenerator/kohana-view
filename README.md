@@ -293,10 +293,8 @@ class Controller_Welcome extends Controller // Look, extend any controller! No m
         )
     );
     $content->display(['name' => $this->request->query('name')]);
-    $renderer = new \Ingenerator\KohanaView\Renderer\PageLayoutRenderer(
-      $this->dependencies->get('kohanaview.renderer.html'),
-      $this->request
-    );
+    $renderer = $this->dependencies->get('kohanaview.renderer.page_layout');
+    /** @var \Ingenerator\KohanaView\Renderer\PageLayoutRenderer $renderer */
 
     $this->response->body($renderer->render($content));
   }

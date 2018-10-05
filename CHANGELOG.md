@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 4.2.0 (2018-10-05)
+
 * Add the `kohanaview.renderer.page_layout` dependency definition to the dependencies configuration. 
   There is a very small chance this will be breaking, if you are using our DI container but not our 
   standard kohana core dependency config. If so, you may need to add an explicit definition for 

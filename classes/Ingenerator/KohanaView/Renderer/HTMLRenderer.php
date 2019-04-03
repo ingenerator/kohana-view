@@ -47,11 +47,11 @@ class HTMLRenderer implements Renderer
     {
         $template_path = $this->getTemplatePath($view);
 
-        ob_start();
+        \ob_start();
         try {
             $this->includeWithAnonymousScope($view, $template_path);
         } finally {
-            $output = ob_get_clean();
+            $output = \ob_get_clean();
         }
 
         return $output;

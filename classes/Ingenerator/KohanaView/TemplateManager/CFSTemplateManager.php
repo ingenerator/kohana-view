@@ -68,9 +68,9 @@ class CFSTemplateManager implements TemplateManager
     {
         $this->cascading_files  = $cascading_files ?: new CFSWrapper;
         $this->compiler         = $compiler;
-        $this->cache_dir        = rtrim($options['cache_dir'], '/');
+        $this->cache_dir        = \rtrim($options['cache_dir'], '/');
         $this->recompile_always = \Arr::get($options, 'recompile_always', FALSE);
-        $this->template_dir     = rtrim(\Arr::get($options, 'template_dir', 'views'), '/');
+        $this->template_dir     = \rtrim(\Arr::get($options, 'template_dir', 'views'), '/');
     }
 
     /**
@@ -101,7 +101,7 @@ class CFSTemplateManager implements TemplateManager
             return TRUE;
         }
 
-        return ! file_exists($compiled_path);
+        return ! \file_exists($compiled_path);
     }
 
     /**
@@ -115,7 +115,7 @@ class CFSTemplateManager implements TemplateManager
             throw TemplateNotFoundException::forSourcePath($this->template_dir.'/'.$template_name);
         }
 
-        return file_get_contents($source_file);
+        return \file_get_contents($source_file);
     }
 
     /**
@@ -124,8 +124,8 @@ class CFSTemplateManager implements TemplateManager
      */
     protected function writeFile($compiled_path, $compiled)
     {
-        $this->ensureWriteableDirectory(dirname($compiled_path));
-        file_put_contents($compiled_path, $compiled);
+        $this->ensureWriteableDirectory(\dirname($compiled_path));
+        \file_put_contents($compiled_path, $compiled);
     }
 
     /**
@@ -133,12 +133,12 @@ class CFSTemplateManager implements TemplateManager
      */
     protected function ensureWriteableDirectory($path)
     {
-        if (is_dir($path)) {
-            if ( ! is_writeable($path)) {
+        if (\is_dir($path)) {
+            if ( ! \is_writeable($path)) {
                 throw TemplateCacheException::pathNotWriteable($path);
             }
         } else {
-            if ( ! mkdir($path, 0777, TRUE)) {
+            if ( ! \mkdir($path, 0777, TRUE)) {
                 throw TemplateCacheException::cannotCreateDirectory($path);
             }
         }

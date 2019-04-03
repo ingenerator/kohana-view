@@ -17,7 +17,7 @@ use org\bovigo\vfs\vfsStreamDirectory;
 use org\bovigo\vfs\vfsStreamFile;
 use test\mock\ViewModel\ViewModelDummy;
 
-class HTMLRendererTest extends \PHPUnit_Framework_TestCase
+class HTMLRendererTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var TemplateManagerSpy
@@ -79,7 +79,7 @@ class HTMLRendererTest extends \PHPUnit_Framework_TestCase
         $this->givenTemplate('View:<?=spl_object_hash($view);?>');
         $view = new ViewModelDummy;
         $this->assertSame(
-            'View:'.spl_object_hash($view),
+            'View:'.\spl_object_hash($view),
             $this->newSubject()->render($view)
         );
     }
@@ -89,7 +89,7 @@ class HTMLRendererTest extends \PHPUnit_Framework_TestCase
         $this->givenTemplate('Renderer:<?=spl_object_hash($renderer);?>');
         $subject = $this->newSubject();
         $this->assertSame(
-            'Renderer:'.spl_object_hash($subject),
+            'Renderer:'.\spl_object_hash($subject),
             $subject->render(new ViewModelDummy)
         );
     }
@@ -124,7 +124,7 @@ class HTMLRendererTest extends \PHPUnit_Framework_TestCase
 
     public function test_it_suppresses_template_output_and_clears_buffer_on_exception_during_render()
     {
-        $ob_level_before = ob_get_level();
+        $ob_level_before = \ob_get_level();
         $this->expectOutputRegex('/^$/');
         $this->givenTemplate('Stuff <?="that works";?> then <?php throw new \InvalidArgumentException("dammit");?>');
         try {
@@ -133,7 +133,7 @@ class HTMLRendererTest extends \PHPUnit_Framework_TestCase
         } catch (\InvalidArgumentException $e) {
             $this->assertSame('dammit', $e->getMessage(), 'Ensure it is the expected exception');
         }
-        $this->assertSame($ob_level_before, ob_get_level(), 'Expect any internal output buffers to be cleared');
+        $this->assertSame($ob_level_before, \ob_get_level(), 'Expect any internal output buffers to be cleared');
     }
 
     public function test_it_can_render_same_template_multiple_times_with_same_or_different_views()
@@ -169,14 +169,14 @@ class HTMLRendererTest extends \PHPUnit_Framework_TestCase
      */
     public function test_it_throws_if_inclusion_fails_even_with_error_reporting_off()
     {
-        error_reporting(0);
+        \error_reporting(0);
         $this->template_manager->setTemplatePath(vfsStream::url('/path/to/undefined/file'));
         $this->newSubject()->render(new ViewModelDummy);
     }
 
     public function setUp()
     {
-        $this->old_error_reporting = error_reporting();
+        $this->old_error_reporting = \error_reporting();
         $this->template_selector   = new ViewTemplateSelectorSpy;
         $this->template_manager    = new TemplateManagerSpy;
         $this->vfs_root            = vfsStream::setup('templates');
@@ -187,7 +187,7 @@ class HTMLRendererTest extends \PHPUnit_Framework_TestCase
 
     public function tearDown()
     {
-        error_reporting($this->old_error_reporting);
+        \error_reporting($this->old_error_reporting);
     }
 
     protected function newSubject()
@@ -200,7 +200,7 @@ class HTMLRendererTest extends \PHPUnit_Framework_TestCase
 
     protected function givenTemplate($content)
     {
-        $filename = uniqid('test-template').'.php';
+        $filename = \uniqid('test-template').'.php';
         $file     = new vfsStreamFile($filename);
         $file->setContent($content);
         $this->vfs_root->addChild($file);
@@ -224,7 +224,7 @@ class ViewTemplateSelectorSpy extends ViewTemplateSelector
 
     public function assertCalledOnceWith(ViewModel $view)
     {
-        \PHPUnit_Framework_Assert::assertSame([$view], $this->calls);
+        \PHPUnit\Framework\Assert::assertSame([$view], $this->calls);
     }
 
 }
@@ -249,7 +249,7 @@ class TemplateManagerSpy implements TemplateManager
 
     public function assertCalledOnceWith($template_name)
     {
-        \PHPUnit_Framework_Assert::assertSame([$template_name], $this->calls);
+        \PHPUnit\Framework\Assert::assertSame([$template_name], $this->calls);
     }
 
 }

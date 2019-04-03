@@ -11,7 +11,7 @@ namespace test\unit\Ingenerator\KohanaView\ViewModel\PageLayout;
 use Ingenerator\KohanaView\ViewModel;
 use Ingenerator\KohanaView\ViewModel\PageLayout\AbstractPageLayoutView;
 
-class AbstractPageLayoutViewTest extends \PHPUnit_Framework_TestCase
+class AbstractPageLayoutViewTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ViewModel

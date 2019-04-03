@@ -1,5 +1,9 @@
 ## Unreleased
 
+## 4.3.0 (2019-04-03)
+
+* Drop support for php5
+
 ## 4.2.0 (2018-10-05)
 
 * Add the `kohanaview.renderer.page_layout` dependency definition to the dependencies configuration. 

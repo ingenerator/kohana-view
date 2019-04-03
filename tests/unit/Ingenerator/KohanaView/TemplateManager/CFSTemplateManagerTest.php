@@ -13,7 +13,7 @@ use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
 use test\mock\CFSWrapper\SingleDirectoryCFSWrapperMock;
 
-class CFSTemplateManagerTest extends \PHPUnit_Framework_TestCase
+class CFSTemplateManagerTest extends \PHPUnit\Framework\TestCase
 {
 
     protected $options = [];
@@ -199,12 +199,12 @@ class SpyingTemplateCompiler extends TemplateCompiler
 
     public function assertCompiledOnce($string)
     {
-        \PHPUnit_Framework_Assert::assertEquals([$string], $this->compiled);
+        \PHPUnit\Framework\Assert::assertEquals([$string], $this->compiled);
     }
 
     public function assertNothingCompiled()
     {
-        \PHPUnit_Framework_Assert::assertEmpty($this->compiled);
+        \PHPUnit\Framework\Assert::assertEmpty($this->compiled);
     }
 }
 

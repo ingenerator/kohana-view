@@ -19,7 +19,7 @@ use test\mock\ViewModel\PageLayout\DummyIntermediateLayoutView;
 use test\mock\ViewModel\PageLayout\DummyPageContentView;
 use test\mock\ViewModel\PageLayout\DummyPageLayoutView;
 
-class PageLayoutRendererTest extends \PHPUnit_Framework_TestCase
+class PageLayoutRendererTest extends \PHPUnit\Framework\TestCase
 {
 
     /**

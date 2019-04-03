@@ -10,7 +10,7 @@ namespace test\unit\Ingenerator\KohanaView\ViewModel\PageLayout;
 use Ingenerator\KohanaView\ViewModel\PageLayout\StaticPageContentView;
 use test\mock\ViewModel\PageLayout\DummyPageLayoutView;
 
-class StaticPageContentViewTest extends \PHPUnit_Framework_TestCase
+class StaticPageContentViewTest extends \PHPUnit\Framework\TestCase
 {
 
     public function test_it_is_initialisable()

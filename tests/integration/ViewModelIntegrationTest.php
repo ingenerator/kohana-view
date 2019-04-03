@@ -18,7 +18,7 @@ use Ingenerator\KohanaView\ViewModel;
  * @runTestsInSeparateProcesses
  * @preserveGlobalState disabled
  */
-class ViewModelIntegrationTest extends \PHPUnit_Framework_TestCase
+class ViewModelIntegrationTest extends \PHPUnit\Framework\TestCase
 {
     const STALE_COMPILED_STRING = 'Stale content from previous compile';
 
@@ -156,8 +156,8 @@ PHP
 
     public function setUp()
     {
-        \PHPUnit_Framework_Assert::assertTrue($this->isInIsolation(), 'Integration tests must runInSeparateProcess');
-        \PHPUnit_Framework_Assert::assertTrue($this->preserveGlobalState, 'Integration tests must run without globals');
+        \PHPUnit\Framework\Assert::assertTrue($this->isInIsolation(), 'Integration tests must runInSeparateProcess');
+        \PHPUnit\Framework\Assert::assertTrue($this->preserveGlobalState, 'Integration tests must run without globals');
         $this->expectOutputRegex('/^$/');
 
         $this->tmp_dir      = sys_get_temp_dir().'/kohana-view-integration/'.uniqid('test');

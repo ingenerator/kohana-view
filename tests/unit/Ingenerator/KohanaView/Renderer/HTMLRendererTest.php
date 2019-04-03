@@ -17,7 +17,7 @@ use org\bovigo\vfs\vfsStreamDirectory;
 use org\bovigo\vfs\vfsStreamFile;
 use test\mock\ViewModel\ViewModelDummy;
 
-class HTMLRendererTest extends \PHPUnit_Framework_TestCase
+class HTMLRendererTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var TemplateManagerSpy
@@ -224,7 +224,7 @@ class ViewTemplateSelectorSpy extends ViewTemplateSelector
 
     public function assertCalledOnceWith(ViewModel $view)
     {
-        \PHPUnit_Framework_Assert::assertSame([$view], $this->calls);
+        \PHPUnit\Framework\Assert::assertSame([$view], $this->calls);
     }
 
 }
@@ -249,7 +249,7 @@ class TemplateManagerSpy implements TemplateManager
 
     public function assertCalledOnceWith($template_name)
     {
-        \PHPUnit_Framework_Assert::assertSame([$template_name], $this->calls);
+        \PHPUnit\Framework\Assert::assertSame([$template_name], $this->calls);
     }
 
 }

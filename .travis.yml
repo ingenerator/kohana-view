@@ -26,3 +26,7 @@ before_script:
 
 # Run the View tests against the koharnessed application in /tmp/koharness
 script: vendor/bin/phpunit
+
+notifications:
+  email: false
+

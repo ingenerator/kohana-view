@@ -9,7 +9,7 @@ namespace test\unit\Ingenerator\KohanaView;
 
 use Ingenerator\KohanaView\TemplateCompiler;
 
-class TemplateCompilerTest extends \PHPUnit_Framework_TestCase
+class TemplateCompilerTest extends \PHPUnit\Framework\TestCase
 {
 
     protected $options = [];

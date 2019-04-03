@@ -12,7 +12,7 @@ use Ingenerator\KohanaView\ViewTemplateSelector;
 use test\mock\ViewModel\FixedTemplateViewModelStub;
 use test\mock\ViewModel\ViewModelDummy;
 
-class ViewTemplateSelectorTest extends \PHPUnit_Framework_TestCase
+class ViewTemplateSelectorTest extends \PHPUnit\Framework\TestCase
 {
 
     public function test_it_is_initialisable()

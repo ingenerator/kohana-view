@@ -9,7 +9,7 @@ namespace test\unit\Ingenerator\KohanaView\ViewModel;
 
 use Ingenerator\KohanaView\ViewModel\AbstractViewModel;
 
-class AbstractViewModelTest extends \PHPUnit_Framework_TestCase
+class AbstractViewModelTest extends \PHPUnit\Framework\TestCase
 {
 
     public function test_it_is_initialisable()

@@ -21,7 +21,7 @@ class ViewModelDummy implements ViewModel
     {
         if (class_exists($class_name)) {
             $instance = new $class_name;
-            \PHPUnit_Framework_Assert::assertInstanceOf(__CLASS__, $instance);
+            \PHPUnit\Framework\Assert::assertInstanceOf(__CLASS__, $instance);
 
             return $instance;
         }

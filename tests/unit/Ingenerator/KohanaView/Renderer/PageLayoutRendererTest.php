@@ -15,7 +15,7 @@ use Ingenerator\KohanaView\ViewModel\PageLayoutView;
 use test\mock\ViewModel\PageLayout\DummyPageContentView;
 use test\mock\ViewModel\PageLayout\DummyPageLayoutView;
 
-class PageLayoutRendererTest extends \PHPUnit_Framework_TestCase implements Renderer
+class PageLayoutRendererTest extends \PHPUnit\Framework\TestCase implements Renderer
 {
 
     /**

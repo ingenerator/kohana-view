@@ -29,11 +29,11 @@
     "require": {
         "composer/installers": "~1.0",
         "kohana/core":         "3.3.*",
-        "php":                 "^5.5||^7.2"
+        "php":                 "^7.2"
     },
     "require-dev": {
         "kohana/koharness": "dev-master",
-        "phpunit/phpunit": "^4.8",
+        "phpunit/phpunit": "^7.0",
         "mikey179/vfsStream": "^1.6",
         "zeelot/kohana-dependencies": "0.7.x-dev@dev"
     },

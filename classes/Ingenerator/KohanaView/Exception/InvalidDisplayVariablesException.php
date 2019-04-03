@@ -25,10 +25,10 @@ class InvalidDisplayVariablesException extends \InvalidArgumentException
     public static function passedToDisplay($view_class, $errors)
     {
         return new static(
-            sprintf(
+            \sprintf(
                 "Invalid variables provided to %s::display()\n%s",
                 $view_class,
-                ' - '.implode("\n - ", $errors)
+                ' - '.\implode("\n - ", $errors)
             )
         );
     }

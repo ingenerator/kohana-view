@@ -83,7 +83,7 @@ class PageLayoutRendererTest extends \PHPUnit\Framework\TestCase implements Rend
 
     public function render(ViewModel $view)
     {
-        $hash = spl_object_hash($view);
+        $hash = \spl_object_hash($view);
         if ($view instanceof DummyPageContentView) {
             return "Rendered:Content:$hash";
         } elseif ($view instanceof DummyPageLayoutView) {
@@ -105,7 +105,7 @@ class PageLayoutRendererTest extends \PHPUnit\Framework\TestCase implements Rend
     protected function assertRendersContentOnly(PageContentView $view, $actual_output)
     {
         $this->assertSame(
-            'Rendered:Content:'.spl_object_hash($view),
+            'Rendered:Content:'.\spl_object_hash($view),
             $actual_output
         );
     }
@@ -116,7 +116,7 @@ class PageLayoutRendererTest extends \PHPUnit\Framework\TestCase implements Rend
         $actual_output
     ) {
         $this->assertSame(
-            'Rendered:Layout:'.spl_object_hash($layout).' with Rendered:Content:'.spl_object_hash($content),
+            'Rendered:Layout:'.\spl_object_hash($layout).' with Rendered:Content:'.\spl_object_hash($content),
             $actual_output
         );
     }

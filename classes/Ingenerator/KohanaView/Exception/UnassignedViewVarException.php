@@ -26,7 +26,7 @@ class UnassignedViewVarException extends \BadMethodCallException
     public static function forVariable($view_class, $var_name, $hint)
     {
         return new static(
-            sprintf(
+            \sprintf(
                 'Call %s::display(["%s" => "%s"]) before rendering a %s view',
                 $view_class,
                 $var_name,

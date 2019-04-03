@@ -56,11 +56,11 @@ class ViewModelIntegrationTest extends \PHPUnit\Framework\TestCase
     {
         $this->givenFileWithContent('module/views/any_view.php', 'Project source template');
 
-        \Kohana::$environment = constant('\Kohana::'.$environment);
+        \Kohana::$environment = \constant('\Kohana::'.$environment);
         $dependencies         = $this->givenDependenciesBootstrapped();
 
         $cache_file = $this->getTemplateManager($dependencies)->getPath('any_view');
-        $this->assertSame('Project source template', file_get_contents($cache_file));
+        $this->assertSame('Project source template', \file_get_contents($cache_file));
     }
 
     /**
@@ -74,12 +74,12 @@ class ViewModelIntegrationTest extends \PHPUnit\Framework\TestCase
         $this->givenFileWithContent('cache/compiled_templates/any_view.php', self::STALE_COMPILED_STRING);
         $this->givenFileWithContent('module/views/any_view.php', 'Project source template');
 
-        \Kohana::$environment = constant('\Kohana::'.$environment);
+        \Kohana::$environment = \constant('\Kohana::'.$environment);
         $dependencies         = $this->givenDependenciesBootstrapped();
 
         $cache_file = $this->getTemplateManager($dependencies)->getPath('any_view');
 
-        $actual_content = file_get_contents($cache_file);
+        $actual_content = \file_get_contents($cache_file);
         if ($expect_recompile) {
             $this->assertNotSame($actual_content, self::STALE_COMPILED_STRING);
         } else {
@@ -160,9 +160,9 @@ PHP
         \PHPUnit\Framework\Assert::assertTrue($this->preserveGlobalState, 'Integration tests must run without globals');
         $this->expectOutputRegex('/^$/');
 
-        $this->tmp_dir      = sys_get_temp_dir().'/kohana-view-integration/'.uniqid('test');
+        $this->tmp_dir      = \sys_get_temp_dir().'/kohana-view-integration/'.\uniqid('test');
         \Kohana::$cache_dir = $this->tmp_dir.'/cache';
-        mkdir($this->tmp_dir.'/module', 0700, TRUE);
+        \mkdir($this->tmp_dir.'/module', 0700, TRUE);
 
         parent::setUp();
     }
@@ -207,12 +207,12 @@ PHP
     {
         $full_path = $this->tmp_dir.'/'.$relative_path;
 
-        $path = dirname($full_path);
-        if ( ! is_dir($path)) {
-            mkdir($path, 0777, TRUE);
+        $path = \dirname($full_path);
+        if ( ! \is_dir($path)) {
+            \mkdir($path, 0777, TRUE);
         }
 
-        file_put_contents($full_path, $content);
+        \file_put_contents($full_path, $content);
 
         return $full_path;
     }

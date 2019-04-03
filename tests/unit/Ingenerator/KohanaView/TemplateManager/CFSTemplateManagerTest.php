@@ -62,7 +62,7 @@ class CFSTemplateManagerTest extends \PHPUnit\Framework\TestCase
     public function test_it_throws_if_it_cannot_create_cache_dir()
     {
         $this->options['cache_dir'] = vfsStream::url('template/cache');
-        chmod($this->options['cache_dir'], 0500);
+        \chmod($this->options['cache_dir'], 0500);
         $this->givenFile('module/views/any/view.php', 'Raw view file');
         $this->newSubject()->getPath('any/view');
     }
@@ -74,7 +74,7 @@ class CFSTemplateManagerTest extends \PHPUnit\Framework\TestCase
     public function test_it_throws_if_it_cannot_create_compiled_file()
     {
         $this->options['cache_dir'] = vfsStream::url('template/cache');
-        chmod($this->options['cache_dir'], 0500);
+        \chmod($this->options['cache_dir'], 0500);
         $this->givenFile('module/views/anything.php', 'Raw view file');
         $this->newSubject()->getPath('anything');
     }
@@ -161,8 +161,8 @@ class CFSTemplateManagerTest extends \PHPUnit\Framework\TestCase
      */
     protected function assertCompiledToFile($compiled_url)
     {
-        $this->assertTrue(file_exists($compiled_url), "Compiled file $compiled_url should exist");
-        $this->assertSame(SpyingTemplateCompiler::COMPILED_OUTPUT, file_get_contents($compiled_url));
+        $this->assertTrue(\file_exists($compiled_url), "Compiled file $compiled_url should exist");
+        $this->assertSame(SpyingTemplateCompiler::COMPILED_OUTPUT, \file_get_contents($compiled_url));
         $this->assertStringStartsWith(
             $this->options['cache_dir'],
             $compiled_url,
@@ -173,11 +173,11 @@ class CFSTemplateManagerTest extends \PHPUnit\Framework\TestCase
     protected function givenFile($path_to_file, $content)
     {
         $file = vfsStream::url('template/'.$path_to_file);
-        $path = dirname($file);
-        if ( ! is_dir($path)) {
-            mkdir($path, 0777, TRUE);
+        $path = \dirname($file);
+        if ( ! \is_dir($path)) {
+            \mkdir($path, 0777, TRUE);
         }
-        file_put_contents($file, $content);
+        \file_put_contents($file, $content);
     }
 
 }

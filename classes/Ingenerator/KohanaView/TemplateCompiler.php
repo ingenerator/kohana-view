@@ -45,7 +45,7 @@ class TemplateCompiler
      */
     public function __construct(array $options = [])
     {
-        $this->options = array_merge($this->options, $options);
+        $this->options = \array_merge($this->options, $options);
     }
 
     /**
@@ -63,11 +63,11 @@ class TemplateCompiler
             throw InvalidTemplateContentException::forEmptyTemplate();
         }
 
-        if (preg_match('/<?php echo/', $source)) {
+        if (\preg_match('/<?php echo/', $source)) {
             throw InvalidTemplateContentException::hasLegacyPhpEcho();
         }
 
-        return preg_replace_callback('/<\?=(.+?)(;|\?>)/s', [$this, 'compilePhpShortTag'], $source);
+        return \preg_replace_callback('/<\?=(.+?)(;|\?>)/s', [$this, 'compilePhpShortTag'], $source);
     }
 
     /**
@@ -77,13 +77,13 @@ class TemplateCompiler
      */
     protected function compilePhpShortTag($matches)
     {
-        $var           = trim($matches[1]);
+        $var           = \trim($matches[1]);
         $terminator    = $matches[2];
         $escape_method = $this->options['escape_method'];
 
         if ($this->startsWith($var, 'raw(')) {
             // Use a plain php echo
-            $compiled = '<?php echo('.substr($var, strlen('raw(')).';';
+            $compiled = '<?php echo('.\substr($var, \strlen('raw(')).';';
         } elseif ($this->startsWith($var, '//')) {
             // Echo an empty string to prevent the comment causing a parse error
             $compiled = "<?='';$var;";
@@ -116,7 +116,7 @@ class TemplateCompiler
      */
     protected function startsWith($string, $prefix)
     {
-        return (strncmp($string, $prefix, strlen($prefix)) === 0);
+        return (\strncmp($string, $prefix, \strlen($prefix)) === 0);
     }
 
 }

@@ -55,7 +55,7 @@ abstract class AbstractNestedChildView extends AbstractViewModel implements Nest
             $parent = $parent->getParentView();
         }
         if ( ! $parent instanceof PageLayoutView) {
-            throw new \UnexpectedValueException('No ultimate PageLayoutView for '.get_class($this));
+            throw new \UnexpectedValueException('No ultimate PageLayoutView for '.\get_class($this));
         }
         return $parent;
     }

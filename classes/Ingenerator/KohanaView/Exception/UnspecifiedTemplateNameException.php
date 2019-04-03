@@ -37,10 +37,10 @@ class UnspecifiedTemplateNameException extends \UnexpectedValueException
     public static function forNonStringValue($view_class, $template)
     {
         return new static(
-            sprintf(
+            \sprintf(
                 '%s::getTemplateName() must return a string template name, %s value returned',
                 $view_class,
-                is_object($template) ? get_class($template) : gettype($template)
+                \is_object($template) ? \get_class($template) : \gettype($template)
             )
         );
     }

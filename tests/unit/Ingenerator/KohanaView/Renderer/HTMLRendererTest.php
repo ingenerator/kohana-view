@@ -9,6 +9,7 @@ namespace test\unit\Ingenerator\KohanaView\Renderer;
 
 
 use Ingenerator\KohanaView\Exception\TemplateNotFoundException;
+use Ingenerator\KohanaView\Renderer;
 use Ingenerator\KohanaView\Renderer\HTMLRenderer;
 use Ingenerator\KohanaView\TemplateManager;
 use Ingenerator\KohanaView\ViewModel;
@@ -16,9 +17,10 @@ use Ingenerator\KohanaView\ViewTemplateSelector;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
 use org\bovigo\vfs\vfsStreamFile;
+use PHPUnit\Framework\TestCase;
 use test\mock\ViewModel\ViewModelDummy;
 
-class HTMLRendererTest extends \PHPUnit\Framework\TestCase
+class HTMLRendererTest extends TestCase
 {
     /**
      * @var TemplateManagerSpy
@@ -43,14 +45,8 @@ class HTMLRendererTest extends \PHPUnit\Framework\TestCase
     public function test_it_is_initialisable()
     {
         $subject = $this->newSubject();
-        $this->assertInstanceOf(
-            'Ingenerator\KohanaView\Renderer\HTMLRenderer',
-            $subject
-        );
-        $this->assertInstanceOf(
-            'Ingenerator\KohanaView\Renderer',
-            $subject
-        );
+        $this->assertInstanceOf(HTMLRenderer::class, $subject);
+        $this->assertInstanceOf(Renderer::class, $subject);
     }
 
     public function test_it_selects_template_for_view()

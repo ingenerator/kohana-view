@@ -145,7 +145,7 @@ class PageLayoutRendererTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expect, $subject->render($content));
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->renderer = new SimpleRendererStub;
     }

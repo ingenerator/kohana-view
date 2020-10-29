@@ -39,9 +39,12 @@ class AbstractPageContentViewTest extends \PHPUnit\Framework\TestCase
     public function test_it_does_not_take_page_as_display_value()
     {
         $this->newSubject()->display(['message' => 'anything']);
+
+        // We got this far successfully, provide assertion to keep PHPUnit happy.
+        $this->assertTrue(TRUE);
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->page_layout = new DummyPageLayoutView;
         parent::setUp();

@@ -26,16 +26,22 @@
         "issues":   "https://github.com/ingenerator/kohana-view/issues",
         "source":   "https://github.com/ingenerator/kohana-view"
     },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://php-packages.ingenerator.com"
+        }
+    ],
     "require": {
         "composer/installers": "~1.0",
-        "kohana/core":         "3.3.*",
-        "php":                 "^7.2"
+        "php":                 "^7.4",
+        "ingenerator/kohana-core": "^4.7"
     },
     "require-dev": {
         "kohana/koharness": "dev-master",
-        "phpunit/phpunit": "^7.0",
         "mikey179/vfsstream": "^1.6",
-        "zeelot/kohana-dependencies": "0.7.x-dev@dev"
+        "zeelot/kohana-dependencies": "0.7.x-dev@dev",
+        "phpunit/phpunit": "^9.0"
     },
     "suggest": {
         "zeelot/kohana-dependencies": "Dependency Injection container for Kohana 3.x"

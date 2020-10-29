@@ -7,6 +7,7 @@
 namespace test\unit\Ingenerator\KohanaView\ViewModel\PageLayout;
 
 
+use BadMethodCallException;
 use Ingenerator\KohanaView\ViewModel\NestedChildView;
 use Ingenerator\KohanaView\ViewModel\NestedParentView;
 use PHPUnit\Framework\TestCase;
@@ -32,11 +33,9 @@ class AbstractNestedChildViewTest extends TestCase
         $this->assertSame($this->parent_view, $this->newSubject()->getParentView());
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function test_it_throws_on_attempt_to_access_page_on_old_interface()
     {
+        $this->expectException(BadMethodCallException::class);
         $this->newSubject()->page;
     }
 
@@ -67,7 +66,7 @@ class AbstractNestedChildViewTest extends TestCase
         $this->assertSame($expect_page, $this->newSubject()->getUltimatePageView());
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->parent_view = new DummyPageLayoutView;

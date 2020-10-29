@@ -7,6 +7,8 @@
 namespace test\unit\Ingenerator\KohanaView\TemplateManager;
 
 
+use Ingenerator\KohanaView\Exception\TemplateCacheException;
+use Ingenerator\KohanaView\Exception\TemplateNotFoundException;
 use Ingenerator\KohanaView\TemplateCompiler;
 use Ingenerator\KohanaView\TemplateManager\CFSTemplateManager;
 use org\bovigo\vfs\vfsStream;
@@ -55,35 +57,33 @@ class CFSTemplateManagerTest extends \PHPUnit\Framework\TestCase
         $this->assertCompiledToFile($compiled_path);
     }
 
-    /**
-     * @expectedException \Ingenerator\KohanaView\Exception\TemplateCacheException
-     * @expectedExceptionMessage Cannot create template cache directory
-     */
     public function test_it_throws_if_it_cannot_create_cache_dir()
     {
         $this->options['cache_dir'] = vfsStream::url('template/cache');
         \chmod($this->options['cache_dir'], 0500);
         $this->givenFile('module/views/any/view.php', 'Raw view file');
+
+        $this->expectException(TemplateCacheException::class);
+        $this->expectExceptionMessage("Cannot create template cache directory");
+
         $this->newSubject()->getPath('any/view');
     }
 
-    /**
-     * @expectedException \Ingenerator\KohanaView\Exception\TemplateCacheException
-     * @expectedExceptionMessage Cannot write to compiled template path
-     */
     public function test_it_throws_if_it_cannot_create_compiled_file()
     {
         $this->options['cache_dir'] = vfsStream::url('template/cache');
         \chmod($this->options['cache_dir'], 0500);
         $this->givenFile('module/views/anything.php', 'Raw view file');
+
+        $this->expectException(TemplateCacheException::class);
+        $this->expectExceptionMessage("Cannot write to compiled template path");
+
         $this->newSubject()->getPath('anything');
     }
 
-    /**
-     * @expectedException \Ingenerator\KohanaView\Exception\TemplateNotFoundException
-     */
     public function test_it_throws_if_no_source_template_for_uncompiled_template_name()
     {
+        $this->expectException(TemplateNotFoundException::class);
         $this->newSubject()->getPath('some/random/template/file/we/do/not/have');
     }
 
@@ -135,7 +135,7 @@ class CFSTemplateManagerTest extends \PHPUnit\Framework\TestCase
         $this->assertCompiledToFile($compiled_url);
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->compiler             = new SpyingTemplateCompiler;
         $this->vfs_root             = vfsStream::setup(

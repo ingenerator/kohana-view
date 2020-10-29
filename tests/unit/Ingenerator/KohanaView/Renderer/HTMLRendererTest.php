@@ -8,6 +8,8 @@
 namespace test\unit\Ingenerator\KohanaView\Renderer;
 
 
+use Ingenerator\KohanaView\Exception\TemplateNotFoundException;
+use Ingenerator\KohanaView\Renderer;
 use Ingenerator\KohanaView\Renderer\HTMLRenderer;
 use Ingenerator\KohanaView\TemplateManager;
 use Ingenerator\KohanaView\ViewModel;
@@ -15,9 +17,10 @@ use Ingenerator\KohanaView\ViewTemplateSelector;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
 use org\bovigo\vfs\vfsStreamFile;
+use PHPUnit\Framework\TestCase;
 use test\mock\ViewModel\ViewModelDummy;
 
-class HTMLRendererTest extends \PHPUnit\Framework\TestCase
+class HTMLRendererTest extends TestCase
 {
     /**
      * @var TemplateManagerSpy
@@ -42,14 +45,8 @@ class HTMLRendererTest extends \PHPUnit\Framework\TestCase
     public function test_it_is_initialisable()
     {
         $subject = $this->newSubject();
-        $this->assertInstanceOf(
-            'Ingenerator\KohanaView\Renderer\HTMLRenderer',
-            $subject
-        );
-        $this->assertInstanceOf(
-            'Ingenerator\KohanaView\Renderer',
-            $subject
-        );
+        $this->assertInstanceOf(HTMLRenderer::class, $subject);
+        $this->assertInstanceOf(Renderer::class, $subject);
     }
 
     public function test_it_selects_template_for_view()
@@ -153,28 +150,27 @@ class HTMLRendererTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(['Number1', 'Number2', 'Number3'], $output);
     }
 
-    /**
-     * @expectedException \ErrorException
-     * @expectedExceptionMessage path/to/undefined/file
-     */
     public function test_it_generates_error_if_template_is_not_found()
     {
         $this->template_manager->setTemplatePath(vfsStream::url('/path/to/undefined/file'));
+
+        $this->expectException(\ErrorException::class);
+        $this->expectExceptionMessage("path/to/undefined/file");
+
         $this->newSubject()->render(new ViewModelDummy);
     }
 
-    /**
-     * @expectedException \Ingenerator\KohanaView\Exception\TemplateNotFoundException
-     * @expectedExceptionMessage path/to/undefined/file
-     */
     public function test_it_throws_if_inclusion_fails_even_with_error_reporting_off()
     {
         \error_reporting(0);
         $this->template_manager->setTemplatePath(vfsStream::url('/path/to/undefined/file'));
+
+        $this->expectException(TemplateNotFoundException::class);
+        $this->expectExceptionMessage("path/to/undefined/file");
         $this->newSubject()->render(new ViewModelDummy);
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->old_error_reporting = \error_reporting();
         $this->template_selector   = new ViewTemplateSelectorSpy;
@@ -185,7 +181,7 @@ class HTMLRendererTest extends \PHPUnit\Framework\TestCase
         parent::__construct();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         \error_reporting($this->old_error_reporting);
     }

@@ -7,6 +7,7 @@
 
 namespace test\unit\Ingenerator\KohanaView;
 
+use Ingenerator\KohanaView\Exception\InvalidTemplateContentException;
 use Ingenerator\KohanaView\TemplateCompiler;
 
 class TemplateCompilerTest extends \PHPUnit\Framework\TestCase
@@ -22,11 +23,9 @@ class TemplateCompilerTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @expectedException \Ingenerator\KohanaView\Exception\InvalidTemplateContentException
-     */
     public function test_it_throws_if_template_empty()
     {
+        $this->expectException(InvalidTemplateContentException::class);
         $this->newSubject()->compile('');
     }
 
@@ -122,27 +121,21 @@ PHP;
         $this->assertSame($expect, $this->newSubject()->compile($source));
     }
 
-    /**
-     * @expectedException \Ingenerator\KohanaView\Exception\InvalidTemplateContentException
-     */
     public function test_it_throws_if_template_already_escapes_value_in_short_tags()
     {
+        $this->expectException(InvalidTemplateContentException::class);
         $this->newSubject()->compile('<?=HTML::chars($double_escape_whoops);?>');
     }
 
-    /**
-     * @expectedException \Ingenerator\KohanaView\Exception\InvalidTemplateContentException
-     */
     public function test_it_throws_if_template_uses_old_style_raw_exclamation_mark_prefix()
     {
+        $this->expectException(InvalidTemplateContentException::class);
         $this->newSubject()->compile('<?=!$var;?>');
     }
 
-    /**
-     * @expectedException \Ingenerator\KohanaView\Exception\InvalidTemplateContentException
-     */
     public function test_it_throws_if_template_uses_old_style_native_php_echo()
     {
+        $this->expectException(InvalidTemplateContentException::class);
         $this->newSubject()->compile('<p><?php echo $raw_content;?></p>');
     }
 

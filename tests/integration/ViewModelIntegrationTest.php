@@ -154,7 +154,7 @@ PHP
         );
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         \PHPUnit\Framework\Assert::assertTrue($this->isInIsolation(), 'Integration tests must runInSeparateProcess');
         \PHPUnit\Framework\Assert::assertTrue($this->preserveGlobalState, 'Integration tests must run without globals');
@@ -167,7 +167,7 @@ PHP
         parent::setUp();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         `rm -rf $this->tmp_dir`;
         $this->assertFileNotExists($this->tmp_dir, 'Temp directory should have been cleared up');

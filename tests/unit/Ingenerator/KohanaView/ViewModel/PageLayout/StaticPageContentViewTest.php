@@ -7,6 +7,7 @@
 namespace test\unit\Ingenerator\KohanaView\ViewModel\PageLayout;
 
 
+use Ingenerator\KohanaView\Exception\UnassignedViewVarException;
 use Ingenerator\KohanaView\ViewModel\PageLayout\StaticPageContentView;
 use test\mock\ViewModel\PageLayout\DummyPageLayoutView;
 
@@ -38,11 +39,9 @@ class StaticPageContentViewTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @expectedException \Ingenerator\KohanaView\Exception\UnassignedViewVarException
-     */
     public function test_it_throws_if_page_path_not_set_before_get_template_name()
     {
+        $this->expectException(UnassignedViewVarException::class);
         $this->newSubject()->getTemplateName();
     }
 

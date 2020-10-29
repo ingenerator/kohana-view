@@ -7,16 +7,21 @@
 namespace test\unit\Ingenerator\KohanaView\ViewModel;
 
 
+use Ingenerator\KohanaView\Exception\InvalidDisplayVariablesException;
+use Ingenerator\KohanaView\Exception\InvalidViewVarAssignmentException;
+use Ingenerator\KohanaView\Exception\UndefinedViewVarException;
+use Ingenerator\KohanaView\ViewModel;
 use Ingenerator\KohanaView\ViewModel\AbstractViewModel;
+use PHPUnit\Framework\TestCase;
 
-class AbstractViewModelTest extends \PHPUnit\Framework\TestCase
+class AbstractViewModelTest extends TestCase
 {
 
     public function test_it_is_initialisable()
     {
         $subject = $this->newSubject();
-        $this->assertInstanceOf('Ingenerator\KohanaView\ViewModel\AbstractViewModel', $subject);
-        $this->assertInstanceOf('Ingenerator\KohanaView\ViewModel', $subject);
+        $this->assertInstanceOf(AbstractViewModel::class, $subject);
+        $this->assertInstanceOf(ViewModel::class, $subject);
     }
 
     public function test_it_provides_magic_read_access_to_defined_variables()
@@ -41,23 +46,18 @@ class AbstractViewModelTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('cached', $subject->lazy_calculated_value);
     }
 
-    /**
-     * @expectedException \Ingenerator\KohanaView\Exception\UndefinedViewVarException
-     * @expectedExceptionMessage TestViewModel does not define a 'some_undefined_var' field
-     */
     public function test_it_throws_if_attempting_to_read_undefined_property()
     {
+        $this->expectException(UndefinedViewVarException::class);
+        $this->expectExceptionMessage("TestViewModel does not define a 'some_undefined_var' field");
         /** @noinspection PhpUndefinedFieldInspection */
         $this->newSubject()->some_undefined_var;
     }
 
-
-    /**
-     * @expectedException \Ingenerator\KohanaView\Exception\InvalidViewVarAssignmentException
-     * @expectedExceptionMessage TestViewModel variables are read-only, cannot assign some_defined_var
-     */
     public function test_it_throws_if_attempting_to_set_any_undefined_externally()
     {
+        $this->expectException(InvalidViewVarAssignmentException::class);
+        $this->expectExceptionMessage("TestViewModel variables are read-only, cannot assign some_defined_var");
         $this->newSubject()->some_defined_var = 'anything';
     }
 
@@ -79,21 +79,17 @@ class AbstractViewModelTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($subject->some_defined_var);
     }
 
-    /**
-     * @expectedException \Ingenerator\KohanaView\Exception\InvalidDisplayVariablesException
-     * @expectedExceptionMessage 'random_var' is not expected
-     */
     public function test_its_display_method_throws_on_unexpected_values()
     {
+        $this->expectException(InvalidDisplayVariablesException::class);
+        $this->expectExceptionMessage("'random_var' is not expected");
         $this->newSubject()->display(['some_defined_var' => 'new', 'random_var' => 'anything']);
     }
 
-    /**
-     * @expectedException \Ingenerator\KohanaView\Exception\InvalidDisplayVariablesException
-     * @expectedExceptionMessage 'some_defined_var' is missing
-     */
     public function test_its_display_method_throws_on_missing_values()
     {
+        $this->expectException(InvalidDisplayVariablesException::class);
+        $this->expectExceptionMessage("'some_defined_var' is missing");
         $this->newSubject()->display([]);
     }
 
@@ -124,12 +120,10 @@ class AbstractViewModelTest extends \PHPUnit\Framework\TestCase
         $this->assertSame('default value', $subject->some_defaulted_var);
     }
 
-    /**
-     * @expectedException \Ingenerator\KohanaView\Exception\InvalidDisplayVariablesException
-     * @expectedExceptionMessage 'some_dynamic_var' conflicts with ::var_some_dynamic_var()
-     */
     public function test_its_display_method_throws_if_variables_conflict_with_variable_methods()
     {
+        $this->expectException(InvalidDisplayVariablesException::class);
+        $this->expectExceptionMessage("'some_dynamic_var' conflicts with ::var_some_dynamic_var()");
         $this->newSubject()->display(
             [
                 'some_defined_var' => 'ok',
@@ -144,6 +138,9 @@ class AbstractViewModelTest extends \PHPUnit\Framework\TestCase
         /** @noinspection PhpUnusedLocalVariableInspection */
         $ok = $subject->lazy_calculated_value;
         $subject->display(['some_defined_var' => 'ok']);
+
+        // We got this far successfully, provide assertion to keep PHPUnit happy.
+        $this->assertTrue(TRUE);
     }
 
     protected function newSubject()

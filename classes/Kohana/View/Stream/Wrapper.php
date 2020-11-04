@@ -104,6 +104,9 @@ class Kohana_View_Stream_Wrapper
 		 */
 		$this->_stat = stat($path);
 
+		// PHP7.4 requires that we return the accurate value for the filesize, otherwise it does not read the full string
+        // and then causes a cryptic "unexpected end of file" error
+        $this->_stat['size'] = strlen($this->_data);
 		return true;
 	}
 
@@ -233,4 +236,11 @@ class Kohana_View_Stream_Wrapper
 				return false;
 		}
 	}
+
+	public function stream_set_option($option, $arg1, $arg2)
+    {
+        // PHP7.4 requires this be implemented, but we can return FALSE that we don't support any of the options
+        // (blocking mode, buffering, etc)
+        return FALSE;
+    }
 }

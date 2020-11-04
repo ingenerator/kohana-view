@@ -29,11 +29,11 @@
     "require": {
         "composer/installers": "~1.0",
         "kohana/core":         "3.3.*",
-        "php":                 ">=5.3.3",
-        "phpunit/phpunit": "^4.5"
+        "php":                 ">=5.3.3"
     },
     "require-dev": {
-        "kohana/koharness": "dev-master"
+        "kohana/koharness": "dev-master",
+        "phpunit/phpunit": "^4.5"
     },
     "minimum-stability": "dev"
 }

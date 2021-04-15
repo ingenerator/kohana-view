@@ -11,6 +11,7 @@ use Ingenerator\KohanaView\Exception\TemplateCacheException;
 use Ingenerator\KohanaView\Exception\TemplateNotFoundException;
 use Ingenerator\KohanaView\TemplateCompiler;
 use Ingenerator\KohanaView\TemplateManager;
+use Kohana_Exception;
 
 /**
  * Manages compilation of templates from view files located within the cascading file system. This allows extension
@@ -133,14 +134,14 @@ class CFSTemplateManager implements TemplateManager
      */
     protected function ensureWriteableDirectory($path)
     {
-        if (\is_dir($path)) {
-            if ( ! \is_writeable($path)) {
-                throw TemplateCacheException::pathNotWriteable($path);
-            }
-        } else {
-            if ( ! \mkdir($path, 0777, TRUE)) {
-                throw TemplateCacheException::cannotCreateDirectory($path);
-            }
+        try {
+            \Kohana::ensureDirectory($path, 0777);
+        } catch (Kohana_Exception $e) {
+            throw TemplateCacheException::cannotCreateDirectory($path);
+        }
+
+        if ( ! \is_writeable($path)) {
+            throw TemplateCacheException::pathNotWriteable($path);
         }
     }
 

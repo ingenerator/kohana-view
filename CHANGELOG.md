@@ -1,5 +1,10 @@
 ## Unreleased
 
+## 4.5.0 (2020-04-18)
+
+* Support PHP 8.0
+* Fix cache mkdir race condition
+
 ## 4.4.0 (2020-10-29)
 
 * Support PHP 7.4

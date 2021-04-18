@@ -2,7 +2,7 @@
 Kohana framework - but you should be able to use it with most PHP projects with a little work.
 
 [![License](https://poser.pugx.org/ingenerator/kohana-view/license.svg)](https://packagist.org/packages/ingenerator/kohana-view)
-[![Build Status](https://travis-ci.org/ingenerator/kohana-view.svg?branch=3.0.x)](https://travis-ci.org/ingenerator/kohana-view)
+[![Build status](https://github.com/ingenerator/kohana-view/actions/workflows/test.yaml/badge.svg)](https://github.com/ingenerator/kohana-view/actions/workflows/test.yaml)
 [![Latest Stable Version](https://poser.pugx.org/ingenerator/kohana-view/v/stable.svg)](https://packagist.org/packages/ingenerator/kohana-view)
 [![Latest Unstable Version](https://poser.pugx.org/ingenerator/kohana-view/v/unstable.svg)](https://packagist.org/packages/ingenerator/kohana-view)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ingenerator/kohana-view/badges/quality-score.png?b=3.0.x)](https://scrutinizer-ci.com/g/ingenerator/kohana-view/?branch=3.0.x)

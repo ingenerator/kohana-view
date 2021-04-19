@@ -50,9 +50,9 @@ jobs:
       run: |
         if [ $DEPENDENCIES == 'lowest' ]
         then
-          composer update --prefer-lowest --no-interaction --no-suggest --no-progress
+          composer update --prefer-lowest --no-interaction --no-progress
         else
-          composer install --no-interaction --no-suggest --no-progress
+          composer install --no-interaction --no-progress
         fi
 
     - name: Run koharnes

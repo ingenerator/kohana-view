@@ -1,5 +1,9 @@
 ## Unreleased
 
+## 4.5.1 (2021-04-19)
+
+* Tighten PHP8 requirement to ~8.0.0
+
 ## 4.5.0 (2020-04-18)
 
 * Support PHP 8.0

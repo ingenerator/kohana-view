@@ -1,5 +1,9 @@
 ## Unreleased
 
+## 4.6.0 (2022-10-16)
+
+* Support PHP 8.1 and PHP 8.2
+
 ## 4.5.1 (2021-04-19)
 
 * Tighten PHP8 requirement to ~8.0.0

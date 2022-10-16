@@ -34,16 +34,21 @@
     ],
     "require": {
         "composer/installers": "~1.0",
-        "php": "^7.4 || ~8.0.0",
-        "ingenerator/kohana-core": "^4.8.5"
+        "php": "~8.0.0 || ~8.1.0 || ~8.2.0",
+        "ingenerator/kohana-core": "^4.9.0"
     },
     "require-dev": {
         "kohana/koharness": "dev-master",
-        "mikey179/vfsstream": "^1.6.8",
-        "zeelot/kohana-dependencies": "0.7.x-dev@dev",
-        "phpunit/phpunit": "^9.0"
+        "mikey179/vfsstream": "^1.6.11",
+        "ingenerator/kohana-dependencies": "^1.3.0",
+        "phpunit/phpunit": "^9.5.5"
     },
     "suggest": {
-        "zeelot/kohana-dependencies": "Dependency Injection container for Kohana 3.x"
+        "ingenerator/kohana-dependencies": "Dependency Injection container for Kohana 3.x"
+    },
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true
+        }
     }
 }

@@ -177,7 +177,7 @@ PHP
     protected function givenDependenciesBootstrapped()
     {
         $modules                     = \Kohana::modules();
-        $modules['dependencies']     = TEST_ROOT_PATH.'/../vendor/zeelot/kohana-dependencies';
+        $modules['dependencies']     = TEST_ROOT_PATH.'/../vendor/ingenerator/kohana-dependencies';
         $modules['integration_test'] = $this->tmp_dir.'/module';
         \Kohana::modules($modules);
 

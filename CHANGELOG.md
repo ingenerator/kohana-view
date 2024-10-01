@@ -1,5 +1,9 @@
 ## Unreleased
 
+## 4.7.0 (2024-10-01)
+
+* Support PHP 8.3
+
 ## 4.6.0 (2022-10-16)
 
 * Support PHP 8.1 and PHP 8.2

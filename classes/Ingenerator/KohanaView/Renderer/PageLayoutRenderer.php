@@ -50,7 +50,7 @@ class PageLayoutRenderer
      */
     protected $current_request;
 
-    public function __construct(Renderer $view_renderer, \Request $current_request = NULL)
+    public function __construct(Renderer $view_renderer, ?\Request $current_request = NULL)
     {
         $this->view_renderer   = $view_renderer;
         $this->current_request = $current_request;

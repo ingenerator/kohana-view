@@ -1,5 +1,9 @@
 ## Unreleased
 
+## 4.8.1 (2025-07-25)
+
+* Add support for v2.x of composer/installers
+
 ## 4.8.0 (2025-07-22)
 
 * Support PHP 8.4

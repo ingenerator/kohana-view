@@ -33,7 +33,7 @@
         }
     ],
     "require": {
-        "composer/installers": "~1.0",
+        "composer/installers": "^1.12 || ^2.0",
         "php": "~8.2.0 || ~8.3.0 || ~8.4.0",
         "ingenerator/kohana-core": "^4.9.0"
     },

@@ -34,6 +34,7 @@ abstract class AbstractPageLayoutView extends AbstractViewModel implements ViewM
         'title'     => NULL,
     ];
 
+    protected $thing = [];
     /**
      * @param string $title
      *

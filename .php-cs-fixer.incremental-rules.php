@@ -21,6 +21,13 @@ return array (
     'allow_single_line_empty_anonymous_classes' => true,
   ),
   'cast_spaces' => true,
+  'class_attributes_separation' => 
+  array (
+    'elements' => 
+    array (
+      'method' => 'one',
+    ),
+  ),
   'class_definition' => 
   array (
     'single_line' => true,
@@ -127,6 +134,13 @@ return array (
   'operator_linebreak' => 
   array (
     'only_booleans' => true,
+  ),
+  'ordered_class_elements' => 
+  array (
+    'order' => 
+    array (
+      0 => 'use_trait',
+    ),
   ),
   'ordered_imports' => 
   array (
@@ -239,6 +253,7 @@ return array (
   'return_type_declaration' => true,
   'semicolon_after_instruction' => true,
   'single_blank_line_at_eof' => true,
+  'single_class_element_per_statement' => true,
   'single_import_per_statement' => true,
   'single_line_after_imports' => true,
   'single_line_comment_spacing' => true,

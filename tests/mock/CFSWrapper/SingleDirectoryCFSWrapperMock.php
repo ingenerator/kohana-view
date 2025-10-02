@@ -11,14 +11,11 @@ use function file_exists;
  */
 class SingleDirectoryCFSWrapperMock extends CFSWrapper
 {
-    protected $root_path;
-
     /**
      * @param string $root_path
      */
-    public function __construct($root_path)
+    public function __construct(protected $root_path)
     {
-        $this->root_path = $root_path;
     }
 
     public function find_file($dir, $file)

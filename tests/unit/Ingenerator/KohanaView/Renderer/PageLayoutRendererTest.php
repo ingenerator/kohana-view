@@ -218,11 +218,8 @@ class SimpleRendererStub implements Renderer
 
 class IsAjaxRequestStub extends Request
 {
-    private bool $is_ajax;
-
-    public function __construct(bool $is_ajax)
+    public function __construct(private readonly bool $is_ajax)
     {
-        $this->is_ajax = $is_ajax;
     }
 
     public function is_ajax(): bool

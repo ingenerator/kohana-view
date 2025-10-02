@@ -2,10 +2,12 @@
 
 declare(strict_types=1);
 
+use Rector\Php81\Rector\Property\ReadOnlyPropertyRector;
 use Rector\Config\RectorConfig;
 use Rector\Php55\Rector\Class_\ClassConstantToSelfClassRector;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\Php80\Rector\Catch_\RemoveUnusedVariableInCatchRector;
+use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
 use Rector\Php81\Rector\FuncCall\NullToStrictStringFuncCallArgRector;
 
 return RectorConfig::configure()
@@ -20,12 +22,12 @@ return RectorConfig::configure()
     ->withRules([
         ClassConstantToSelfClassRector::class,
         StringClassNameToClassConstantRector::class,
-        //        \Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector::class,
+        ClassPropertyAssignToConstructorPromotionRector::class,
         // ClosureToArrowFunctionRector::class,
         // ReturnNeverTypeRector::class,
         RemoveUnusedVariableInCatchRector::class,
         NullToStrictStringFuncCallArgRector::class,
-        //        \Rector\Php81\Rector\Property\ReadOnlyPropertyRector::class,
+                ReadOnlyPropertyRector::class,
     ])
     ->withImportNames(
         removeUnusedImports: true,

@@ -1,5 +1,6 @@
 <?php
 return array (
+  'align_multiline_comment' => true,
   'array_indentation' => true,
   'array_syntax' => true,
   'blank_line_after_namespace' => true,
@@ -50,6 +51,7 @@ return array (
   'no_trailing_comma_in_singleline' => true,
   'no_whitespace_before_comma_in_array' => true,
   'no_whitespace_in_blank_line' => true,
+  'not_operator_with_space' => true,
   'single_blank_line_at_eof' => true,
   'single_line_after_imports' => true,
   'statement_indentation' => 
@@ -66,5 +68,6 @@ return array (
     ),
   ),
   'trim_array_spaces' => true,
+  'unary_operator_spaces' => true,
   'whitespace_after_comma_in_array' => true,
 );

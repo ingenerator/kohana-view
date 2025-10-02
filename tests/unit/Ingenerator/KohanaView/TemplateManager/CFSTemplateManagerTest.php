@@ -1,11 +1,6 @@
 <?php
-/**
- * @author     Andrew Coulton <andrew@ingenerator.com>
- * @copyright  2015 inGenerator Ltd
- * @license    http://kohanaframework.org/license
- */
-namespace test\unit\Ingenerator\KohanaView\TemplateManager;
 
+namespace test\unit\Ingenerator\KohanaView\TemplateManager;
 
 use Ingenerator\KohanaView\Exception\TemplateCacheException;
 use Ingenerator\KohanaView\Exception\TemplateNotFoundException;
@@ -15,13 +10,19 @@ use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
 use test\mock\CFSWrapper\SingleDirectoryCFSWrapperMock;
 
+use function chmod;
+use function dirname;
+use function file_get_contents;
+use function file_put_contents;
+use function is_dir;
+use function mkdir;
+
 class CFSTemplateManagerTest extends \PHPUnit\Framework\TestCase
 {
-
     protected $options = [];
 
     /**
-     * @var \test\mock\CFSWrapper\SingleDirectoryCFSWrapperMock
+     * @var SingleDirectoryCFSWrapperMock
      */
     protected $cfs_wrapper;
 
@@ -34,7 +35,6 @@ class CFSTemplateManagerTest extends \PHPUnit\Framework\TestCase
      * @var vfsStreamDirectory
      */
     protected $vfs_root;
-
 
     public function test_it_is_initialisable()
     {
@@ -60,11 +60,11 @@ class CFSTemplateManagerTest extends \PHPUnit\Framework\TestCase
     public function test_it_throws_if_it_cannot_create_cache_dir()
     {
         $this->options['cache_dir'] = vfsStream::url('template/cache');
-        \chmod($this->options['cache_dir'], 0500);
+        chmod($this->options['cache_dir'], 0o500);
         $this->givenFile('module/views/any/view.php', 'Raw view file');
 
         $this->expectException(TemplateCacheException::class);
-        $this->expectExceptionMessage("Cannot create template cache directory");
+        $this->expectExceptionMessage('Cannot create template cache directory');
 
         $this->newSubject()->getPath('any/view');
     }
@@ -72,11 +72,11 @@ class CFSTemplateManagerTest extends \PHPUnit\Framework\TestCase
     public function test_it_throws_if_it_cannot_create_compiled_file()
     {
         $this->options['cache_dir'] = vfsStream::url('template/cache');
-        \chmod($this->options['cache_dir'], 0500);
+        chmod($this->options['cache_dir'], 0o500);
         $this->givenFile('module/views/anything.php', 'Raw view file');
 
         $this->expectException(TemplateCacheException::class);
-        $this->expectExceptionMessage("Cannot write to compiled template path");
+        $this->expectExceptionMessage('Cannot write to compiled template path');
 
         $this->newSubject()->getPath('anything');
     }
@@ -99,8 +99,8 @@ class CFSTemplateManagerTest extends \PHPUnit\Framework\TestCase
 
     public function test_it_does_not_recompile_templates_when_disabled()
     {
-        $this->options['cache_dir']        = vfsStream::url('template/cache');
-        $this->options['recompile_always'] = FALSE;
+        $this->options['cache_dir'] = vfsStream::url('template/cache');
+        $this->options['recompile_always'] = false;
         $this->givenFile('cache/some/compiled_view.php', 'Any compiled content');
         $this->assertSame(
             vfsStream::url('template/cache/some/compiled_view.php'),
@@ -111,8 +111,8 @@ class CFSTemplateManagerTest extends \PHPUnit\Framework\TestCase
 
     public function test_it_recompiles_once_per_instance_when_enabled()
     {
-        $this->options['cache_dir']        = vfsStream::url('template/cache');
-        $this->options['recompile_always'] = TRUE;
+        $this->options['cache_dir'] = vfsStream::url('template/cache');
+        $this->options['recompile_always'] = true;
         $this->givenFile('cache/some/compiled_view.php', 'Any compiled content');
         $this->givenFile('module/views/some/compiled_view.php', 'Raw template content');
         $subject = $this->newSubject();
@@ -127,7 +127,7 @@ class CFSTemplateManagerTest extends \PHPUnit\Framework\TestCase
 
     public function test_its_source_template_path_is_configurable()
     {
-        $this->options['template_dir']  = 'templates';
+        $this->options['template_dir'] = 'templates';
         $this->givenFile('module/templates/any/template_file.php', 'This is raw view in templates');
 
         $compiled_url = $this->newSubject()->getPath('any/template_file');
@@ -135,19 +135,19 @@ class CFSTemplateManagerTest extends \PHPUnit\Framework\TestCase
         $this->assertCompiledToFile($compiled_url);
     }
 
-    public function setUp(): void
+    protected function setUp(): void
     {
-        $this->compiler             = new SpyingTemplateCompiler;
-        $this->vfs_root             = vfsStream::setup(
+        $this->compiler = new SpyingTemplateCompiler();
+        $this->vfs_root = vfsStream::setup(
             'template',
-            0700,
+            0o700,
             [
-                'cache'  => [],
+                'cache' => [],
                 'module' => [],
             ]
         );
         $this->options['cache_dir'] = vfsStream::url('template/cache');
-        $this->cfs_wrapper          = new SingleDirectoryCFSWrapperMock(vfsStream::url('template/module'));
+        $this->cfs_wrapper = new SingleDirectoryCFSWrapperMock(vfsStream::url('template/module'));
         parent::setUp();
     }
 
@@ -161,8 +161,8 @@ class CFSTemplateManagerTest extends \PHPUnit\Framework\TestCase
      */
     protected function assertCompiledToFile($compiled_url)
     {
-        $this->assertTrue(\file_exists($compiled_url), "Compiled file $compiled_url should exist");
-        $this->assertSame(SpyingTemplateCompiler::COMPILED_OUTPUT, \file_get_contents($compiled_url));
+        $this->assertFileExists($compiled_url, "Compiled file $compiled_url should exist");
+        $this->assertSame(SpyingTemplateCompiler::COMPILED_OUTPUT, file_get_contents($compiled_url));
         $this->assertStringStartsWith(
             $this->options['cache_dir'],
             $compiled_url,
@@ -173,22 +173,23 @@ class CFSTemplateManagerTest extends \PHPUnit\Framework\TestCase
     protected function givenFile($path_to_file, $content)
     {
         $file = vfsStream::url('template/'.$path_to_file);
-        $path = \dirname($file);
-        if ( ! \is_dir($path)) {
-            \mkdir($path, 0777, TRUE);
+        $path = dirname($file);
+        if ( ! is_dir($path)) {
+            mkdir($path, 0o777, true);
         }
-        \file_put_contents($file, $content);
+        file_put_contents($file, $content);
     }
-
 }
 
 class SpyingTemplateCompiler extends TemplateCompiler
 {
-    const COMPILED_OUTPUT = 'compiled template content';
+    public const COMPILED_OUTPUT = 'compiled template content';
     protected $compiled = [];
 
     /** @noinspection PhpMissingParentConstructorInspection */
-    public function __construct() { }
+    public function __construct()
+    {
+    }
 
     public function compile($source)
     {
@@ -207,4 +208,3 @@ class SpyingTemplateCompiler extends TemplateCompiler
         \PHPUnit\Framework\Assert::assertEmpty($this->compiled);
     }
 }
-

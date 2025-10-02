@@ -1,15 +1,9 @@
 <?php
-/**
- * @author    Andrew Coulton <andrew@ingenerator.com>
- * @licence   proprietary
- */
 
 namespace test\unit\Ingenerator\KohanaView\ViewModel\PageLayout;
 
-
 use BadMethodCallException;
 use Ingenerator\KohanaView\ViewModel\NestedChildView;
-use Ingenerator\KohanaView\ViewModel\NestedParentView;
 use PHPUnit\Framework\TestCase;
 use test\mock\ViewModel\PageLayout\DummyIntermediateLayoutView;
 use test\mock\ViewModel\PageLayout\DummyNestedChildView;
@@ -17,9 +11,8 @@ use test\mock\ViewModel\PageLayout\DummyPageLayoutView;
 
 class AbstractNestedChildViewTest extends TestCase
 {
-
     /**
-     * @var \test\mock\ViewModel\PageLayout\DummyPageLayoutView
+     * @var DummyPageLayoutView
      */
     protected $parent_view;
 
@@ -43,17 +36,17 @@ class AbstractNestedChildViewTest extends TestCase
     {
         return [
             [
-                $page = new DummyPageLayoutView,
-                $page
+                $page = new DummyPageLayoutView(),
+                $page,
             ],
             [
                 new DummyIntermediateLayoutView(
                     new DummyIntermediateLayoutView(
-                        $page = new DummyPageLayoutView
+                        $page = new DummyPageLayoutView()
                     )
                 ),
-                $page
-            ]
+                $page,
+            ],
         ];
     }
 
@@ -69,7 +62,7 @@ class AbstractNestedChildViewTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->parent_view = new DummyPageLayoutView;
+        $this->parent_view = new DummyPageLayoutView();
     }
 
     protected function newSubject()

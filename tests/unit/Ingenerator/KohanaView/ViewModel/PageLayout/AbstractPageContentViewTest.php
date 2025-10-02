@@ -1,9 +1,4 @@
 <?php
-/**
- * @author     Andrew Coulton <andrew@ingenerator.com>
- * @copyright  2015 inGenerator Ltd
- * @license    http://kohanaframework.org/license
- */
 
 namespace test\unit\Ingenerator\KohanaView\ViewModel\PageLayout;
 
@@ -41,12 +36,12 @@ class AbstractPageContentViewTest extends \PHPUnit\Framework\TestCase
         $this->newSubject()->display(['message' => 'anything']);
 
         // We got this far successfully, provide assertion to keep PHPUnit happy.
-        $this->assertTrue(TRUE);
+        $this->assertTrue(true);
     }
 
-    public function setUp(): void
+    protected function setUp(): void
     {
-        $this->page_layout = new DummyPageLayoutView;
+        $this->page_layout = new DummyPageLayoutView();
         parent::setUp();
     }
 
@@ -56,13 +51,11 @@ class AbstractPageContentViewTest extends \PHPUnit\Framework\TestCase
             $this->page_layout
         );
     }
-
 }
 
 class TestableAbstractPageContentView extends AbstractPageContentView
 {
     protected $variables = [
-        'message' => NULL,
+        'message' => null,
     ];
-
 }

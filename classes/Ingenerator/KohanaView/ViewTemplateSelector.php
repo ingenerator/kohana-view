@@ -1,7 +1,13 @@
 <?php
+
 namespace Ingenerator\KohanaView;
 
 use Ingenerator\KohanaView\Exception\UnspecifiedTemplateNameException;
+use UnexpectedValueException;
+
+use function is_string;
+use function preg_replace;
+use function strtolower;
 
 /**
  * The ViewTemplateSelector maps ViewModel classes to the appropriate template file. By default this is done by
@@ -14,17 +20,10 @@ use Ingenerator\KohanaView\Exception\UnspecifiedTemplateNameException;
  *   \Other\View\HierarchyViewModel     => other/view/hierarchy
  *
  * Views can also implement TemplateSpecifyingViewModel to provide a custom template file name when required.
- *
- * @author     Andrew Coulton <andrew@ingenerator.com>
- * @copyright  2015 inGenerator Ltd
- * @license    http://kohanaframework.org/license
  */
 class ViewTemplateSelector
 {
-
     /**
-     * @param ViewModel $view
-     *
      * @return string
      */
     public function getTemplateName(ViewModel $view)
@@ -37,20 +36,19 @@ class ViewTemplateSelector
     }
 
     /**
-     * @param TemplateSpecifyingViewModel $view
-     *
      * @return string
-     * @throws \UnexpectedValueException if no template is provided
+     *
+     * @throws UnexpectedValueException if no template is provided
      */
     protected function validateSpecifiedTemplateName(TemplateSpecifyingViewModel $view)
     {
-        $template   = $view->getTemplateName();
-        $view_class = \get_class($view);
+        $template = $view->getTemplateName();
+        $view_class = $view::class;
         if ( ! $template) {
             throw UnspecifiedTemplateNameException::forEmptyValue($view_class);
         }
 
-        if ( ! \is_string($template)) {
+        if ( ! is_string($template)) {
             throw UnspecifiedTemplateNameException::forNonStringValue($view_class, $template);
         }
 
@@ -58,19 +56,16 @@ class ViewTemplateSelector
     }
 
     /**
-     * @param ViewModel $view
-     *
      * @return string
      */
     protected function calculateTemplateFromClassName(ViewModel $view)
     {
-        $template = \get_class($view);
-        $template = \preg_replace('/\\\\|_/', '/', $template);
-        $template = \preg_replace('#(^view/?(model)?/)|(?<!/)(view/?(model)?$)#i', '', $template);
-        $template = \preg_replace('/([a-z])([A-Z])/', '\1_\2', $template);
-        $template = \strtolower($template);
+        $template = $view::class;
+        $template = preg_replace('/\\\\|_/', '/', $template);
+        $template = preg_replace('#(^view/?(model)?/)|(?<!/)(view/?(model)?$)#i', '', $template);
+        $template = preg_replace('/([a-z])([A-Z])/', '\1_\2', $template);
+        $template = strtolower($template);
 
         return $template;
     }
-
 }

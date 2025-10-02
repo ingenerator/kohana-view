@@ -1,19 +1,13 @@
 <?php
-/**
- * @author     Andrew Coulton <andrew@ingenerator.com>
- * @copyright  2015 inGenerator Ltd
- * @license    http://kohanaframework.org/license
- */
 
 namespace Ingenerator\KohanaView\Exception;
 
+use InvalidArgumentException;
 
 /**
- * Thrown when the content of a template is not valid for some reason
- *
- * @package Ingenerator\KohanaView\Exception
+ * Thrown when the content of a template is not valid for some reason.
  */
-class InvalidTemplateContentException extends \InvalidArgumentException
+class InvalidTemplateContentException extends InvalidArgumentException
 {
     /**
      * @param string $escape_method
@@ -38,7 +32,7 @@ class InvalidTemplateContentException extends \InvalidArgumentException
     public static function hasLegacyPhpEcho()
     {
         return new static(
-            "Invalid legacy-style use of `<?php echo` to avoid automatic escaping : use `<?=raw()` instead"
+            'Invalid legacy-style use of `<?php echo` to avoid automatic escaping : use `<?=raw()` instead'
         );
     }
 
@@ -46,5 +40,4 @@ class InvalidTemplateContentException extends \InvalidArgumentException
     {
         return new static('Cannot compile empty template');
     }
-
 }

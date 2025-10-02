@@ -1,12 +1,6 @@
 <?php
-/**
- * @author     Andrew Coulton <andrew@ingenerator.com>
- * @copyright  2015 inGenerator Ltd
- * @license    http://kohanaframework.org/license
- */
 
 namespace Ingenerator\KohanaView\ViewModel\PageLayout;
-
 
 use Ingenerator\KohanaView\ViewModel\AbstractViewModel;
 use Ingenerator\KohanaView\ViewModel\NestedChildView;
@@ -22,12 +16,9 @@ use Ingenerator\KohanaView\ViewModel\PageLayoutView;
  * to set the title or otherwise interact with the <head> and <meta> parts of the page.
  *
  * @property-read PageLayoutView $page
- *
- * @package Ingenerator\KohanaView\ViewModel\PageLayout
  */
 abstract class AbstractPageContentView extends AbstractViewModel implements PageContentView, NestedChildView
 {
-
     /**
      * @var PageLayoutView
      */
@@ -51,5 +42,4 @@ abstract class AbstractPageContentView extends AbstractViewModel implements Page
     {
         return $this->page_view;
     }
-
 }

@@ -1,11 +1,6 @@
 <?php
-/**
- * @author     Andrew Coulton <andrew@ingenerator.com>
- * @copyright  2015 inGenerator Ltd
- * @license    http://kohanaframework.org/license
- */
-namespace test\unit\Ingenerator\KohanaView\ViewModel;
 
+namespace test\unit\Ingenerator\KohanaView\ViewModel;
 
 use Ingenerator\KohanaView\Exception\InvalidDisplayVariablesException;
 use Ingenerator\KohanaView\Exception\InvalidViewVarAssignmentException;
@@ -16,7 +11,6 @@ use PHPUnit\Framework\TestCase;
 
 class AbstractViewModelTest extends TestCase
 {
-
     public function test_it_is_initialisable()
     {
         $subject = $this->newSubject();
@@ -50,14 +44,14 @@ class AbstractViewModelTest extends TestCase
     {
         $this->expectException(UndefinedViewVarException::class);
         $this->expectExceptionMessage("TestViewModel does not define a 'some_undefined_var' field");
-        /** @noinspection PhpUndefinedFieldInspection */
+        /* @noinspection PhpUndefinedFieldInspection */
         $this->newSubject()->some_undefined_var;
     }
 
     public function test_it_throws_if_attempting_to_set_any_undefined_externally()
     {
         $this->expectException(InvalidViewVarAssignmentException::class);
-        $this->expectExceptionMessage("TestViewModel variables are read-only, cannot assign some_defined_var");
+        $this->expectExceptionMessage('TestViewModel variables are read-only, cannot assign some_defined_var');
         $this->newSubject()->some_defined_var = 'anything';
     }
 
@@ -75,7 +69,7 @@ class AbstractViewModelTest extends TestCase
     public function test_its_display_method_can_define_null_variables()
     {
         $subject = $this->newSubject();
-        $subject->display(['some_defined_var' => NULL]);
+        $subject->display(['some_defined_var' => null]);
         $this->assertNull($subject->some_defined_var);
     }
 
@@ -98,7 +92,7 @@ class AbstractViewModelTest extends TestCase
         $subject = $this->newSubject();
         $subject->display(
             [
-                'some_defined_var'   => 'required',
+                'some_defined_var' => 'required',
                 'some_defaulted_var' => 'custom',
             ]
         );
@@ -110,7 +104,7 @@ class AbstractViewModelTest extends TestCase
         $subject = $this->newSubject();
         $subject->display(
             [
-                'some_defined_var'   => 'required',
+                'some_defined_var' => 'required',
                 'some_defaulted_var' => 'custom',
             ]
         );
@@ -140,14 +134,13 @@ class AbstractViewModelTest extends TestCase
         $subject->display(['some_defined_var' => 'ok']);
 
         // We got this far successfully, provide assertion to keep PHPUnit happy.
-        $this->assertTrue(TRUE);
+        $this->assertTrue(true);
     }
 
     protected function newSubject()
     {
-        return new TestViewModel;
+        return new TestViewModel();
     }
-
 }
 
 /**
@@ -157,7 +150,6 @@ class AbstractViewModelTest extends TestCase
  */
 class TestViewModel extends AbstractViewModel
 {
-
     protected $default_variables = [
         'some_defaulted_var' => 'default value',
     ];
@@ -177,5 +169,4 @@ class TestViewModel extends AbstractViewModel
 
         return 'calculated';
     }
-
 }

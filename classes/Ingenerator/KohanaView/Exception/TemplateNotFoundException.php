@@ -1,20 +1,14 @@
 <?php
-/**
- * @author     Andrew Coulton <andrew@ingenerator.com>
- * @copyright  2015 inGenerator Ltd
- * @license    http://kohanaframework.org/license
- */
 
 namespace Ingenerator\KohanaView\Exception;
 
-/**
- * Thrown when a template cannot be found
- *
- * @package Ingenerator\KohanaView\Exception
- */
-class TemplateNotFoundException extends \InvalidArgumentException
-{
+use InvalidArgumentException;
 
+/**
+ * Thrown when a template cannot be found.
+ */
+class TemplateNotFoundException extends InvalidArgumentException
+{
     /**
      * @param string $path
      *

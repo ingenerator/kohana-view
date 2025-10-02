@@ -1,12 +1,6 @@
 <?php
-/**
- * @author     Andrew Coulton <andrew@ingenerator.com>
- * @copyright  2015 inGenerator Ltd
- * @license    http://kohanaframework.org/license
- */
 
 namespace test\unit\Ingenerator\KohanaView\ViewModel\PageLayout;
-
 
 use Ingenerator\KohanaView\ViewModel;
 use Ingenerator\KohanaView\ViewModel\PageLayout\AbstractPageLayoutView;
@@ -59,12 +53,10 @@ class AbstractPageLayoutViewTest extends \PHPUnit\Framework\TestCase
 
     protected function newSubject()
     {
-        return new TestablePageLayoutView;
+        return new TestablePageLayoutView();
     }
-
 }
 
 class TestablePageLayoutView extends AbstractPageLayoutView
 {
-
 }

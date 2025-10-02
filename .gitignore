@@ -4,3 +4,4 @@
 /koharness_bootstrap.php
 .phpunit.result.cache
 /.idea
+.php-cs-fixer.cache

@@ -113,6 +113,6 @@ class TemplateCompiler
      */
     protected function startsWith($string, $prefix)
     {
-        return (strncmp($string, $prefix, strlen($prefix)) === 0);
+        return strncmp($string, $prefix, strlen($prefix)) === 0;
     }
 }

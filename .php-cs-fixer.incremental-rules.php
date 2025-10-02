@@ -134,6 +134,21 @@ return array (
   'no_trailing_comma_in_singleline' => true,
   'no_trailing_whitespace' => true,
   'no_trailing_whitespace_in_comment' => true,
+  'no_unneeded_control_parentheses' => 
+  array (
+    'statements' => 
+    array (
+      0 => 'break',
+      1 => 'clone',
+      2 => 'continue',
+      3 => 'echo_print',
+      4 => 'others',
+      5 => 'return',
+      6 => 'switch_case',
+      7 => 'yield',
+      8 => 'yield_from',
+    ),
+  ),
   'no_unneeded_import_alias' => true,
   'no_unused_imports' => true,
   'no_useless_concat_operator' => true,

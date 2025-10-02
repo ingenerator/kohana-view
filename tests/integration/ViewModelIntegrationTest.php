@@ -39,7 +39,7 @@ class ViewModelIntegrationTest extends TestCase
     {
         $dependencies = $this->givenDependenciesBootstrapped();
         $renderer = $dependencies->get('kohanaview.renderer.html');
-        $this->assertInstanceOf('Ingenerator\KohanaView\Renderer\HTMLRenderer', $renderer);
+        $this->assertInstanceOf(HTMLRenderer::class, $renderer);
         $this->assertSame($renderer, $dependencies->get('kohanaview.renderer.html'));
     }
 

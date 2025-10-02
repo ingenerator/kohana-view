@@ -5,6 +5,7 @@ namespace test\unit\Ingenerator\KohanaView\TemplateManager;
 use Ingenerator\KohanaView\Exception\TemplateCacheException;
 use Ingenerator\KohanaView\Exception\TemplateNotFoundException;
 use Ingenerator\KohanaView\TemplateCompiler;
+use Ingenerator\KohanaView\TemplateManager;
 use Ingenerator\KohanaView\TemplateManager\CFSTemplateManager;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
@@ -42,11 +43,11 @@ class CFSTemplateManagerTest extends TestCase
     {
         $subject = $this->newSubject();
         $this->assertInstanceOf(
-            'Ingenerator\KohanaView\TemplateManager\CFSTemplateManager',
+            CFSTemplateManager::class,
             $subject
         );
         $this->assertInstanceOf(
-            'Ingenerator\KohanaView\TemplateManager',
+            TemplateManager::class,
             $subject
         );
     }

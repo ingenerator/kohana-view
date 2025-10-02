@@ -3,6 +3,8 @@
 namespace test\unit\Ingenerator\KohanaView\ViewModel\PageLayout;
 
 use Ingenerator\KohanaView\Exception\UnassignedViewVarException;
+use Ingenerator\KohanaView\TemplateSpecifyingViewModel;
+use Ingenerator\KohanaView\ViewModel\PageContentView;
 use Ingenerator\KohanaView\ViewModel\PageLayout\StaticPageContentView;
 use PHPUnit\Framework\TestCase;
 use test\mock\ViewModel\PageLayout\DummyPageLayoutView;
@@ -12,14 +14,14 @@ class StaticPageContentViewTest extends TestCase
     public function test_it_is_initialisable()
     {
         $subject = $this->newSubject();
-        $this->assertInstanceOf('Ingenerator\KohanaView\ViewModel\PageLayout\StaticPageContentView', $subject);
-        $this->assertInstanceOf('Ingenerator\KohanaView\ViewModel\PageContentView', $subject);
+        $this->assertInstanceOf(StaticPageContentView::class, $subject);
+        $this->assertInstanceOf(PageContentView::class, $subject);
     }
 
     public function test_it_is_a_template_specifying_view()
     {
         $this->assertInstanceOf(
-            'Ingenerator\KohanaView\TemplateSpecifyingViewModel',
+            TemplateSpecifyingViewModel::class,
             $this->newSubject()
         );
     }

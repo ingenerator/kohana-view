@@ -33,7 +33,7 @@ class PageLayoutRendererTest extends TestCase
     public function test_it_is_initialisable()
     {
         $this->assertInstanceOf(
-            'Ingenerator\KohanaView\Renderer\PageLayoutRenderer',
+            PageLayoutRenderer::class,
             $this->newSubject()
         );
     }

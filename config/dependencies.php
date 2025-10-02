@@ -1,6 +1,10 @@
 <?php
 
+use Ingenerator\KohanaView\Renderer\HTMLRenderer;
 use Ingenerator\KohanaView\Renderer\PageLayoutRenderer;
+use Ingenerator\KohanaView\TemplateCompiler;
+use Ingenerator\KohanaView\TemplateManager\CFSTemplateManager;
+use Ingenerator\KohanaView\ViewTemplateSelector;
 
 /*
  * KohanaView dependency container configuration for use with https://github.com/zeelot/kohana-dependencies.
@@ -10,7 +14,7 @@ return [
         'renderer' => [
             'html' => [
                 '_settings' => [
-                    'class' => '\Ingenerator\KohanaView\Renderer\HTMLRenderer',
+                    'class' => HTMLRenderer::class,
                     'arguments' => ['%kohanaview.template.selector%', '%kohanaview.template.manager%'],
                     'shared' => true,
                 ],
@@ -26,21 +30,21 @@ return [
         'template' => [
             'compiler' => [
                 '_settings' => [
-                    'class' => '\Ingenerator\KohanaView\TemplateCompiler',
+                    'class' => TemplateCompiler::class,
                     'arguments' => [],
                     'shared' => true,
                 ],
             ],
             'manager' => [
                 '_settings' => [
-                    'class' => '\Ingenerator\KohanaView\TemplateManager\CFSTemplateManager',
+                    'class' => CFSTemplateManager::class,
                     'arguments' => ['%kohanaview.template.compiler%', '@kohanaview.template_manager@'],
                     'shared' => true,
                 ],
             ],
             'selector' => [
                 '_settings' => [
-                    'class' => '\Ingenerator\KohanaView\ViewTemplateSelector',
+                    'class' => ViewTemplateSelector::class,
                     'arguments' => [],
                     'shared' => true,
                 ],

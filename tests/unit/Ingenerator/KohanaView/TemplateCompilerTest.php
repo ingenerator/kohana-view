@@ -13,7 +13,7 @@ class TemplateCompilerTest extends TestCase
     public function test_it_is_initialisable()
     {
         $this->assertInstanceOf(
-            'Ingenerator\KohanaView\TemplateCompiler',
+            TemplateCompiler::class,
             $this->newSubject()
         );
     }

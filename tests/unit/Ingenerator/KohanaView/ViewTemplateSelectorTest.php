@@ -13,7 +13,7 @@ class ViewTemplateSelectorTest extends TestCase
 {
     public function test_it_is_initialisable()
     {
-        $this->assertInstanceOf('Ingenerator\KohanaView\ViewTemplateSelector', $this->newSubject());
+        $this->assertInstanceOf(ViewTemplateSelector::class, $this->newSubject());
     }
 
     /**

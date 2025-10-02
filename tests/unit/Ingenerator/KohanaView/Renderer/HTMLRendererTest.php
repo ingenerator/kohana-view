@@ -207,7 +207,7 @@ class HTMLRendererTest extends TestCase
 
 class ViewTemplateSelectorSpy extends ViewTemplateSelector
 {
-    const FIXED_TEMPLATE_NAME = 'selected_template';
+    public const FIXED_TEMPLATE_NAME = 'selected_template';
 
     protected $calls = [];
 

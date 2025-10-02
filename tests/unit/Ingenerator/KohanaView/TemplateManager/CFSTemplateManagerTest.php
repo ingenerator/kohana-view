@@ -184,7 +184,7 @@ class CFSTemplateManagerTest extends \PHPUnit\Framework\TestCase
 
 class SpyingTemplateCompiler extends TemplateCompiler
 {
-    const COMPILED_OUTPUT = 'compiled template content';
+    public const COMPILED_OUTPUT = 'compiled template content';
     protected $compiled = [];
 
     /** @noinspection PhpMissingParentConstructorInspection */

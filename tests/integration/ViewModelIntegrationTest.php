@@ -27,7 +27,7 @@ use function uniqid;
  */
 class ViewModelIntegrationTest extends \PHPUnit\Framework\TestCase
 {
-    const STALE_COMPILED_STRING = 'Stale content from previous compile';
+    public const STALE_COMPILED_STRING = 'Stale content from previous compile';
 
     protected $tmp_dir;
 

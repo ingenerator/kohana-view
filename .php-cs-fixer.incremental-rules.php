@@ -161,6 +161,7 @@ return array (
   'nullable_type_declaration' => true,
   'nullable_type_declaration_for_default_null_value' => true,
   'object_operator_without_whitespace' => true,
+  'octal_notation' => true,
   'operator_linebreak' => 
   array (
     'only_booleans' => true,

@@ -61,7 +61,7 @@ class CFSTemplateManagerTest extends \PHPUnit\Framework\TestCase
     public function test_it_throws_if_it_cannot_create_cache_dir()
     {
         $this->options['cache_dir'] = vfsStream::url('template/cache');
-        chmod($this->options['cache_dir'], 0500);
+        chmod($this->options['cache_dir'], 0o500);
         $this->givenFile('module/views/any/view.php', 'Raw view file');
 
         $this->expectException(TemplateCacheException::class);
@@ -73,7 +73,7 @@ class CFSTemplateManagerTest extends \PHPUnit\Framework\TestCase
     public function test_it_throws_if_it_cannot_create_compiled_file()
     {
         $this->options['cache_dir'] = vfsStream::url('template/cache');
-        chmod($this->options['cache_dir'], 0500);
+        chmod($this->options['cache_dir'], 0o500);
         $this->givenFile('module/views/anything.php', 'Raw view file');
 
         $this->expectException(TemplateCacheException::class);
@@ -141,7 +141,7 @@ class CFSTemplateManagerTest extends \PHPUnit\Framework\TestCase
         $this->compiler = new SpyingTemplateCompiler();
         $this->vfs_root = vfsStream::setup(
             'template',
-            0700,
+            0o700,
             [
                 'cache' => [],
                 'module' => [],
@@ -176,7 +176,7 @@ class CFSTemplateManagerTest extends \PHPUnit\Framework\TestCase
         $file = vfsStream::url('template/'.$path_to_file);
         $path = dirname($file);
         if ( ! is_dir($path)) {
-            mkdir($path, 0777, true);
+            mkdir($path, 0o777, true);
         }
         file_put_contents($file, $content);
     }

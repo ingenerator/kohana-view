@@ -130,7 +130,7 @@ class CFSTemplateManager implements TemplateManager
     protected function ensureWriteableDirectory($path)
     {
         try {
-            Kohana::ensureDirectory($path, 0777);
+            Kohana::ensureDirectory($path, 0o777);
         } catch (Kohana_Exception $e) {
             throw TemplateCacheException::cannotCreateDirectory($path);
         }

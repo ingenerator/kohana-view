@@ -11,7 +11,7 @@ return RectorConfig::configure()
         __DIR__.'/tests',
     ])
     ->withRootFiles()
-    ->withCodeQualityLevel(0)
+    ->withCodeQualityLevel(100)
     ->withImportNames(
         removeUnusedImports: true,
     );

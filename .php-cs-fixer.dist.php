@@ -12,9 +12,10 @@ return (new PhpCsFixer\Config())
     ->setRules([
         // @todo: Bump to php84 migration when we drop 8.2 support
         '@PHP82Migration' => true,
-//        '@PHP82Migration:risky' => true,
+        '@PHP82Migration:risky' => true,
         // --- Initial set taken from Behat/Behat
         '@Symfony' => true,
+        '@Symfony:risky' => true,
         'concat_space' => false, // override Symfony
         'global_namespace_import' => [ //override Symfony
             'import_classes' => true,
@@ -57,9 +58,8 @@ return (new PhpCsFixer\Config())
                 'var',
             ],
         ],
-        // TEMPORARY
-        'get_class_to_class_keyword' => true,
-        'modernize_strpos' => true,
-        'no_alias_functions' => true,
+        // -- Disabled until we go to 5.x
+        'void_return' => false,
+        'declare_strict_types' => false,
     ])
     ->setFinder($finder);

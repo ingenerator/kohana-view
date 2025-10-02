@@ -8,7 +8,6 @@ use Ingenerator\KohanaView\Renderer\HTMLRenderer;
 use Ingenerator\KohanaView\TemplateManager\CFSTemplateManager;
 use Ingenerator\KohanaView\ViewModel;
 use Kohana;
-use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\Attributes\PreserveGlobalState;
 use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use PHPUnit\Framework\Attributes\TestWith;
@@ -32,7 +31,6 @@ use function uniqid;
 #[RunTestsInSeparateProcesses]
 class ViewModelIntegrationTest extends TestCase
 {
-    private $preserveGlobalState;
     public const STALE_COMPILED_STRING = 'Stale content from previous compile';
 
     protected $tmp_dir;
@@ -162,8 +160,6 @@ class ViewModelIntegrationTest extends TestCase
 
     protected function setUp(): void
     {
-        Assert::assertTrue($this->isInIsolation(), 'Integration tests must runInSeparateProcess');
-        Assert::assertTrue($this->preserveGlobalState, 'Integration tests must run without globals');
         $this->expectOutputRegex('/^$/');
 
         $this->tmp_dir = sys_get_temp_dir().'/kohana-view-integration/'.uniqid('test');

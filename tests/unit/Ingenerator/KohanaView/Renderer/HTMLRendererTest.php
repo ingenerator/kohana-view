@@ -181,8 +181,6 @@ class HTMLRendererTest extends TestCase
         $this->template_manager = new TemplateManagerSpy();
         $this->vfs_root = vfsStream::setup('templates');
         $this->givenTemplate('Default');
-
-        parent::__construct();
     }
 
     protected function tearDown(): void

@@ -131,7 +131,7 @@ class CFSTemplateManager implements TemplateManager
     {
         try {
             Kohana::ensureDirectory($path, 0o777);
-        } catch (Kohana_Exception $e) {
+        } catch (Kohana_Exception) {
             throw TemplateCacheException::cannotCreateDirectory($path);
         }
 

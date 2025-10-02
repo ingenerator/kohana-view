@@ -72,6 +72,7 @@ return array (
     'import_functions' => true,
   ),
   'heredoc_indentation' => true,
+  'include' => true,
   'increment_style' => true,
   'indentation_type' => true,
   'integer_literal_case' => true,

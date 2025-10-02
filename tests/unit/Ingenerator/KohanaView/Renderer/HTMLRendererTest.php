@@ -156,7 +156,7 @@ class HTMLRendererTest extends TestCase
         $this->template_manager->setTemplatePath(vfsStream::url('/path/to/undefined/file'));
 
         $this->expectException(ErrorException::class);
-        $this->expectExceptionMessage("path/to/undefined/file");
+        $this->expectExceptionMessage('path/to/undefined/file');
 
         $this->newSubject()->render(new ViewModelDummy());
     }
@@ -167,7 +167,7 @@ class HTMLRendererTest extends TestCase
         $this->template_manager->setTemplatePath(vfsStream::url('/path/to/undefined/file'));
 
         $this->expectException(TemplateNotFoundException::class);
-        $this->expectExceptionMessage("path/to/undefined/file");
+        $this->expectExceptionMessage('path/to/undefined/file');
         $this->newSubject()->render(new ViewModelDummy());
     }
 

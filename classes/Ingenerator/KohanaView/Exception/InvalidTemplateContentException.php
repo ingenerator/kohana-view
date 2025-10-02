@@ -32,7 +32,7 @@ class InvalidTemplateContentException extends InvalidArgumentException
     public static function hasLegacyPhpEcho()
     {
         return new static(
-            "Invalid legacy-style use of `<?php echo` to avoid automatic escaping : use `<?=raw()` instead"
+            'Invalid legacy-style use of `<?php echo` to avoid automatic escaping : use `<?=raw()` instead'
         );
     }
 

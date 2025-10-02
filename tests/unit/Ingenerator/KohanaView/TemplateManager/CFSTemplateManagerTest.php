@@ -65,7 +65,7 @@ class CFSTemplateManagerTest extends \PHPUnit\Framework\TestCase
         $this->givenFile('module/views/any/view.php', 'Raw view file');
 
         $this->expectException(TemplateCacheException::class);
-        $this->expectExceptionMessage("Cannot create template cache directory");
+        $this->expectExceptionMessage('Cannot create template cache directory');
 
         $this->newSubject()->getPath('any/view');
     }
@@ -77,7 +77,7 @@ class CFSTemplateManagerTest extends \PHPUnit\Framework\TestCase
         $this->givenFile('module/views/anything.php', 'Raw view file');
 
         $this->expectException(TemplateCacheException::class);
-        $this->expectExceptionMessage("Cannot write to compiled template path");
+        $this->expectExceptionMessage('Cannot write to compiled template path');
 
         $this->newSubject()->getPath('anything');
     }

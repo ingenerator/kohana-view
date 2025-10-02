@@ -53,7 +53,7 @@ class PageLayoutRendererTest extends \PHPUnit\Framework\TestCase
         $content = new DummyPageContentView($layout = new DummyPageLayoutView());
 
         $this->renderer->registerViews(['A' => $content, 'B' => $layout]);
-        $this->assertSame("<Content#A/>", $subject->render($content));
+        $this->assertSame('<Content#A/>', $subject->render($content));
     }
 
     /**
@@ -97,7 +97,7 @@ class PageLayoutRendererTest extends \PHPUnit\Framework\TestCase
         $content = new DummyPageContentView($layout = new DummyPageLayoutView());
         $this->renderer->registerViews(['A' => $content, 'B' => $layout]);
         $this->assertSame(
-            "<Content#A/>",
+            '<Content#A/>',
             $this->newSubject()->render($content)
         );
     }
@@ -110,14 +110,14 @@ class PageLayoutRendererTest extends \PHPUnit\Framework\TestCase
                 "<Layout#A>\n"
                 ."<Intermediate#B>\n"
                 ."<Intermediate#C>\n"
-                ."<Child#D/>"
+                .'<Child#D/>'
                 ."\n</Intermediate#C>"
                 ."\n</Intermediate#B>"
                 ."\n</Layout#A>",
             ],
             [
                 false,
-                "<Child#D/>",
+                '<Child#D/>',
             ],
         ];
     }
@@ -169,9 +169,9 @@ class PageLayoutRendererTest extends \PHPUnit\Framework\TestCase
         $actual_output,
     ) {
         $this->assertSame(
-            "<Layout#".spl_object_hash($layout).">\n"
-            ."<Content#".spl_object_hash($content)."/>"
-            ."\n</Layout#".spl_object_hash($layout).">",
+            '<Layout#'.spl_object_hash($layout).">\n"
+            .'<Content#'.spl_object_hash($content).'/>'
+            ."\n</Layout#".spl_object_hash($layout).'>',
             $actual_output
         );
     }

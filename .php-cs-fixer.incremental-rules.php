@@ -132,6 +132,7 @@ return array (
   'no_trailing_whitespace_in_comment' => true,
   'no_unneeded_import_alias' => true,
   'no_unused_imports' => true,
+  'no_useless_concat_operator' => true,
   'no_whitespace_before_comma_in_array' => true,
   'no_whitespace_in_blank_line' => true,
   'not_operator_with_space' => true,
@@ -259,6 +260,7 @@ return array (
   'phpdoc_var_without_name' => true,
   'return_type_declaration' => true,
   'semicolon_after_instruction' => true,
+  'simple_to_complex_string_variable' => true,
   'single_blank_line_at_eof' => true,
   'single_class_element_per_statement' => true,
   'single_import_per_statement' => true,
@@ -271,6 +273,7 @@ return array (
       0 => 'hash',
     ),
   ),
+  'single_quote' => true,
   'single_space_around_construct' => true,
   'space_after_semicolon' => 
   array (

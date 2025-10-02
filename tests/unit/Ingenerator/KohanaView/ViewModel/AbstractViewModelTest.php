@@ -51,7 +51,7 @@ class AbstractViewModelTest extends TestCase
     public function test_it_throws_if_attempting_to_set_any_undefined_externally()
     {
         $this->expectException(InvalidViewVarAssignmentException::class);
-        $this->expectExceptionMessage("TestViewModel variables are read-only, cannot assign some_defined_var");
+        $this->expectExceptionMessage('TestViewModel variables are read-only, cannot assign some_defined_var');
         $this->newSubject()->some_defined_var = 'anything';
     }
 

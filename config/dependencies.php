@@ -1,6 +1,8 @@
 <?php
 
-/**
+use Ingenerator\KohanaView\Renderer\PageLayoutRenderer;
+
+/*
  * KohanaView dependency container configuration for use with https://github.com/zeelot/kohana-dependencies.
  */
 return [
@@ -15,7 +17,7 @@ return [
             ],
             'page_layout' => [
                 '_settings' => [
-                    'class' => Ingenerator\KohanaView\Renderer\PageLayoutRenderer::class,
+                    'class' => PageLayoutRenderer::class,
                     'arguments' => ['%kohanaview.renderer.html%', '%kohana.request%'],
                     'shared' => true,
                 ],

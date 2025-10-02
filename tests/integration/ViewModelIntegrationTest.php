@@ -8,6 +8,10 @@ use Ingenerator\KohanaView\Renderer\HTMLRenderer;
 use Ingenerator\KohanaView\TemplateManager\CFSTemplateManager;
 use Ingenerator\KohanaView\ViewModel;
 use Kohana;
+use PHPUnit\Framework\Assert;
+use PHPUnit\Framework\TestCase;
+use View\Test\CustomView;
+use View\Test\SomeModel;
 
 use function constant;
 use function dirname;
@@ -25,7 +29,7 @@ use function uniqid;
  *
  * @preserveGlobalState disabled
  */
-class ViewModelIntegrationTest extends \PHPUnit\Framework\TestCase
+class ViewModelIntegrationTest extends TestCase
 {
     public const STALE_COMPILED_STRING = 'Stale content from previous compile';
 
@@ -113,7 +117,7 @@ class ViewModelIntegrationTest extends \PHPUnit\Framework\TestCase
         /** @noinspection PhpUndefinedNamespaceInspection */
         /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
         /** @noinspection PhpUndefinedClassInspection */
-        $view = new \View\Test\SomeModel();
+        $view = new SomeModel();
         /** @var ViewModel $view */
         $result = $this->getHTMLRenderer($dependencies)->render($view);
 
@@ -150,7 +154,7 @@ class ViewModelIntegrationTest extends \PHPUnit\Framework\TestCase
         /** @noinspection PhpUndefinedNamespaceInspection */
         /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
         /** @noinspection PhpUndefinedClassInspection */
-        $view = new \View\Test\CustomView();
+        $view = new CustomView();
         /** @var ViewModel $view */
         $this->assertSame(
             'View with &lt;p&gt;Stuff&amp;Things&lt;/p&gt;, <p>Stuff&Things</p>',
@@ -160,8 +164,8 @@ class ViewModelIntegrationTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        \PHPUnit\Framework\Assert::assertTrue($this->isInIsolation(), 'Integration tests must runInSeparateProcess');
-        \PHPUnit\Framework\Assert::assertTrue($this->preserveGlobalState, 'Integration tests must run without globals');
+        Assert::assertTrue($this->isInIsolation(), 'Integration tests must runInSeparateProcess');
+        Assert::assertTrue($this->preserveGlobalState, 'Integration tests must run without globals');
         $this->expectOutputRegex('/^$/');
 
         $this->tmp_dir = sys_get_temp_dir().'/kohana-view-integration/'.uniqid('test');

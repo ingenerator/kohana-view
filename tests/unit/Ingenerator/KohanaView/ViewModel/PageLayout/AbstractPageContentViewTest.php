@@ -3,9 +3,10 @@
 namespace test\unit\Ingenerator\KohanaView\ViewModel\PageLayout;
 
 use Ingenerator\KohanaView\ViewModel\PageLayout\AbstractPageContentView;
+use PHPUnit\Framework\TestCase;
 use test\mock\ViewModel\PageLayout\DummyPageLayoutView;
 
-class AbstractPageContentViewTest extends \PHPUnit\Framework\TestCase
+class AbstractPageContentViewTest extends TestCase
 {
     protected $page_layout;
 

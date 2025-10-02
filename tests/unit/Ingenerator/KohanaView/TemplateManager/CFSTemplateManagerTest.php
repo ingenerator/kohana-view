@@ -8,6 +8,8 @@ use Ingenerator\KohanaView\TemplateCompiler;
 use Ingenerator\KohanaView\TemplateManager\CFSTemplateManager;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
+use PHPUnit\Framework\Assert;
+use PHPUnit\Framework\TestCase;
 use test\mock\CFSWrapper\SingleDirectoryCFSWrapperMock;
 
 use function chmod;
@@ -17,7 +19,7 @@ use function file_put_contents;
 use function is_dir;
 use function mkdir;
 
-class CFSTemplateManagerTest extends \PHPUnit\Framework\TestCase
+class CFSTemplateManagerTest extends TestCase
 {
     protected $options = [];
 
@@ -200,11 +202,11 @@ class SpyingTemplateCompiler extends TemplateCompiler
 
     public function assertCompiledOnce($string)
     {
-        \PHPUnit\Framework\Assert::assertEquals([$string], $this->compiled);
+        Assert::assertEquals([$string], $this->compiled);
     }
 
     public function assertNothingCompiled()
     {
-        \PHPUnit\Framework\Assert::assertEmpty($this->compiled);
+        Assert::assertEmpty($this->compiled);
     }
 }

@@ -1,13 +1,16 @@
 <?php
 
 
+use PhpCsFixer\Finder;
+use PhpCsFixer\Config;
+use PhpCsFixer\Runner\Parallel\ParallelConfigFactory;
 use PhpCsFixer\Fixer\Phpdoc\PhpdocSeparationFixer;
 
-$finder = (new PhpCsFixer\Finder())
+$finder = (new Finder())
     ->in(__DIR__);
 
-return (new PhpCsFixer\Config())
-    ->setParallelConfig(PhpCsFixer\Runner\Parallel\ParallelConfigFactory::detect())
+return (new Config())
+    ->setParallelConfig(ParallelConfigFactory::detect())
     ->setRiskyAllowed(true)
     ->setRules([
         // @todo: Bump to php84 migration when we drop 8.2 support

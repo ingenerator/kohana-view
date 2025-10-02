@@ -4,8 +4,9 @@ namespace test\unit\Ingenerator\KohanaView\ViewModel\PageLayout;
 
 use Ingenerator\KohanaView\ViewModel;
 use Ingenerator\KohanaView\ViewModel\PageLayout\AbstractPageLayoutView;
+use PHPUnit\Framework\TestCase;
 
-class AbstractPageLayoutViewTest extends \PHPUnit\Framework\TestCase
+class AbstractPageLayoutViewTest extends TestCase
 {
     /**
      * @var ViewModel

@@ -8,6 +8,7 @@ use Ingenerator\KohanaView\ViewModel;
 use Ingenerator\KohanaView\ViewModel\PageContentView;
 use Ingenerator\KohanaView\ViewModel\PageLayoutView;
 use PHPUnit\Framework\Assert;
+use PHPUnit\Framework\TestCase;
 use Request;
 use test\mock\ViewModel\PageLayout\DummyIntermediateLayoutView;
 use test\mock\ViewModel\PageLayout\DummyNestedChildView;
@@ -17,7 +18,7 @@ use UnexpectedValueException;
 
 use function spl_object_hash;
 
-class PageLayoutRendererTest extends \PHPUnit\Framework\TestCase
+class PageLayoutRendererTest extends TestCase
 {
     /**
      * @var SimpleRendererStub

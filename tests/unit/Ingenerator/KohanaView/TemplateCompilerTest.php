@@ -4,8 +4,9 @@ namespace test\unit\Ingenerator\KohanaView;
 
 use Ingenerator\KohanaView\Exception\InvalidTemplateContentException;
 use Ingenerator\KohanaView\TemplateCompiler;
+use PHPUnit\Framework\TestCase;
 
-class TemplateCompilerTest extends \PHPUnit\Framework\TestCase
+class TemplateCompilerTest extends TestCase
 {
     protected $options = [];
 

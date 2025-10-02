@@ -4,9 +4,10 @@ namespace test\unit\Ingenerator\KohanaView\ViewModel\PageLayout;
 
 use Ingenerator\KohanaView\Exception\UnassignedViewVarException;
 use Ingenerator\KohanaView\ViewModel\PageLayout\StaticPageContentView;
+use PHPUnit\Framework\TestCase;
 use test\mock\ViewModel\PageLayout\DummyPageLayoutView;
 
-class StaticPageContentViewTest extends \PHPUnit\Framework\TestCase
+class StaticPageContentViewTest extends TestCase
 {
     public function test_it_is_initialisable()
     {

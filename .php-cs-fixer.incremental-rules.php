@@ -112,6 +112,7 @@ return array (
   'no_leading_namespace_whitespace' => true,
   'no_multiline_whitespace_around_double_arrow' => true,
   'no_multiple_statements_per_line' => true,
+  'no_null_property_initialization' => true,
   'no_singleline_whitespace_before_semicolons' => true,
   'no_space_around_double_colon' => true,
   'no_spaces_after_function_name' => true,

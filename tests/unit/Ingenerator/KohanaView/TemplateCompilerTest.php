@@ -1,9 +1,4 @@
 <?php
-/**
- * @author     Andrew Coulton <andrew@ingenerator.com>
- * @copyright  2015 inGenerator Ltd
- * @license    http://kohanaframework.org/license
- */
 
 namespace test\unit\Ingenerator\KohanaView;
 
@@ -12,7 +7,6 @@ use Ingenerator\KohanaView\TemplateCompiler;
 
 class TemplateCompilerTest extends \PHPUnit\Framework\TestCase
 {
-
     protected $options = [];
 
     public function test_it_is_initialisable()
@@ -41,17 +35,17 @@ class TemplateCompilerTest extends \PHPUnit\Framework\TestCase
     public function test_it_does_not_modify_php_comments()
     {
         $source = <<<PHP
-            <?php
-              /**
-               * Some php comment
-               */
-            <html>
-                <head><title></title></head>
-                <body>
-                <h1>some code</h1>
-                </body>
-            </html>
-PHP;
+                        <?php
+                          /**
+                           * Some php comment
+                           */
+                        <html>
+                            <head><title></title></head>
+                            <body>
+                            <h1>some code</h1>
+                            </body>
+                        </html>
+            PHP;
         $this->assertSame(
             $source,
             $this->newSubject()->compile($source)
@@ -61,13 +55,13 @@ PHP;
     public function test_it_does_not_modify_code_in_full_php_tags()
     {
         $source = <<<'PHP'
-            <html>
-                <head><title><?php $foo = 'you shouldn\'t do this but whatever';?></title></head>
-                <body>
-                <h1>some code</h1>
-                </body>
-            </html>
-PHP;
+                        <html>
+                            <head><title><?php $foo = 'you shouldn\'t do this but whatever';?></title></head>
+                            <body>
+                            <h1>some code</h1>
+                            </body>
+                        </html>
+            PHP;
         $this->assertSame(
             $source,
             $this->newSubject()->compile($source)
@@ -152,74 +146,74 @@ PHP;
 
     public function test_it_compiles_complex_template()
     {
-        $source   = <<<'PHP'
-<?php
-/**
- * Some view file or other
- * @var ViewModelThing $view
- */
-<div class="stuff"><h1><?=$view->title;?> <small><?=$caption;?></small></h1>
- <h2><?=Date::format($anything);?></h2>
- <?php if ($foo):?>
-    <?=raw($foo);?>
- <?php endif;?>
- <?=raw($view->render($child_view));?>
-</div>
-PHP;
+        $source = <<<'PHP'
+            <?php
+            /**
+             * Some view file or other
+             * @var ViewModelThing $view
+             */
+            <div class="stuff"><h1><?=$view->title;?> <small><?=$caption;?></small></h1>
+             <h2><?=Date::format($anything);?></h2>
+             <?php if ($foo):?>
+                <?=raw($foo);?>
+             <?php endif;?>
+             <?=raw($view->render($child_view));?>
+            </div>
+            PHP;
         $expected = <<<'PHP'
-<?php
-/**
- * Some view file or other
- * @var ViewModelThing $view
- */
-<div class="stuff"><h1><?=HTML::chars($view->title);?> <small><?=HTML::chars($caption);?></small></h1>
- <h2><?=HTML::chars(Date::format($anything));?></h2>
- <?php if ($foo):?>
-    <?php echo($foo);?>
- <?php endif;?>
- <?php echo($view->render($child_view));?>
-</div>
-PHP;
+            <?php
+            /**
+             * Some view file or other
+             * @var ViewModelThing $view
+             */
+            <div class="stuff"><h1><?=HTML::chars($view->title);?> <small><?=HTML::chars($caption);?></small></h1>
+             <h2><?=HTML::chars(Date::format($anything));?></h2>
+             <?php if ($foo):?>
+                <?php echo($foo);?>
+             <?php endif;?>
+             <?php echo($view->render($child_view));?>
+            </div>
+            PHP;
         $this->assertEquals($expected, $this->newSubject()->compile($source));
     }
 
     public function test_it_compiles_complex_template_with_multiline_raw_call()
     {
         $source = <<<'PHP'
-<?php
-    <td>
-        <?=raw(Button::link(
-            [
-                'href'           => $employment['employment_url'],
-                'title'          => $employment['link_title'],
-                'disallowed_msg' => 'You do not have permission to view this employment',
-                'icon'           => 'fa-file',
-                'caption'        => 'View',
-                'class'          => 'info',
-                'class_always'   => 'btn-xs btn-block'
-            ]
-        )); ?>
-        <?=raw(our(content(here('yikes'))));?>
-    </td>
-PHP;
+            <?php
+                <td>
+                    <?=raw(Button::link(
+                        [
+                            'href'           => $employment['employment_url'],
+                            'title'          => $employment['link_title'],
+                            'disallowed_msg' => 'You do not have permission to view this employment',
+                            'icon'           => 'fa-file',
+                            'caption'        => 'View',
+                            'class'          => 'info',
+                            'class_always'   => 'btn-xs btn-block'
+                        ]
+                    )); ?>
+                    <?=raw(our(content(here('yikes'))));?>
+                </td>
+            PHP;
 
         $expect = <<<'PHP'
-<?php
-    <td>
-        <?php echo(Button::link(
-            [
-                'href'           => $employment['employment_url'],
-                'title'          => $employment['link_title'],
-                'disallowed_msg' => 'You do not have permission to view this employment',
-                'icon'           => 'fa-file',
-                'caption'        => 'View',
-                'class'          => 'info',
-                'class_always'   => 'btn-xs btn-block'
-            ]
-        )); ?>
-        <?php echo(our(content(here('yikes'))));?>
-    </td>
-PHP;
+            <?php
+                <td>
+                    <?php echo(Button::link(
+                        [
+                            'href'           => $employment['employment_url'],
+                            'title'          => $employment['link_title'],
+                            'disallowed_msg' => 'You do not have permission to view this employment',
+                            'icon'           => 'fa-file',
+                            'caption'        => 'View',
+                            'class'          => 'info',
+                            'class_always'   => 'btn-xs btn-block'
+                        ]
+                    )); ?>
+                    <?php echo(our(content(here('yikes'))));?>
+                </td>
+            PHP;
 
         $this->assertEquals($expect, $this->newSubject()->compile($source));
     }
@@ -228,5 +222,4 @@ PHP;
     {
         return new TemplateCompiler($this->options);
     }
-
 }

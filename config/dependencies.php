@@ -1,49 +1,46 @@
 <?php
+
 /**
- * KohanaView dependency container configuration for use with https://github.com/zeelot/kohana-dependencies
- *
- * @author     Andrew Coulton <andrew@ingenerator.com>
- * @copyright  2015 inGenerator Ltd
- * @license    http://kohanaframework.org/license
+ * KohanaView dependency container configuration for use with https://github.com/zeelot/kohana-dependencies.
  */
 return [
     'kohanaview' => [
         'renderer' => [
             'html' => [
                 '_settings' => [
-                    'class'     => '\Ingenerator\KohanaView\Renderer\HTMLRenderer',
+                    'class' => '\Ingenerator\KohanaView\Renderer\HTMLRenderer',
                     'arguments' => ['%kohanaview.template.selector%', '%kohanaview.template.manager%'],
-                    'shared'    => TRUE,
+                    'shared' => true,
                 ],
             ],
             'page_layout' => [
                 '_settings' => [
-                    'class'     => \Ingenerator\KohanaView\Renderer\PageLayoutRenderer::class,
+                    'class' => Ingenerator\KohanaView\Renderer\PageLayoutRenderer::class,
                     'arguments' => ['%kohanaview.renderer.html%', '%kohana.request%'],
-                    'shared'    => TRUE,
+                    'shared' => true,
                 ],
             ],
         ],
         'template' => [
             'compiler' => [
                 '_settings' => [
-                    'class'     => '\Ingenerator\KohanaView\TemplateCompiler',
+                    'class' => '\Ingenerator\KohanaView\TemplateCompiler',
                     'arguments' => [],
-                    'shared'    => TRUE,
+                    'shared' => true,
                 ],
             ],
-            'manager'  => [
+            'manager' => [
                 '_settings' => [
-                    'class'     => '\Ingenerator\KohanaView\TemplateManager\CFSTemplateManager',
+                    'class' => '\Ingenerator\KohanaView\TemplateManager\CFSTemplateManager',
                     'arguments' => ['%kohanaview.template.compiler%', '@kohanaview.template_manager@'],
-                    'shared'    => TRUE,
+                    'shared' => true,
                 ],
             ],
             'selector' => [
                 '_settings' => [
-                    'class'     => '\Ingenerator\KohanaView\ViewTemplateSelector',
+                    'class' => '\Ingenerator\KohanaView\ViewTemplateSelector',
                     'arguments' => [],
-                    'shared'    => TRUE,
+                    'shared' => true,
                 ],
             ],
         ],

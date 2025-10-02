@@ -1,17 +1,21 @@
 <?php
-/**
- * @author     Andrew Coulton <andrew@ingenerator.com>
- * @copyright  2015 inGenerator Ltd
- * @license    http://kohanaframework.org/license
- */
 
 namespace Ingenerator\KohanaView\TemplateManager;
 
+use Arr;
 use Ingenerator\KohanaView\Exception\TemplateCacheException;
 use Ingenerator\KohanaView\Exception\TemplateNotFoundException;
 use Ingenerator\KohanaView\TemplateCompiler;
 use Ingenerator\KohanaView\TemplateManager;
+use Kohana;
 use Kohana_Exception;
+
+use function dirname;
+use function file_exists;
+use function file_get_contents;
+use function file_put_contents;
+use function is_writeable;
+use function rtrim;
 
 /**
  * Manages compilation of templates from view files located within the cascading file system. This allows extension
@@ -20,8 +24,6 @@ use Kohana_Exception;
  * Templates will be dynamically compiled and cached to disk:
  *  * If the recompile_always option is TRUE, then once for every execution
  *  * If the recompile_always option is FALSE, then only if the compiled template does not yet exist
- *
- * @package Ingenerator\KohanaView\TemplateManager
  */
 class CFSTemplateManager implements TemplateManager
 {
@@ -46,7 +48,7 @@ class CFSTemplateManager implements TemplateManager
     protected $compiler;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $recompile_always;
 
@@ -60,32 +62,25 @@ class CFSTemplateManager implements TemplateManager
      * * cache_dir        => the path where compiled templates will be cached
      * * recompile_always => whether to recompile each template on every execution,
      * * template_dir     => directory (in the cascading filesystem) to search for templates
-     *
-     * @param TemplateCompiler $compiler
-     * @param array            $options
-     * @param null|CFSWrapper  $cascading_files
      */
-    public function __construct(TemplateCompiler $compiler, array $options, ?CFSWrapper $cascading_files = NULL)
+    public function __construct(TemplateCompiler $compiler, array $options, ?CFSWrapper $cascading_files = null)
     {
-        $this->cascading_files  = $cascading_files ?: new CFSWrapper;
-        $this->compiler         = $compiler;
-        $this->cache_dir        = \rtrim($options['cache_dir'], '/');
-        $this->recompile_always = \Arr::get($options, 'recompile_always', FALSE);
-        $this->template_dir     = \rtrim(\Arr::get($options, 'template_dir', 'views'), '/');
+        $this->cascading_files = $cascading_files ?: new CFSWrapper();
+        $this->compiler = $compiler;
+        $this->cache_dir = rtrim($options['cache_dir'], '/');
+        $this->recompile_always = Arr::get($options, 'recompile_always', false);
+        $this->template_dir = rtrim(Arr::get($options, 'template_dir', 'views'), '/');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getPath($template_name)
     {
         $compiled_path = $this->cache_dir.'/'.$template_name.'.php';
 
         if ($this->isCompileRequired($compiled_path)) {
-            $source   = $this->requireSourceFileContent($template_name);
+            $source = $this->requireSourceFileContent($template_name);
             $compiled = $this->compiler->compile($source);
             $this->writeFile($compiled_path, $compiled);
-            $this->compiled_paths[$compiled_path] = TRUE;
+            $this->compiled_paths[$compiled_path] = true;
         }
 
         return $compiled_path;
@@ -98,11 +93,11 @@ class CFSTemplateManager implements TemplateManager
      */
     protected function isCompileRequired($compiled_path)
     {
-        if ($this->recompile_always AND ! isset($this->compiled_paths[$compiled_path])) {
-            return TRUE;
+        if ($this->recompile_always and ! isset($this->compiled_paths[$compiled_path])) {
+            return true;
         }
 
-        return ! \file_exists($compiled_path);
+        return ! file_exists($compiled_path);
     }
 
     /**
@@ -116,7 +111,7 @@ class CFSTemplateManager implements TemplateManager
             throw TemplateNotFoundException::forSourcePath($this->template_dir.'/'.$template_name);
         }
 
-        return \file_get_contents($source_file);
+        return file_get_contents($source_file);
     }
 
     /**
@@ -125,8 +120,8 @@ class CFSTemplateManager implements TemplateManager
      */
     protected function writeFile($compiled_path, $compiled)
     {
-        $this->ensureWriteableDirectory(\dirname($compiled_path));
-        \file_put_contents($compiled_path, $compiled);
+        $this->ensureWriteableDirectory(dirname($compiled_path));
+        file_put_contents($compiled_path, $compiled);
     }
 
     /**
@@ -135,14 +130,13 @@ class CFSTemplateManager implements TemplateManager
     protected function ensureWriteableDirectory($path)
     {
         try {
-            \Kohana::ensureDirectory($path, 0777);
+            Kohana::ensureDirectory($path, 0o777);
         } catch (Kohana_Exception $e) {
             throw TemplateCacheException::cannotCreateDirectory($path);
         }
 
-        if ( ! \is_writeable($path)) {
+        if ( ! is_writeable($path)) {
             throw TemplateCacheException::pathNotWriteable($path);
         }
     }
-
 }

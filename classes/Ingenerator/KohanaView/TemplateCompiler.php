@@ -1,13 +1,17 @@
 <?php
-/**
- * @author     Andrew Coulton <andrew@ingenerator.com>
- * @copyright  2015 inGenerator Ltd
- * @license    http://kohanaframework.org/license
- */
 
 namespace Ingenerator\KohanaView;
 
 use Ingenerator\KohanaView\Exception\InvalidTemplateContentException;
+use InvalidArgumentException;
+
+use function array_merge;
+use function preg_match;
+use function preg_replace_callback;
+use function strlen;
+use function strncmp;
+use function substr;
+use function trim;
 
 /**
  * The TemplateCompiler takes a plain PHP template string and processes it to add automatic variable escaping within
@@ -27,12 +31,9 @@ use Ingenerator\KohanaView\Exception\InvalidTemplateContentException;
  *    <?php echo $stuff;?>
  *
  * The raw output prefix and escape method are configurable via the options array passed to the constructor.
- *
- * @package Ingenerator\KohanaView
  */
 class TemplateCompiler
 {
-
     /**
      * @var array
      */
@@ -40,12 +41,9 @@ class TemplateCompiler
         'escape_method' => 'HTML::chars',
     ];
 
-    /**
-     * @param array $options
-     */
     public function __construct(array $options = [])
     {
-        $this->options = \array_merge($this->options, $options);
+        $this->options = array_merge($this->options, $options);
     }
 
     /**
@@ -55,7 +53,8 @@ class TemplateCompiler
      * @param string $source
      *
      * @return string
-     * @throws \InvalidArgumentException if the template is empty or invalid
+     *
+     * @throws InvalidArgumentException if the template is empty or invalid
      */
     public function compile($source)
     {
@@ -63,11 +62,11 @@ class TemplateCompiler
             throw InvalidTemplateContentException::forEmptyTemplate();
         }
 
-        if (\preg_match('/<?php echo/', $source)) {
+        if (preg_match('/<?php echo/', $source)) {
             throw InvalidTemplateContentException::hasLegacyPhpEcho();
         }
 
-        return \preg_replace_callback('/<\?=(.+?)(;|\?>)/s', [$this, 'compilePhpShortTag'], $source);
+        return preg_replace_callback('/<\?=(.+?)(;|\?>)/s', [$this, 'compilePhpShortTag'], $source);
     }
 
     /**
@@ -77,17 +76,16 @@ class TemplateCompiler
      */
     protected function compilePhpShortTag($matches)
     {
-        $var           = \trim($matches[1]);
-        $terminator    = $matches[2];
+        $var = trim($matches[1]);
+        $terminator = $matches[2];
         $escape_method = $this->options['escape_method'];
 
         if ($this->startsWith($var, 'raw(')) {
             // Use a plain php echo
-            $compiled = '<?php echo('.\substr($var, \strlen('raw(')).';';
+            $compiled = '<?php echo('.substr($var, strlen('raw(')).';';
         } elseif ($this->startsWith($var, '//')) {
             // Echo an empty string to prevent the comment causing a parse error
             $compiled = "<?='';$var;";
-
         } elseif ($this->startsWith($var, $escape_method)) {
             throw InvalidTemplateContentException::containsImplicitDoubleEscape(
                 $escape_method,
@@ -95,7 +93,6 @@ class TemplateCompiler
             );
         } elseif ($this->startsWith($var, '!')) {
             throw InvalidTemplateContentException::hasLegacyRawEscapePrefix($matches[0]);
-
         } else {
             // Escape the value before echoing
             $compiled = "<?={$escape_method}($var);";
@@ -116,7 +113,6 @@ class TemplateCompiler
      */
     protected function startsWith($string, $prefix)
     {
-        return (\strncmp($string, $prefix, \strlen($prefix)) === 0);
+        return strncmp($string, $prefix, strlen($prefix)) === 0;
     }
-
 }

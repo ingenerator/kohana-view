@@ -1,12 +1,6 @@
 <?php
-/**
- * @author     Andrew Coulton <andrew@ingenerator.com>
- * @copyright  2015 inGenerator Ltd
- * @license    http://kohanaframework.org/license
- */
 
 namespace test\unit\Ingenerator\KohanaView\Renderer;
-
 
 use Ingenerator\KohanaView\Renderer;
 use Ingenerator\KohanaView\Renderer\PageLayoutRenderer;
@@ -14,21 +8,25 @@ use Ingenerator\KohanaView\ViewModel;
 use Ingenerator\KohanaView\ViewModel\PageContentView;
 use Ingenerator\KohanaView\ViewModel\PageLayoutView;
 use PHPUnit\Framework\Assert;
-use test\mock\ViewModel\PageLayout\DummyNestedChildView;
+use Request;
 use test\mock\ViewModel\PageLayout\DummyIntermediateLayoutView;
+use test\mock\ViewModel\PageLayout\DummyNestedChildView;
 use test\mock\ViewModel\PageLayout\DummyPageContentView;
 use test\mock\ViewModel\PageLayout\DummyPageLayoutView;
+use UnexpectedValueException;
+
+use function get_class;
+use function spl_object_hash;
 
 class PageLayoutRendererTest extends \PHPUnit\Framework\TestCase
 {
-
     /**
-     * @var \test\unit\Ingenerator\KohanaView\Renderer\SimpleRendererStub
+     * @var SimpleRendererStub
      */
     protected $renderer;
 
     /**
-     * @var \Request
+     * @var Request
      */
     protected $request;
 
@@ -46,16 +44,16 @@ class PageLayoutRendererTest extends \PHPUnit\Framework\TestCase
      *           [null]
      */
     public function test_it_renders_just_content_for_all_requests_when_use_layout_explicit_false(
-        $request
+        $request,
     ) {
-        $this->request = $request ? new IsAjaxRequestStub($request['is_ajax']) : NULL;
+        $this->request = $request ? new IsAjaxRequestStub($request['is_ajax']) : null;
 
         $subject = $this->newSubject();
-        $subject->setUseLayout(FALSE);
-        $content = new DummyPageContentView($layout = new DummyPageLayoutView);
+        $subject->setUseLayout(false);
+        $content = new DummyPageContentView($layout = new DummyPageLayoutView());
 
         $this->renderer->registerViews(['A' => $content, 'B' => $layout]);
-        $this->assertSame("<Content#A/>", $subject->render($content));
+        $this->assertSame('<Content#A/>', $subject->render($content));
     }
 
     /**
@@ -64,12 +62,12 @@ class PageLayoutRendererTest extends \PHPUnit\Framework\TestCase
      *           [null]
      */
     public function test_it_renders_layout_containing_content_for_all_requests_when_use_layout_explicit_true(
-        $request
+        $request,
     ) {
-        $this->request = $request ? new IsAjaxRequestStub($request['is_ajax']) : NULL;
-        $subject       = $this->newSubject();
-        $subject->setUseLayout(TRUE);
-        $content = new DummyPageContentView($layout = new DummyPageLayoutView);
+        $this->request = $request ? new IsAjaxRequestStub($request['is_ajax']) : null;
+        $subject = $this->newSubject();
+        $subject->setUseLayout(true);
+        $content = new DummyPageContentView($layout = new DummyPageLayoutView());
 
         $this->renderer->registerViews(['A' => $content, 'B' => $layout]);
         $this->assertSame("<Layout#B>\n<Content#A/>\n</Layout#B>", $subject->render($content));
@@ -77,30 +75,29 @@ class PageLayoutRendererTest extends \PHPUnit\Framework\TestCase
 
     public function test_by_default_it_renders_layout_containing_content_when_no_request()
     {
-        $this->request = NULL;
-        $content       = new DummyPageContentView($layout = new DummyPageLayoutView);
-        $subject       = $this->newSubject();
+        $this->request = null;
+        $content = new DummyPageContentView($layout = new DummyPageLayoutView());
+        $subject = $this->newSubject();
         $this->renderer->registerViews(['A' => $content, 'B' => $layout]);
         $this->assertSame("<Layout#B>\n<Content#A/>\n</Layout#B>", $subject->render($content));
     }
 
     public function test_by_default_it_renders_layout_containing_content_when_request_not_ajax()
     {
-        $this->request = new IsAjaxRequestStub(FALSE);
-        $content       = new DummyPageContentView($layout = new DummyPageLayoutView);
-        $subject       = $this->newSubject();
+        $this->request = new IsAjaxRequestStub(false);
+        $content = new DummyPageContentView($layout = new DummyPageLayoutView());
+        $subject = $this->newSubject();
         $this->renderer->registerViews(['A' => $content, 'B' => $layout]);
         $this->assertSame("<Layout#B>\n<Content#A/>\n</Layout#B>", $subject->render($content));
-
     }
 
     public function test_by_default_it_renders_just_content_when_request_is_ajax()
     {
-        $this->request = new IsAjaxRequestStub(TRUE);
-        $content       = new DummyPageContentView($layout = new DummyPageLayoutView);
+        $this->request = new IsAjaxRequestStub(true);
+        $content = new DummyPageContentView($layout = new DummyPageLayoutView());
         $this->renderer->registerViews(['A' => $content, 'B' => $layout]);
         $this->assertSame(
-            "<Content#A/>",
+            '<Content#A/>',
             $this->newSubject()->render($content)
         );
     }
@@ -109,18 +106,18 @@ class PageLayoutRendererTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [
-                TRUE,
+                true,
                 "<Layout#A>\n"
                 ."<Intermediate#B>\n"
                 ."<Intermediate#C>\n"
-                ."<Child#D/>"
+                .'<Child#D/>'
                 ."\n</Intermediate#C>"
                 ."\n</Intermediate#B>"
-                ."\n</Layout#A>"
+                ."\n</Layout#A>",
             ],
             [
-                FALSE,
-                "<Child#D/>"
+                false,
+                '<Child#D/>',
             ],
         ];
     }
@@ -130,12 +127,12 @@ class PageLayoutRendererTest extends \PHPUnit\Framework\TestCase
      */
     public function test_it_renders_full_chain_if_with_layout_or_only_first_child_if_not(
         $use_layout,
-        $expect
+        $expect,
     ) {
-        $page             = new DummyPageLayoutView;
+        $page = new DummyPageLayoutView();
         $sidebar_template = new DummyIntermediateLayoutView($page);
-        $second_template  = new DummyIntermediateLayoutView($sidebar_template);
-        $content          = new DummyNestedChildView($second_template);
+        $second_template = new DummyIntermediateLayoutView($sidebar_template);
+        $content = new DummyNestedChildView($second_template);
         $this->renderer->registerViews(
             ['A' => $page, 'B' => $sidebar_template, 'C' => $second_template, 'D' => $content]
         );
@@ -147,7 +144,7 @@ class PageLayoutRendererTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->renderer = new SimpleRendererStub;
+        $this->renderer = new SimpleRendererStub();
     }
 
     protected function newSubject()
@@ -161,7 +158,7 @@ class PageLayoutRendererTest extends \PHPUnit\Framework\TestCase
     protected function assertRendersContentOnly(PageContentView $view, $actual_output)
     {
         $this->assertSame(
-            '<Content#'.\spl_object_hash($view).'/>',
+            '<Content#'.spl_object_hash($view).'/>',
             $actual_output
         );
     }
@@ -169,16 +166,15 @@ class PageLayoutRendererTest extends \PHPUnit\Framework\TestCase
     protected function assertRendersContentInLayout(
         PageLayoutView $layout,
         PageContentView $content,
-        $actual_output
+        $actual_output,
     ) {
         $this->assertSame(
-            "<Layout#".\spl_object_hash($layout).">\n"
-            ."<Content#".\spl_object_hash($content)."/>"
-            ."\n</Layout#".\spl_object_hash($layout).">",
+            '<Layout#'.spl_object_hash($layout).">\n"
+            .'<Content#'.spl_object_hash($content).'/>'
+            ."\n</Layout#".spl_object_hash($layout).'>',
             $actual_output
         );
     }
-
 }
 
 class SimpleRendererStub implements Renderer
@@ -188,29 +184,27 @@ class SimpleRendererStub implements Renderer
     public function registerViews($views)
     {
         foreach ($views as $key => $view) {
-            $hash                        = \spl_object_hash($view);
+            $hash = spl_object_hash($view);
             $this->expected_views[$hash] = $key;
         }
     }
 
     /**
-     * @param ViewModel $view
-     *
      * @return string
      */
     public function render(ViewModel $view)
     {
-        $hash = \spl_object_hash($view);
+        $hash = spl_object_hash($view);
         Assert::assertArrayHasKey(
             $hash,
             $this->expected_views,
-            'Unregistered view '.\get_class($view)
+            'Unregistered view '.get_class($view)
         );
         $id_letter = $this->expected_views[$hash];
         if ($view instanceof DummyPageContentView) {
             return "<Content#$id_letter/>";
         } elseif ($view instanceof DummyPageLayoutView) {
-            /** @noinspection PhpUndefinedFieldInspection */
+            /* @noinspection PhpUndefinedFieldInspection */
             return "<Layout#$id_letter>\n".$view->body_html."\n</Layout#$id_letter>";
         } elseif ($view instanceof DummyNestedChildView) {
             return "<Child#$id_letter/>";
@@ -218,12 +212,11 @@ class SimpleRendererStub implements Renderer
             return "<Intermediate#$id_letter>\n".$view->child_html."\n</Intermediate#$id_letter>";
         }
 
-        throw new \UnexpectedValueException('Don\'t know how to render '.\get_class($view));
+        throw new UnexpectedValueException('Don\'t know how to render '.get_class($view));
     }
-
 }
 
-class IsAjaxRequestStub extends \Request
+class IsAjaxRequestStub extends Request
 {
     private bool $is_ajax;
 

@@ -1,21 +1,19 @@
 <?php
-/**
- * @author     Andrew Coulton <andrew@ingenerator.com>
- * @copyright  2015 inGenerator Ltd
- * @license    http://kohanaframework.org/license
- */
 
 namespace Ingenerator\KohanaView\Exception;
 
+use UnexpectedValueException;
+
+use function get_class;
+use function gettype;
+use function is_object;
+use function sprintf;
 
 /**
- * Thrown when a TemplateSpecifyingView does not return a valid template name
- *
- * @package Ingenerator\KohanaView\Exception
+ * Thrown when a TemplateSpecifyingView does not return a valid template name.
  */
-class UnspecifiedTemplateNameException extends \UnexpectedValueException
+class UnspecifiedTemplateNameException extends UnexpectedValueException
 {
-
     /**
      * @param string $view_class
      *
@@ -37,12 +35,11 @@ class UnspecifiedTemplateNameException extends \UnexpectedValueException
     public static function forNonStringValue($view_class, $template)
     {
         return new static(
-            \sprintf(
+            sprintf(
                 '%s::getTemplateName() must return a string template name, %s value returned',
                 $view_class,
-                \is_object($template) ? \get_class($template) : \gettype($template)
+                is_object($template) ? get_class($template) : gettype($template)
             )
         );
     }
-
 }

@@ -1,15 +1,18 @@
 <?php
-/**
- * @author     Andrew Coulton <andrew@ingenerator.com>
- * @copyright  2015 inGenerator Ltd
- * @license    http://kohanaframework.org/license
- */
+
 namespace Ingenerator\KohanaView\ViewModel;
 
+use BadMethodCallException;
 use Ingenerator\KohanaView\Exception\InvalidDisplayVariablesException;
 use Ingenerator\KohanaView\Exception\InvalidViewVarAssignmentException;
 use Ingenerator\KohanaView\Exception\UndefinedViewVarException;
 use Ingenerator\KohanaView\ViewModel;
+
+use function array_diff;
+use function array_key_exists;
+use function array_keys;
+use function array_merge;
+use function method_exists;
 
 /**
  * The AbstractViewModel can be used as a base for all ViewModels within the system. It supports providing values
@@ -40,7 +43,6 @@ use Ingenerator\KohanaView\ViewModel;
  */
 abstract class AbstractViewModel implements ViewModel
 {
-
     /**
      * @var array Variables that will be set back to defaults on each display unless a new value is passed
      */
@@ -58,24 +60,22 @@ abstract class AbstractViewModel implements ViewModel
 
     public function __construct()
     {
-        $this->variables = \array_merge($this->default_variables, $this->variables);
+        $this->variables = array_merge($this->default_variables, $this->variables);
 
         // Assign the expect_var_names to ensure that we don't accidentally start requiring compiled fields
-        $this->expect_var_names = \array_keys($this->variables);
+        $this->expect_var_names = array_keys($this->variables);
     }
 
     /**
-     * Get field values
+     * Get field values.
      *
      * @param string $name
-     *
-     * @return mixed
      */
     public function __get($name)
     {
-        if (\array_key_exists($name, $this->variables)) {
+        if (array_key_exists($name, $this->variables)) {
             return $this->variables[$name];
-        } elseif (\method_exists($this, 'var_'.$name)) {
+        } elseif (method_exists($this, 'var_'.$name)) {
             $method = 'var_'.$name;
 
             return $this->$method();
@@ -86,9 +86,8 @@ abstract class AbstractViewModel implements ViewModel
 
     /**
      * @param string $name
-     * @param mixed  $value
      *
-     * @throws \BadMethodCallException values cannot be assigned except with the display method
+     * @throws BadMethodCallException values cannot be assigned except with the display method
      */
     public function __set($name, $value)
     {
@@ -97,13 +96,11 @@ abstract class AbstractViewModel implements ViewModel
 
     /**
      * Set the data to be rendered in the view - note this does not actually render the view.
-     *
-     * @param array $variables
      */
     public function display(array $variables)
     {
         // Reinstate default variables to ensure they are in expected state when using view in a loop
-        $variables = \array_merge($this->default_variables, $variables);
+        $variables = array_merge($this->default_variables, $variables);
 
         if ($errors = $this->validateDisplayVariables($variables)) {
             throw InvalidDisplayVariablesException::passedToDisplay(static::class, $errors);
@@ -113,27 +110,24 @@ abstract class AbstractViewModel implements ViewModel
     }
 
     /**
-     * @param array $variables
-     *
      * @return string[] of errors
      */
     protected function validateDisplayVariables(array $variables)
     {
-        $errors             = [];
-        $provided_variables = \array_keys($variables);
-        foreach (\array_diff($provided_variables, $this->expect_var_names) as $unexpected_var) {
-            if (\method_exists($this, 'var_'.$unexpected_var)) {
+        $errors = [];
+        $provided_variables = array_keys($variables);
+        foreach (array_diff($provided_variables, $this->expect_var_names) as $unexpected_var) {
+            if (method_exists($this, 'var_'.$unexpected_var)) {
                 $errors[] = "'$unexpected_var' conflicts with ::var_$unexpected_var()";
             } else {
                 $errors[] = "'$unexpected_var' is not expected";
             }
         }
 
-        foreach (\array_diff($this->expect_var_names, $provided_variables) as $missing_var) {
+        foreach (array_diff($this->expect_var_names, $provided_variables) as $missing_var) {
             $errors[] = "'$missing_var' is missing";
         }
 
         return $errors;
     }
-
 }

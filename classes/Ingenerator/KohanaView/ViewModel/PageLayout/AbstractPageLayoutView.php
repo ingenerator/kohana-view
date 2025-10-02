@@ -1,12 +1,6 @@
 <?php
-/**
- * @author     Andrew Coulton <andrew@ingenerator.com>
- * @copyright  2015 inGenerator Ltd
- * @license    http://kohanaframework.org/license
- */
 
 namespace Ingenerator\KohanaView\ViewModel\PageLayout;
-
 
 use Ingenerator\KohanaView\ViewModel;
 use Ingenerator\KohanaView\ViewModel\AbstractViewModel;
@@ -19,19 +13,16 @@ use Ingenerator\KohanaView\ViewModel\AbstractViewModel;
  * of this page layout and display any html string directly for simpler cases.
  *
  * @property-read string $body_html The content to display in the body HTML area
- * @property-read string $title     The page title
- *
- * @package Ingenerator\KohanaView\ViewModel\PageLayoutView
+ * @property-read string $title The page title
  */
 abstract class AbstractPageLayoutView extends AbstractViewModel implements ViewModel\PageLayoutView, ViewModel\NestedParentView
 {
-
     /**
      * @var array
      */
     protected $variables = [
-        'body_html' => NULL,
-        'title'     => NULL,
+        'body_html' => null,
+        'title' => null,
     ];
 
     /**
@@ -58,5 +49,4 @@ abstract class AbstractPageLayoutView extends AbstractViewModel implements ViewM
     {
         $this->variables['body_html'] = $html;
     }
-
 }

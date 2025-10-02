@@ -1,18 +1,12 @@
 <?php
-/**
- * @author     Andrew Coulton <andrew@ingenerator.com>
- * @copyright  2015 inGenerator Ltd
- * @license    http://kohanaframework.org/license
- */
 
 namespace Ingenerator\KohanaView\Renderer;
-
 
 use Ingenerator\KohanaView\Renderer;
 use Ingenerator\KohanaView\ViewModel\NestedChildView;
 use Ingenerator\KohanaView\ViewModel\PageContentView;
 use Ingenerator\KohanaView\ViewModel\PageLayoutView;
-
+use Request;
 
 /**
  * Renders a PageContentView and - when appropriate - renders the generated output inside a PageLayoutView. By
@@ -30,8 +24,6 @@ use Ingenerator\KohanaView\ViewModel\PageLayoutView;
  *    }
  *
  * Obviously in real life the creation of the views and renderers would happen in your dependency container.
- *
- * @package Ingenerator\KohanaView\Renderer
  */
 class PageLayoutRenderer
 {
@@ -46,19 +38,17 @@ class PageLayoutRenderer
     protected $view_renderer;
 
     /**
-     * @var \Request
+     * @var Request
      */
     protected $current_request;
 
-    public function __construct(Renderer $view_renderer, ?\Request $current_request = NULL)
+    public function __construct(Renderer $view_renderer, ?Request $current_request = null)
     {
-        $this->view_renderer   = $view_renderer;
+        $this->view_renderer = $view_renderer;
         $this->current_request = $current_request;
     }
 
     /**
-     * @param PageContentView $content_view
-     *
      * @return string
      */
     public function render(PageContentView $content_view)
@@ -78,9 +68,6 @@ class PageLayoutRenderer
     }
 
     /**
-     * @param PageLayoutView $parent
-     * @param string         $content
-     *
      * @return string
      */
     protected function renderParent(PageLayoutView $parent, $content_html)
@@ -99,20 +86,20 @@ class PageLayoutRenderer
      */
     protected function shouldUseLayout()
     {
-        if ($this->use_layout !== NULL) {
+        if ($this->use_layout !== null) {
             return $this->use_layout;
         }
 
-        if ($this->current_request AND $this->current_request->is_ajax()) {
-            return FALSE;
+        if ($this->current_request and $this->current_request->is_ajax()) {
+            return false;
         } else {
-            return TRUE;
+            return true;
         }
     }
 
     /**
      * Configure whether to always wrap the content in the layout (TRUE), never (FALSE) or automatically for
-     * non-AJAX requests (NULL)
+     * non-AJAX requests (NULL).
      *
      * @param bool $use_layout
      *
@@ -122,5 +109,4 @@ class PageLayoutRenderer
     {
         $this->use_layout = $use_layout;
     }
-
 }

@@ -1,17 +1,11 @@
 <?php
-/**
- * @author    Andrew Coulton <andrew@ingenerator.com>
- * @licence   proprietary
- */
 
 namespace Ingenerator\KohanaView\ViewModel;
-
 
 interface NestedChildView extends PageContentView
 {
     /**
-     *
-     * @return \Ingenerator\KohanaView\ViewModel\NestedParentView
+     * @return NestedParentView
      */
     public function getParentView();
 }

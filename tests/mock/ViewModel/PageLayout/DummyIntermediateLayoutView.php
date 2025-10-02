@@ -1,11 +1,6 @@
 <?php
-/**
- * @author    Andrew Coulton <andrew@ingenerator.com>
- * @licence   proprietary
- */
 
 namespace test\mock\ViewModel\PageLayout;
-
 
 use Ingenerator\KohanaView\ViewModel\PageLayout\AbstractIntermediateLayoutView;
 
@@ -18,5 +13,4 @@ class DummyIntermediateLayoutView extends AbstractIntermediateLayoutView
     {
         return parent::getUltimatePageView();
     }
-
 }

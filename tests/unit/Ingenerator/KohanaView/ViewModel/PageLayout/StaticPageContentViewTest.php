@@ -1,11 +1,6 @@
 <?php
-/**
- * @author     Andrew Coulton <andrew@ingenerator.com>
- * @copyright  2015 inGenerator Ltd
- * @license    http://kohanaframework.org/license
- */
-namespace test\unit\Ingenerator\KohanaView\ViewModel\PageLayout;
 
+namespace test\unit\Ingenerator\KohanaView\ViewModel\PageLayout;
 
 use Ingenerator\KohanaView\Exception\UnassignedViewVarException;
 use Ingenerator\KohanaView\ViewModel\PageLayout\StaticPageContentView;
@@ -13,7 +8,6 @@ use test\mock\ViewModel\PageLayout\DummyPageLayoutView;
 
 class StaticPageContentViewTest extends \PHPUnit\Framework\TestCase
 {
-
     public function test_it_is_initialisable()
     {
         $subject = $this->newSubject();
@@ -48,8 +42,7 @@ class StaticPageContentViewTest extends \PHPUnit\Framework\TestCase
     protected function newSubject()
     {
         return new StaticPageContentView(
-            new DummyPageLayoutView
+            new DummyPageLayoutView()
         );
     }
-
 }

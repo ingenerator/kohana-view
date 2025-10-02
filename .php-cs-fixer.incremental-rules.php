@@ -53,6 +53,8 @@ return array (
   'native_type_declaration_casing' => true,
   'no_blank_lines_after_class_opening' => true,
   'no_blank_lines_after_phpdoc' => true,
+  'no_empty_comment' => true,
+  'no_empty_statement' => true,
   'no_extra_blank_lines' => 
   array (
     'tokens' => 
@@ -71,6 +73,7 @@ return array (
     ),
   ),
   'no_multiline_whitespace_around_double_arrow' => true,
+  'no_multiple_statements_per_line' => true,
   'no_singleline_whitespace_before_semicolons' => true,
   'no_space_around_double_colon' => true,
   'no_spaces_after_function_name' => true,
@@ -82,6 +85,7 @@ return array (
   'no_whitespace_in_blank_line' => true,
   'not_operator_with_space' => true,
   'object_operator_without_whitespace' => true,
+  'semicolon_after_instruction' => true,
   'single_blank_line_at_eof' => true,
   'single_line_after_imports' => true,
   'single_space_around_construct' => true,

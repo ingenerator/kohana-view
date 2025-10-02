@@ -13,7 +13,9 @@ return RectorConfig::configure()
         __DIR__.'/tests',
     ])
     ->withRootFiles()
-    ->withCodeQualityLevel(100)
+    ->withPreparedSets(
+        codeQuality: true,
+    )
     ->withPhpSets()
     ->withSkip([
         ClosureToArrowFunctionRector::class => [

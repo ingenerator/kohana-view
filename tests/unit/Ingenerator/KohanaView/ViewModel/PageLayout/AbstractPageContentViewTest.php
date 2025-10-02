@@ -39,7 +39,7 @@ class AbstractPageContentViewTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue(true);
     }
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->page_layout = new DummyPageLayoutView();
         parent::setUp();

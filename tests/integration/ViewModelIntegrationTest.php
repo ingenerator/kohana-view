@@ -158,7 +158,7 @@ class ViewModelIntegrationTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         \PHPUnit\Framework\Assert::assertTrue($this->isInIsolation(), 'Integration tests must runInSeparateProcess');
         \PHPUnit\Framework\Assert::assertTrue($this->preserveGlobalState, 'Integration tests must run without globals');
@@ -171,7 +171,7 @@ class ViewModelIntegrationTest extends \PHPUnit\Framework\TestCase
         parent::setUp();
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         shell_exec("rm -rf $this->tmp_dir");
         $this->assertFileNotExists($this->tmp_dir, 'Temp directory should have been cleared up');

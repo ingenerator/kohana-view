@@ -136,7 +136,7 @@ class CFSTemplateManagerTest extends \PHPUnit\Framework\TestCase
         $this->assertCompiledToFile($compiled_url);
     }
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->compiler = new SpyingTemplateCompiler();
         $this->vfs_root = vfsStream::setup(

@@ -171,7 +171,7 @@ class HTMLRendererTest extends TestCase
         $this->newSubject()->render(new ViewModelDummy());
     }
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->old_error_reporting = error_reporting();
         $this->template_selector = new ViewTemplateSelectorSpy();
@@ -182,7 +182,7 @@ class HTMLRendererTest extends TestCase
         parent::__construct();
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         error_reporting($this->old_error_reporting);
     }

@@ -1,5 +1,7 @@
 <?php
 return array (
+  'array_indentation' => true,
+  'array_syntax' => true,
   'blank_line_after_namespace' => true,
   'blank_line_after_opening_tag' => true,
   'blank_line_before_statement' => 
@@ -16,6 +18,7 @@ return array (
   'encoding' => true,
   'indentation_type' => true,
   'integer_literal_case' => true,
+  'list_syntax' => true,
   'lowercase_cast' => true,
   'lowercase_keywords' => true,
   'lowercase_static_reference' => true,
@@ -42,6 +45,9 @@ return array (
       10 => 'use',
     ),
   ),
+  'no_multiline_whitespace_around_double_arrow' => true,
+  'no_trailing_comma_in_singleline' => true,
+  'no_whitespace_before_comma_in_array' => true,
   'no_whitespace_in_blank_line' => true,
   'single_blank_line_at_eof' => true,
   'single_line_after_imports' => true,
@@ -49,4 +55,15 @@ return array (
   array (
     'stick_comment_to_next_continuous_control_statement' => true,
   ),
+  'trailing_comma_in_multiline' => 
+  array (
+    'after_heredoc' => true,
+    'elements' => 
+    array (
+      0 => 'array_destructuring',
+      1 => 'arrays',
+    ),
+  ),
+  'trim_array_spaces' => true,
+  'whitespace_after_comma_in_array' => true,
 );

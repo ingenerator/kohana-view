@@ -43,7 +43,7 @@ class AbstractNestedChildViewTest extends TestCase
         return [
             [
                 $page = new DummyPageLayoutView,
-                $page
+                $page,
             ],
             [
                 new DummyIntermediateLayoutView(
@@ -51,8 +51,8 @@ class AbstractNestedChildViewTest extends TestCase
                         $page = new DummyPageLayoutView
                     )
                 ),
-                $page
-            ]
+                $page,
+            ],
         ];
     }
 

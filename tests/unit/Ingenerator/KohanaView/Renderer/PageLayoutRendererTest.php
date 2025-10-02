@@ -114,11 +114,11 @@ class PageLayoutRendererTest extends \PHPUnit\Framework\TestCase
                 ."<Child#D/>"
                 ."\n</Intermediate#C>"
                 ."\n</Intermediate#B>"
-                ."\n</Layout#A>"
+                ."\n</Layout#A>",
             ],
             [
                 false,
-                "<Child#D/>"
+                "<Child#D/>",
             ],
         ];
     }

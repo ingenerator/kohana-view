@@ -1,11 +1,5 @@
 <?php
 
-/**
- * @author     Andrew Coulton <andrew@ingenerator.com>
- * @copyright  2015 inGenerator Ltd
- * @license    http://kohanaframework.org/license
- */
-
 namespace test\unit\Ingenerator\KohanaView\TemplateManager;
 
 use Ingenerator\KohanaView\Exception\TemplateCacheException;

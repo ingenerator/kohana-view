@@ -3,9 +3,6 @@
 /**
  * KohanaView dependency container configuration for use with https://github.com/zeelot/kohana-dependencies
  *
- * @author     Andrew Coulton <andrew@ingenerator.com>
- * @copyright  2015 inGenerator Ltd
- * @license    http://kohanaframework.org/license
  */
 return [
     'kohanaview' => [

@@ -1,11 +1,5 @@
 <?php
 
-/**
- * @author     Andrew Coulton <andrew@ingenerator.com>
- * @copyright  2015 inGenerator Ltd
- * @license    http://kohanaframework.org/license
- */
-
 namespace test\mock\CFSWrapper;
 
 use Ingenerator\KohanaView\TemplateManager\CFSWrapper;

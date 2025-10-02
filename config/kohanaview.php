@@ -3,9 +3,6 @@
 /**
  * Configuration for the KohanaView module
  *
- * @author     Andrew Coulton <andrew@ingenerator.com>
- * @copyright  2015 inGenerator Ltd
- * @license    http://kohanaframework.org/license
  */
 return [
     'template_manager' => [

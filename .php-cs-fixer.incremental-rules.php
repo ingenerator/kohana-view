@@ -38,6 +38,17 @@ return array (
   'encoding' => true,
   'fully_qualified_strict_types' => true,
   'function_declaration' => true,
+  'general_phpdoc_annotation_remove' => 
+  array (
+    'annotations' => 
+    array (
+      0 => 'category',
+      1 => 'author',
+      2 => 'licence',
+      3 => 'license',
+      4 => 'copyright',
+    ),
+  ),
   'global_namespace_import' => 
   array (
     'import_classes' => true,

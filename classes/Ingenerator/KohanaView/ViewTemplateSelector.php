@@ -22,9 +22,6 @@ use function strtolower;
  *
  * Views can also implement TemplateSpecifyingViewModel to provide a custom template file name when required.
  *
- * @author     Andrew Coulton <andrew@ingenerator.com>
- * @copyright  2015 inGenerator Ltd
- * @license    http://kohanaframework.org/license
  */
 class ViewTemplateSelector
 {

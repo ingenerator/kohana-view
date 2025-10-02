@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @author    Andrew Coulton <andrew@ingenerator.com>
- * @licence   proprietary
- */
-
 namespace test\unit\Ingenerator\KohanaView\ViewModel\PageLayout;
 
 use test\mock\ViewModel\PageLayout\DummyIntermediateLayoutView;

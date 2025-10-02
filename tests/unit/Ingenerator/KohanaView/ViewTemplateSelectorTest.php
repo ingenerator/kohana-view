@@ -5,6 +5,7 @@
  * @copyright  2015 inGenerator Ltd
  * @license    http://kohanaframework.org/license
  */
+
 namespace test\unit\Ingenerator\KohanaView;
 
 use Ingenerator\KohanaView\Exception\UnspecifiedTemplateNameException;
@@ -15,7 +16,6 @@ use test\mock\ViewModel\ViewModelDummy;
 
 class ViewTemplateSelectorTest extends \PHPUnit\Framework\TestCase
 {
-
     public function test_it_is_initialisable()
     {
         $this->assertInstanceOf('Ingenerator\KohanaView\ViewTemplateSelector', $this->newSubject());
@@ -64,7 +64,6 @@ class ViewTemplateSelectorTest extends \PHPUnit\Framework\TestCase
         $this->newSubject()->getTemplateName(new FixedTemplateViewModelStub(new \DateTime));
     }
 
-
     /**
      * @return ViewTemplateSelector
      */
@@ -73,5 +72,3 @@ class ViewTemplateSelectorTest extends \PHPUnit\Framework\TestCase
         return new ViewTemplateSelector;
     }
 }
-
-

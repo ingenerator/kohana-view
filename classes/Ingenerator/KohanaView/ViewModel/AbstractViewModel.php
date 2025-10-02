@@ -1,9 +1,11 @@
 <?php
+
 /**
  * @author     Andrew Coulton <andrew@ingenerator.com>
  * @copyright  2015 inGenerator Ltd
  * @license    http://kohanaframework.org/license
  */
+
 namespace Ingenerator\KohanaView\ViewModel;
 
 use Ingenerator\KohanaView\Exception\InvalidDisplayVariablesException;
@@ -40,7 +42,6 @@ use Ingenerator\KohanaView\ViewModel;
  */
 abstract class AbstractViewModel implements ViewModel
 {
-
     /**
      * @var array Variables that will be set back to defaults on each display unless a new value is passed
      */
@@ -135,5 +136,4 @@ abstract class AbstractViewModel implements ViewModel
 
         return $errors;
     }
-
 }

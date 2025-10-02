@@ -1,4 +1,5 @@
 <?php
+
 # Bootstrap for running unit tests
 \define('TEST_ROOT_PATH', \realpath(__DIR__).'/');
 require_once(__DIR__.'/../koharness_bootstrap.php');

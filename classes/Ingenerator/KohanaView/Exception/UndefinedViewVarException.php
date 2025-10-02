@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author     Andrew Coulton <andrew@ingenerator.com>
  * @copyright  2015 inGenerator Ltd
@@ -14,7 +15,6 @@ namespace Ingenerator\KohanaView\Exception;
  */
 class UndefinedViewVarException extends \BadMethodCallException
 {
-
     /**
      * @param string $view_class
      * @param string $var_name

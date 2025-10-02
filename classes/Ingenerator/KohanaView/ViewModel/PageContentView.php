@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author     Andrew Coulton <andrew@ingenerator.com>
  * @copyright  2015 inGenerator Ltd
@@ -6,7 +7,6 @@
  */
 
 namespace Ingenerator\KohanaView\ViewModel;
-
 
 use Ingenerator\KohanaView\ViewModel;
 
@@ -20,7 +20,6 @@ use Ingenerator\KohanaView\ViewModel;
  */
 interface PageContentView extends ViewModel
 {
-
     /**
      * The page layout that this content view will be rendered into
      *

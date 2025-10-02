@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author     Andrew Coulton <andrew@ingenerator.com>
  * @copyright  2015 inGenerator Ltd
@@ -16,12 +17,10 @@ namespace Ingenerator\KohanaView;
  */
 interface Renderer
 {
-
     /**
      * @param ViewModel $view
      *
      * @return string
      */
     public function render(ViewModel $view);
-
 }

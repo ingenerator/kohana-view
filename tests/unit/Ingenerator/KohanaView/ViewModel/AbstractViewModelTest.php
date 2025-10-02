@@ -1,11 +1,12 @@
 <?php
+
 /**
  * @author     Andrew Coulton <andrew@ingenerator.com>
  * @copyright  2015 inGenerator Ltd
  * @license    http://kohanaframework.org/license
  */
-namespace test\unit\Ingenerator\KohanaView\ViewModel;
 
+namespace test\unit\Ingenerator\KohanaView\ViewModel;
 
 use Ingenerator\KohanaView\Exception\InvalidDisplayVariablesException;
 use Ingenerator\KohanaView\Exception\InvalidViewVarAssignmentException;
@@ -16,7 +17,6 @@ use PHPUnit\Framework\TestCase;
 
 class AbstractViewModelTest extends TestCase
 {
-
     public function test_it_is_initialisable()
     {
         $subject = $this->newSubject();
@@ -147,7 +147,6 @@ class AbstractViewModelTest extends TestCase
     {
         return new TestViewModel;
     }
-
 }
 
 /**
@@ -157,7 +156,6 @@ class AbstractViewModelTest extends TestCase
  */
 class TestViewModel extends AbstractViewModel
 {
-
     protected $default_variables = [
         'some_defaulted_var' => 'default value',
     ];
@@ -177,5 +175,4 @@ class TestViewModel extends AbstractViewModel
 
         return 'calculated';
     }
-
 }

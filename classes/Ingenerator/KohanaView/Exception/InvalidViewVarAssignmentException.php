@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author     Andrew Coulton <andrew@ingenerator.com>
  * @copyright  2015 inGenerator Ltd
@@ -7,7 +8,6 @@
 
 namespace Ingenerator\KohanaView\Exception;
 
-
 /**
  * Thrown when attempting to assign variables to a view model directly
  *
@@ -15,7 +15,6 @@ namespace Ingenerator\KohanaView\Exception;
  */
 class InvalidViewVarAssignmentException extends \BadMethodCallException
 {
-
     /**
      * @param string $view_class
      * @param string $var_name

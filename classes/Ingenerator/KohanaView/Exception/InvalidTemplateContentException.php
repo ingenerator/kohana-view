@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author     Andrew Coulton <andrew@ingenerator.com>
  * @copyright  2015 inGenerator Ltd
@@ -6,7 +7,6 @@
  */
 
 namespace Ingenerator\KohanaView\Exception;
-
 
 /**
  * Thrown when the content of a template is not valid for some reason
@@ -46,5 +46,4 @@ class InvalidTemplateContentException extends \InvalidArgumentException
     {
         return new static('Cannot compile empty template');
     }
-
 }

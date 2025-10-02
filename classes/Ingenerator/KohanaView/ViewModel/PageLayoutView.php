@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author     Andrew Coulton <andrew@ingenerator.com>
  * @copyright  2015 inGenerator Ltd
@@ -6,7 +7,6 @@
  */
 
 namespace Ingenerator\KohanaView\ViewModel;
-
 
 use Ingenerator\KohanaView\ViewModel;
 
@@ -20,12 +20,10 @@ use Ingenerator\KohanaView\ViewModel;
  */
 interface PageLayoutView extends ViewModel
 {
-
     /**
      * @param string $html
      *
      * @return void
      */
     public function setBodyHTML($html);
-
 }

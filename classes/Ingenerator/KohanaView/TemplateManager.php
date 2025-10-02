@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author     Andrew Coulton <andrew@ingenerator.com>
  * @copyright  2015 inGenerator Ltd
@@ -6,7 +7,6 @@
  */
 
 namespace Ingenerator\KohanaView;
-
 
 /**
  * The TemplateManager interfaces with the physical view template files provided by the project, managing compilation
@@ -16,12 +16,10 @@ namespace Ingenerator\KohanaView;
  */
 interface TemplateManager
 {
-
     /**
      * @param string $template_name Name of the template to use (can include path separators)
      *
      * @return string Path to the compiled template file
      */
     public function getPath($template_name);
-
 }

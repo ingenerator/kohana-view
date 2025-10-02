@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author     Andrew Coulton <andrew@ingenerator.com>
  * @copyright  2015 inGenerator Ltd
@@ -12,7 +13,6 @@ use Ingenerator\KohanaView\TemplateCompiler;
 
 class TemplateCompilerTest extends \PHPUnit\Framework\TestCase
 {
-
     protected $options = [];
 
     public function test_it_is_initialisable()
@@ -228,5 +228,4 @@ PHP;
     {
         return new TemplateCompiler($this->options);
     }
-
 }

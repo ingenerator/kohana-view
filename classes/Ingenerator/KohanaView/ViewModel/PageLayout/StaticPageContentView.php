@@ -5,6 +5,7 @@
  * @copyright  2015 inGenerator Ltd
  * @license    http://kohanaframework.org/license
  */
+
 namespace Ingenerator\KohanaView\ViewModel\PageLayout;
 
 use Ingenerator\KohanaView\Exception\UnassignedViewVarException;
@@ -27,6 +28,4 @@ class StaticPageContentView extends AbstractPageContentView implements TemplateS
 
         return $this->variables['page_path'];
     }
-
-
 }

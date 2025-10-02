@@ -1,11 +1,12 @@
 <?php
+
 /**
  * @author     Andrew Coulton <andrew@ingenerator.com>
  * @copyright  2015 inGenerator Ltd
  * @license    http://kohanaframework.org/license
  */
-namespace test\unit\Ingenerator\KohanaView\TemplateManager;
 
+namespace test\unit\Ingenerator\KohanaView\TemplateManager;
 
 use Ingenerator\KohanaView\Exception\TemplateCacheException;
 use Ingenerator\KohanaView\Exception\TemplateNotFoundException;
@@ -17,7 +18,6 @@ use test\mock\CFSWrapper\SingleDirectoryCFSWrapperMock;
 
 class CFSTemplateManagerTest extends \PHPUnit\Framework\TestCase
 {
-
     protected $options = [];
 
     /**
@@ -34,7 +34,6 @@ class CFSTemplateManagerTest extends \PHPUnit\Framework\TestCase
      * @var vfsStreamDirectory
      */
     protected $vfs_root;
-
 
     public function test_it_is_initialisable()
     {
@@ -179,7 +178,6 @@ class CFSTemplateManagerTest extends \PHPUnit\Framework\TestCase
         }
         \file_put_contents($file, $content);
     }
-
 }
 
 class SpyingTemplateCompiler extends TemplateCompiler
@@ -207,4 +205,3 @@ class SpyingTemplateCompiler extends TemplateCompiler
         \PHPUnit\Framework\Assert::assertEmpty($this->compiled);
     }
 }
-

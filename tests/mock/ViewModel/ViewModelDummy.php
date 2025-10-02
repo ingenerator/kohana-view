@@ -1,9 +1,11 @@
 <?php
+
 /**
  * @author     Andrew Coulton <andrew@ingenerator.com>
  * @copyright  2015 inGenerator Ltd
  * @license    http://kohanaframework.org/license
  */
+
 namespace test\mock\ViewModel;
 
 use Ingenerator\KohanaView\ViewModel;
@@ -42,5 +44,4 @@ class ViewModelDummy implements ViewModel
     public function display(array $variables)
     {
     }
-
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author     Andrew Coulton <andrew@ingenerator.com>
  * @copyright  2015 inGenerator Ltd
@@ -7,7 +8,6 @@
 
 namespace Ingenerator\KohanaView\Exception;
 
-
 /**
  * Thrown when a TemplateSpecifyingView does not return a valid template name
  *
@@ -15,7 +15,6 @@ namespace Ingenerator\KohanaView\Exception;
  */
 class UnspecifiedTemplateNameException extends \UnexpectedValueException
 {
-
     /**
      * @param string $view_class
      *
@@ -44,5 +43,4 @@ class UnspecifiedTemplateNameException extends \UnexpectedValueException
             )
         );
     }
-
 }

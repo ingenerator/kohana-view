@@ -1,11 +1,11 @@
 <?php
+
 /**
  * @author    Andrew Coulton <andrew@ingenerator.com>
  * @licence   proprietary
  */
 
 namespace Ingenerator\KohanaView\ViewModel\PageLayout;
-
 
 use Ingenerator\KohanaView\ViewModel\NestedParentView;
 
@@ -33,5 +33,4 @@ abstract class AbstractIntermediateLayoutView extends AbstractNestedChildView im
     {
         return $this->child_html;
     }
-
 }

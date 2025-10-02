@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author     Andrew Coulton <andrew@ingenerator.com>
  * @copyright  2015 inGenerator Ltd
@@ -6,7 +7,6 @@
  */
 
 namespace Ingenerator\KohanaView\Renderer;
-
 
 use Ingenerator\KohanaView\Exception\TemplateNotFoundException;
 use Ingenerator\KohanaView\Renderer;
@@ -22,7 +22,6 @@ use Ingenerator\KohanaView\ViewTemplateSelector;
  */
 class HTMLRenderer implements Renderer
 {
-
     /**
      * @var TemplateManager
      */
@@ -38,7 +37,6 @@ class HTMLRenderer implements Renderer
         $this->template_selector = $template_selector;
         $this->template_manager  = $template_manager;
     }
-
 
     /**
      * {@inheritdoc}
@@ -90,5 +88,4 @@ class HTMLRenderer implements Renderer
             throw TemplateNotFoundException::forFullPath($template_path);
         }
     }
-
 }

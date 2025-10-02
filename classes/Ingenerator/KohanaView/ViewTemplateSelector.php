@@ -1,4 +1,5 @@
 <?php
+
 namespace Ingenerator\KohanaView;
 
 use Ingenerator\KohanaView\Exception\UnspecifiedTemplateNameException;
@@ -21,7 +22,6 @@ use Ingenerator\KohanaView\Exception\UnspecifiedTemplateNameException;
  */
 class ViewTemplateSelector
 {
-
     /**
      * @param ViewModel $view
      *
@@ -72,5 +72,4 @@ class ViewTemplateSelector
 
         return $template;
     }
-
 }

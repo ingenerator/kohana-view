@@ -1,4 +1,5 @@
 <?php
+
 /**
  * KohanaView dependency container configuration for use with https://github.com/zeelot/kohana-dependencies
  *

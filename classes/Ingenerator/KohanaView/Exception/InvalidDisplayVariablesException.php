@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author     Andrew Coulton <andrew@ingenerator.com>
  * @copyright  2015 inGenerator Ltd
@@ -15,7 +16,6 @@ namespace Ingenerator\KohanaView\Exception;
  */
 class InvalidDisplayVariablesException extends \InvalidArgumentException
 {
-
     /**
      * @param string   $view_class
      * @param string[] $errors

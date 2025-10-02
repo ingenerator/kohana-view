@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author     Andrew Coulton <andrew@ingenerator.com>
  * @copyright  2015 inGenerator Ltd
@@ -6,7 +7,6 @@
  */
 
 namespace test\unit\Ingenerator\KohanaView\ViewModel\PageLayout;
-
 
 use Ingenerator\KohanaView\ViewModel;
 use Ingenerator\KohanaView\ViewModel\PageLayout\AbstractPageLayoutView;
@@ -61,10 +61,8 @@ class AbstractPageLayoutViewTest extends \PHPUnit\Framework\TestCase
     {
         return new TestablePageLayoutView;
     }
-
 }
 
 class TestablePageLayoutView extends AbstractPageLayoutView
 {
-
 }

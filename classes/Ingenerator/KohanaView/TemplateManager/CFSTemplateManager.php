@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author     Andrew Coulton <andrew@ingenerator.com>
  * @copyright  2015 inGenerator Ltd
@@ -144,5 +145,4 @@ class CFSTemplateManager implements TemplateManager
             throw TemplateCacheException::pathNotWriteable($path);
         }
     }
-
 }

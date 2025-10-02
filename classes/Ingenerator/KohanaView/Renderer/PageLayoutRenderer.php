@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author     Andrew Coulton <andrew@ingenerator.com>
  * @copyright  2015 inGenerator Ltd
@@ -7,12 +8,10 @@
 
 namespace Ingenerator\KohanaView\Renderer;
 
-
 use Ingenerator\KohanaView\Renderer;
 use Ingenerator\KohanaView\ViewModel\NestedChildView;
 use Ingenerator\KohanaView\ViewModel\PageContentView;
 use Ingenerator\KohanaView\ViewModel\PageLayoutView;
-
 
 /**
  * Renders a PageContentView and - when appropriate - renders the generated output inside a PageLayoutView. By
@@ -122,5 +121,4 @@ class PageLayoutRenderer
     {
         $this->use_layout = $use_layout;
     }
-
 }

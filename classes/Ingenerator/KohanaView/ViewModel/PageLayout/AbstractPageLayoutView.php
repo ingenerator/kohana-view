@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author     Andrew Coulton <andrew@ingenerator.com>
  * @copyright  2015 inGenerator Ltd
@@ -6,7 +7,6 @@
  */
 
 namespace Ingenerator\KohanaView\ViewModel\PageLayout;
-
 
 use Ingenerator\KohanaView\ViewModel;
 use Ingenerator\KohanaView\ViewModel\AbstractViewModel;
@@ -25,7 +25,6 @@ use Ingenerator\KohanaView\ViewModel\AbstractViewModel;
  */
 abstract class AbstractPageLayoutView extends AbstractViewModel implements ViewModel\PageLayoutView, ViewModel\NestedParentView
 {
-
     /**
      * @var array
      */
@@ -58,5 +57,4 @@ abstract class AbstractPageLayoutView extends AbstractViewModel implements ViewM
     {
         $this->variables['body_html'] = $html;
     }
-
 }

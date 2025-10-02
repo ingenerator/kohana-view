@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author     Andrew Coulton <andrew@ingenerator.com>
  * @copyright  2015 inGenerator Ltd
@@ -32,7 +33,6 @@ use Ingenerator\KohanaView\Exception\InvalidTemplateContentException;
  */
 class TemplateCompiler
 {
-
     /**
      * @var array
      */
@@ -87,7 +87,6 @@ class TemplateCompiler
         } elseif ($this->startsWith($var, '//')) {
             // Echo an empty string to prevent the comment causing a parse error
             $compiled = "<?='';$var;";
-
         } elseif ($this->startsWith($var, $escape_method)) {
             throw InvalidTemplateContentException::containsImplicitDoubleEscape(
                 $escape_method,
@@ -95,7 +94,6 @@ class TemplateCompiler
             );
         } elseif ($this->startsWith($var, '!')) {
             throw InvalidTemplateContentException::hasLegacyRawEscapePrefix($matches[0]);
-
         } else {
             // Escape the value before echoing
             $compiled = "<?={$escape_method}($var);";
@@ -118,5 +116,4 @@ class TemplateCompiler
     {
         return (\strncmp($string, $prefix, \strlen($prefix)) === 0);
     }
-
 }

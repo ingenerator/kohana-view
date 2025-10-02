@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author     Andrew Coulton <andrew@ingenerator.com>
  * @copyright  2015 inGenerator Ltd
@@ -7,7 +8,6 @@
 
 namespace Ingenerator\KohanaView\Exception;
 
-
 /**
  * Thrown when a required view variable has not been assigned before use
  *
@@ -15,7 +15,6 @@ namespace Ingenerator\KohanaView\Exception;
  */
 class UnassignedViewVarException extends \BadMethodCallException
 {
-
     /**
      * @param string $view_class
      * @param string $var_name
@@ -35,6 +34,4 @@ class UnassignedViewVarException extends \BadMethodCallException
             )
         );
     }
-
-
 }

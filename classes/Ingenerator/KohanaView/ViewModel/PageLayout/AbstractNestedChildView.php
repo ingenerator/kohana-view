@@ -1,11 +1,11 @@
 <?php
+
 /**
  * @author    Andrew Coulton <andrew@ingenerator.com>
  * @licence   proprietary
  */
 
 namespace Ingenerator\KohanaView\ViewModel\PageLayout;
-
 
 use Ingenerator\KohanaView\ViewModel\AbstractViewModel;
 use Ingenerator\KohanaView\ViewModel\NestedChildView;
@@ -14,7 +14,6 @@ use Ingenerator\KohanaView\ViewModel\PageLayoutView;
 
 abstract class AbstractNestedChildView extends AbstractViewModel implements NestedChildView
 {
-
     /**
      * @var \Ingenerator\KohanaView\ViewModel\NestedParentView
      */
@@ -57,7 +56,7 @@ abstract class AbstractNestedChildView extends AbstractViewModel implements Nest
         if ( ! $parent instanceof PageLayoutView) {
             throw new \UnexpectedValueException('No ultimate PageLayoutView for '.\get_class($this));
         }
+
         return $parent;
     }
-
 }

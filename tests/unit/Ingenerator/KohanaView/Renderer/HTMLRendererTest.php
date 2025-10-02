@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author     Andrew Coulton <andrew@ingenerator.com>
  * @copyright  2015 inGenerator Ltd
@@ -6,7 +7,6 @@
  */
 
 namespace test\unit\Ingenerator\KohanaView\Renderer;
-
 
 use Ingenerator\KohanaView\Exception\TemplateNotFoundException;
 use Ingenerator\KohanaView\Renderer;
@@ -202,7 +202,6 @@ class HTMLRendererTest extends TestCase
         $this->vfs_root->addChild($file);
         $this->template_manager->setTemplatePath($file->url());
     }
-
 }
 
 class ViewTemplateSelectorSpy extends ViewTemplateSelector
@@ -222,12 +221,10 @@ class ViewTemplateSelectorSpy extends ViewTemplateSelector
     {
         \PHPUnit\Framework\Assert::assertSame([$view], $this->calls);
     }
-
 }
 
 class TemplateManagerSpy implements TemplateManager
 {
-
     protected $calls = [];
     protected $template_path;
 
@@ -247,7 +244,6 @@ class TemplateManagerSpy implements TemplateManager
     {
         \PHPUnit\Framework\Assert::assertSame([$template_name], $this->calls);
     }
-
 }
 
 class NumberViewModel extends ViewModel\AbstractViewModel

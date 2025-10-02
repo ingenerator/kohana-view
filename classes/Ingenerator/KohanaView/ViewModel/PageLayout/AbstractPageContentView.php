@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author     Andrew Coulton <andrew@ingenerator.com>
  * @copyright  2015 inGenerator Ltd
@@ -6,7 +7,6 @@
  */
 
 namespace Ingenerator\KohanaView\ViewModel\PageLayout;
-
 
 use Ingenerator\KohanaView\ViewModel\AbstractViewModel;
 use Ingenerator\KohanaView\ViewModel\NestedChildView;
@@ -27,7 +27,6 @@ use Ingenerator\KohanaView\ViewModel\PageLayoutView;
  */
 abstract class AbstractPageContentView extends AbstractViewModel implements PageContentView, NestedChildView
 {
-
     /**
      * @var PageLayoutView
      */
@@ -51,5 +50,4 @@ abstract class AbstractPageContentView extends AbstractViewModel implements Page
     {
         return $this->page_view;
     }
-
 }

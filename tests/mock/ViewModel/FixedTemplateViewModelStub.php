@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author     Andrew Coulton <andrew@ingenerator.com>
  * @copyright  2015 inGenerator Ltd
@@ -28,5 +29,4 @@ class FixedTemplateViewModelStub extends ViewModelDummy implements TemplateSpeci
     {
         return $this->template;
     }
-
 }

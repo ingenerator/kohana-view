@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author     Andrew Coulton <andrew@ingenerator.com>
  * @copyright  2015 inGenerator Ltd
@@ -56,7 +57,6 @@ class AbstractPageContentViewTest extends \PHPUnit\Framework\TestCase
             $this->page_layout
         );
     }
-
 }
 
 class TestableAbstractPageContentView extends AbstractPageContentView
@@ -64,5 +64,4 @@ class TestableAbstractPageContentView extends AbstractPageContentView
     protected $variables = [
         'message' => NULL,
     ];
-
 }

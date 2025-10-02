@@ -1,11 +1,11 @@
 <?php
+
 /**
  * @author    Andrew Coulton <andrew@ingenerator.com>
  * @licence   proprietary
  */
 
 namespace test\unit\Ingenerator\KohanaView\ViewModel\PageLayout;
-
 
 use BadMethodCallException;
 use Ingenerator\KohanaView\ViewModel\NestedChildView;
@@ -17,7 +17,6 @@ use test\mock\ViewModel\PageLayout\DummyPageLayoutView;
 
 class AbstractNestedChildViewTest extends TestCase
 {
-
     /**
      * @var \test\mock\ViewModel\PageLayout\DummyPageLayoutView
      */

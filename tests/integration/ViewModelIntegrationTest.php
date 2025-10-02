@@ -108,7 +108,6 @@ PHP
         /** @noinspection PhpUndefinedClassInspection */
         $view = new \View\Test\SomeModel;
         /** @var $view ViewModel */
-
         $result = $this->getHTMLRenderer($dependencies)->render($view);
 
         $this->assertSame(
@@ -119,7 +118,6 @@ PHP
 
     public function test_it_automatically_escapes_view_variables()
     {
-
         $this->givenFileWithContent(
             'module/classes/View/Test/CustomView.php',
             <<<'PHP'
@@ -147,7 +145,6 @@ PHP
         /** @noinspection PhpUndefinedClassInspection */
         $view = new \View\Test\CustomView;
         /** @var $view ViewModel */
-
         $this->assertSame(
             'View with &lt;p&gt;Stuff&amp;Things&lt;/p&gt;, <p>Stuff&Things</p>',
             $this->getHTMLRenderer($dependencies)->render($view)
@@ -224,5 +221,4 @@ PHP
     {
         return $dependencies->get('kohanaview.renderer.html');
     }
-
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author     Andrew Coulton <andrew@ingenerator.com>
  * @copyright  2015 inGenerator Ltd
@@ -6,7 +7,6 @@
  */
 
 namespace Ingenerator\KohanaView\Exception;
-
 
 /**
  * Thrown when there are problems caching a template
@@ -36,5 +36,4 @@ class TemplateCacheException extends \RuntimeException
     {
         return new static("Cannot write to compiled template path '$path'");
     }
-
 }

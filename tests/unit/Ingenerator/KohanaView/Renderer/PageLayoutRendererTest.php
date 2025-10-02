@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author     Andrew Coulton <andrew@ingenerator.com>
  * @copyright  2015 inGenerator Ltd
@@ -6,7 +7,6 @@
  */
 
 namespace test\unit\Ingenerator\KohanaView\Renderer;
-
 
 use Ingenerator\KohanaView\Renderer;
 use Ingenerator\KohanaView\Renderer\PageLayoutRenderer;
@@ -21,7 +21,6 @@ use test\mock\ViewModel\PageLayout\DummyPageLayoutView;
 
 class PageLayoutRendererTest extends \PHPUnit\Framework\TestCase
 {
-
     /**
      * @var \test\unit\Ingenerator\KohanaView\Renderer\SimpleRendererStub
      */
@@ -91,7 +90,6 @@ class PageLayoutRendererTest extends \PHPUnit\Framework\TestCase
         $subject       = $this->newSubject();
         $this->renderer->registerViews(['A' => $content, 'B' => $layout]);
         $this->assertSame("<Layout#B>\n<Content#A/>\n</Layout#B>", $subject->render($content));
-
     }
 
     public function test_by_default_it_renders_just_content_when_request_is_ajax()
@@ -178,7 +176,6 @@ class PageLayoutRendererTest extends \PHPUnit\Framework\TestCase
             $actual_output
         );
     }
-
 }
 
 class SimpleRendererStub implements Renderer
@@ -220,7 +217,6 @@ class SimpleRendererStub implements Renderer
 
         throw new \UnexpectedValueException('Don\'t know how to render '.\get_class($view));
     }
-
 }
 
 class IsAjaxRequestStub extends \Request

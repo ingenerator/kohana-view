@@ -8,12 +8,14 @@
 
 namespace Ingenerator\KohanaView\Exception;
 
+use InvalidArgumentException;
+
 /**
  * Thrown when a template cannot be found
  *
  * @package Ingenerator\KohanaView\Exception
  */
-class TemplateNotFoundException extends \InvalidArgumentException
+class TemplateNotFoundException extends InvalidArgumentException
 {
     /**
      * @param string $path

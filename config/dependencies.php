@@ -19,7 +19,7 @@ return [
             ],
             'page_layout' => [
                 '_settings' => [
-                    'class' => \Ingenerator\KohanaView\Renderer\PageLayoutRenderer::class,
+                    'class' => Ingenerator\KohanaView\Renderer\PageLayoutRenderer::class,
                     'arguments' => ['%kohanaview.renderer.html%', '%kohana.request%'],
                     'shared' => true,
                 ],

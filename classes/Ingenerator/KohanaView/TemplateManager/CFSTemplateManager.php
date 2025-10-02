@@ -8,11 +8,20 @@
 
 namespace Ingenerator\KohanaView\TemplateManager;
 
+use Arr;
 use Ingenerator\KohanaView\Exception\TemplateCacheException;
 use Ingenerator\KohanaView\Exception\TemplateNotFoundException;
 use Ingenerator\KohanaView\TemplateCompiler;
 use Ingenerator\KohanaView\TemplateManager;
+use Kohana;
 use Kohana_Exception;
+
+use function dirname;
+use function file_exists;
+use function file_get_contents;
+use function file_put_contents;
+use function is_writeable;
+use function rtrim;
 
 /**
  * Manages compilation of templates from view files located within the cascading file system. This allows extension
@@ -70,9 +79,9 @@ class CFSTemplateManager implements TemplateManager
     {
         $this->cascading_files = $cascading_files ?: new CFSWrapper;
         $this->compiler = $compiler;
-        $this->cache_dir = \rtrim($options['cache_dir'], '/');
-        $this->recompile_always = \Arr::get($options, 'recompile_always', false);
-        $this->template_dir = \rtrim(\Arr::get($options, 'template_dir', 'views'), '/');
+        $this->cache_dir = rtrim($options['cache_dir'], '/');
+        $this->recompile_always = Arr::get($options, 'recompile_always', false);
+        $this->template_dir = rtrim(Arr::get($options, 'template_dir', 'views'), '/');
     }
 
     /**
@@ -103,7 +112,7 @@ class CFSTemplateManager implements TemplateManager
             return true;
         }
 
-        return ! \file_exists($compiled_path);
+        return ! file_exists($compiled_path);
     }
 
     /**
@@ -117,7 +126,7 @@ class CFSTemplateManager implements TemplateManager
             throw TemplateNotFoundException::forSourcePath($this->template_dir.'/'.$template_name);
         }
 
-        return \file_get_contents($source_file);
+        return file_get_contents($source_file);
     }
 
     /**
@@ -126,8 +135,8 @@ class CFSTemplateManager implements TemplateManager
      */
     protected function writeFile($compiled_path, $compiled)
     {
-        $this->ensureWriteableDirectory(\dirname($compiled_path));
-        \file_put_contents($compiled_path, $compiled);
+        $this->ensureWriteableDirectory(dirname($compiled_path));
+        file_put_contents($compiled_path, $compiled);
     }
 
     /**
@@ -136,12 +145,12 @@ class CFSTemplateManager implements TemplateManager
     protected function ensureWriteableDirectory($path)
     {
         try {
-            \Kohana::ensureDirectory($path, 0777);
+            Kohana::ensureDirectory($path, 0777);
         } catch (Kohana_Exception $e) {
             throw TemplateCacheException::cannotCreateDirectory($path);
         }
 
-        if ( ! \is_writeable($path)) {
+        if ( ! is_writeable($path)) {
             throw TemplateCacheException::pathNotWriteable($path);
         }
     }

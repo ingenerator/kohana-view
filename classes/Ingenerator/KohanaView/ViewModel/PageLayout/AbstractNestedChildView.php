@@ -7,15 +7,19 @@
 
 namespace Ingenerator\KohanaView\ViewModel\PageLayout;
 
+use BadMethodCallException;
 use Ingenerator\KohanaView\ViewModel\AbstractViewModel;
 use Ingenerator\KohanaView\ViewModel\NestedChildView;
 use Ingenerator\KohanaView\ViewModel\NestedParentView;
 use Ingenerator\KohanaView\ViewModel\PageLayoutView;
+use UnexpectedValueException;
+
+use function get_class;
 
 abstract class AbstractNestedChildView extends AbstractViewModel implements NestedChildView
 {
     /**
-     * @var \Ingenerator\KohanaView\ViewModel\NestedParentView
+     * @var NestedParentView
      */
     protected $parent_view;
 
@@ -27,7 +31,7 @@ abstract class AbstractNestedChildView extends AbstractViewModel implements Nest
 
     /**
      *
-     * @return \Ingenerator\KohanaView\ViewModel\NestedParentView
+     * @return NestedParentView
      */
     public function getParentView()
     {
@@ -41,11 +45,11 @@ abstract class AbstractNestedChildView extends AbstractViewModel implements Nest
      */
     public function var_page()
     {
-        throw new \BadMethodCallException('Call to legacy '.__METHOD__.' interface');
+        throw new BadMethodCallException('Call to legacy '.__METHOD__.' interface');
     }
 
     /**
-     * @return \Ingenerator\KohanaView\ViewModel\PageLayoutView
+     * @return PageLayoutView
      */
     protected function getUltimatePageView()
     {
@@ -54,7 +58,7 @@ abstract class AbstractNestedChildView extends AbstractViewModel implements Nest
             $parent = $parent->getParentView();
         }
         if ( ! $parent instanceof PageLayoutView) {
-            throw new \UnexpectedValueException('No ultimate PageLayoutView for '.\get_class($this));
+            throw new UnexpectedValueException('No ultimate PageLayoutView for '.get_class($this));
         }
 
         return $parent;

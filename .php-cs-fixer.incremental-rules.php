@@ -26,6 +26,7 @@ return array (
     'single_line' => true,
   ),
   'class_reference_name_casing' => true,
+  'clean_namespace' => true,
   'constant_case' => true,
   'control_structure_braces' => true,
   'control_structure_continuation_position' => true,
@@ -35,10 +36,18 @@ return array (
     'style' => 'braces',
   ),
   'encoding' => true,
+  'fully_qualified_strict_types' => true,
   'function_declaration' => true,
+  'global_namespace_import' => 
+  array (
+    'import_classes' => true,
+    'import_constants' => true,
+    'import_functions' => true,
+  ),
   'heredoc_indentation' => true,
   'indentation_type' => true,
   'integer_literal_case' => true,
+  'lambda_not_used_import' => true,
   'list_syntax' => true,
   'lowercase_cast' => true,
   'lowercase_keywords' => true,
@@ -72,6 +81,8 @@ return array (
       10 => 'use',
     ),
   ),
+  'no_leading_import_slash' => true,
+  'no_leading_namespace_whitespace' => true,
   'no_multiline_whitespace_around_double_arrow' => true,
   'no_multiple_statements_per_line' => true,
   'no_singleline_whitespace_before_semicolons' => true,
@@ -81,6 +92,8 @@ return array (
   'no_trailing_comma_in_singleline' => true,
   'no_trailing_whitespace' => true,
   'no_trailing_whitespace_in_comment' => true,
+  'no_unneeded_import_alias' => true,
+  'no_unused_imports' => true,
   'no_whitespace_before_comma_in_array' => true,
   'no_whitespace_in_blank_line' => true,
   'not_operator_with_space' => true,
@@ -89,8 +102,19 @@ return array (
   array (
     'only_booleans' => true,
   ),
+  'ordered_imports' => 
+  array (
+    'imports_order' => 
+    array (
+      0 => 'class',
+      1 => 'function',
+      2 => 'const',
+    ),
+    'sort_algorithm' => 'alpha',
+  ),
   'semicolon_after_instruction' => true,
   'single_blank_line_at_eof' => true,
+  'single_import_per_statement' => true,
   'single_line_after_imports' => true,
   'single_space_around_construct' => true,
   'space_after_semicolon' => 

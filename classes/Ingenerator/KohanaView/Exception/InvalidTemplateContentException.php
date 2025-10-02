@@ -8,12 +8,14 @@
 
 namespace Ingenerator\KohanaView\Exception;
 
+use InvalidArgumentException;
+
 /**
  * Thrown when the content of a template is not valid for some reason
  *
  * @package Ingenerator\KohanaView\Exception
  */
-class InvalidTemplateContentException extends \InvalidArgumentException
+class InvalidTemplateContentException extends InvalidArgumentException
 {
     /**
      * @param string $escape_method

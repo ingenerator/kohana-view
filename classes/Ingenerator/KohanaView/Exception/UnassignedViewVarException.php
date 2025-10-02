@@ -8,12 +8,16 @@
 
 namespace Ingenerator\KohanaView\Exception;
 
+use BadMethodCallException;
+
+use function sprintf;
+
 /**
  * Thrown when a required view variable has not been assigned before use
  *
  * @package Ingenerator\KohanaView\Exception
  */
-class UnassignedViewVarException extends \BadMethodCallException
+class UnassignedViewVarException extends BadMethodCallException
 {
     /**
      * @param string $view_class
@@ -25,7 +29,7 @@ class UnassignedViewVarException extends \BadMethodCallException
     public static function forVariable($view_class, $var_name, $hint)
     {
         return new static(
-            \sprintf(
+            sprintf(
                 'Call %s::display(["%s" => "%s"]) before rendering a %s view',
                 $view_class,
                 $var_name,

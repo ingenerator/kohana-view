@@ -14,6 +14,9 @@ use Ingenerator\KohanaView\TemplateManager;
 use Ingenerator\KohanaView\ViewModel;
 use Ingenerator\KohanaView\ViewTemplateSelector;
 
+use function ob_get_clean;
+use function ob_start;
+
 /**
  * Renders a ViewModel to an HTML string for return to the user. The template is rendered with an anonymous scope
  * which only has access to the ViewModel, the Renderer (for rendering any subviews) and the template file path.
@@ -45,11 +48,11 @@ class HTMLRenderer implements Renderer
     {
         $template_path = $this->getTemplatePath($view);
 
-        \ob_start();
+        ob_start();
         try {
             $this->includeWithAnonymousScope($view, $template_path);
         } finally {
-            $output = \ob_get_clean();
+            $output = ob_get_clean();
         }
 
         return $output;

@@ -8,12 +8,14 @@
 
 namespace Ingenerator\KohanaView\Exception;
 
+use RuntimeException;
+
 /**
  * Thrown when there are problems caching a template
  *
  * @package Ingenerator\KohanaView\Exception
  */
-class TemplateCacheException extends \RuntimeException
+class TemplateCacheException extends RuntimeException
 {
     /**
      * @param string $path

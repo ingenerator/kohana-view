@@ -14,20 +14,25 @@ use Ingenerator\KohanaView\ViewModel;
 use Ingenerator\KohanaView\ViewModel\PageContentView;
 use Ingenerator\KohanaView\ViewModel\PageLayoutView;
 use PHPUnit\Framework\Assert;
-use test\mock\ViewModel\PageLayout\DummyNestedChildView;
+use Request;
 use test\mock\ViewModel\PageLayout\DummyIntermediateLayoutView;
+use test\mock\ViewModel\PageLayout\DummyNestedChildView;
 use test\mock\ViewModel\PageLayout\DummyPageContentView;
 use test\mock\ViewModel\PageLayout\DummyPageLayoutView;
+use UnexpectedValueException;
+
+use function get_class;
+use function spl_object_hash;
 
 class PageLayoutRendererTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \test\unit\Ingenerator\KohanaView\Renderer\SimpleRendererStub
+     * @var SimpleRendererStub
      */
     protected $renderer;
 
     /**
-     * @var \Request
+     * @var Request
      */
     protected $request;
 
@@ -159,7 +164,7 @@ class PageLayoutRendererTest extends \PHPUnit\Framework\TestCase
     protected function assertRendersContentOnly(PageContentView $view, $actual_output)
     {
         $this->assertSame(
-            '<Content#'.\spl_object_hash($view).'/>',
+            '<Content#'.spl_object_hash($view).'/>',
             $actual_output
         );
     }
@@ -170,9 +175,9 @@ class PageLayoutRendererTest extends \PHPUnit\Framework\TestCase
         $actual_output,
     ) {
         $this->assertSame(
-            "<Layout#".\spl_object_hash($layout).">\n"
-            ."<Content#".\spl_object_hash($content)."/>"
-            ."\n</Layout#".\spl_object_hash($layout).">",
+            "<Layout#".spl_object_hash($layout).">\n"
+            ."<Content#".spl_object_hash($content)."/>"
+            ."\n</Layout#".spl_object_hash($layout).">",
             $actual_output
         );
     }
@@ -185,7 +190,7 @@ class SimpleRendererStub implements Renderer
     public function registerViews($views)
     {
         foreach ($views as $key => $view) {
-            $hash = \spl_object_hash($view);
+            $hash = spl_object_hash($view);
             $this->expected_views[$hash] = $key;
         }
     }
@@ -197,11 +202,11 @@ class SimpleRendererStub implements Renderer
      */
     public function render(ViewModel $view)
     {
-        $hash = \spl_object_hash($view);
+        $hash = spl_object_hash($view);
         Assert::assertArrayHasKey(
             $hash,
             $this->expected_views,
-            'Unregistered view '.\get_class($view)
+            'Unregistered view '.get_class($view)
         );
         $id_letter = $this->expected_views[$hash];
         if ($view instanceof DummyPageContentView) {
@@ -215,11 +220,11 @@ class SimpleRendererStub implements Renderer
             return "<Intermediate#$id_letter>\n".$view->child_html."\n</Intermediate#$id_letter>";
         }
 
-        throw new \UnexpectedValueException('Don\'t know how to render '.\get_class($view));
+        throw new UnexpectedValueException('Don\'t know how to render '.get_class($view));
     }
 }
 
-class IsAjaxRequestStub extends \Request
+class IsAjaxRequestStub extends Request
 {
     private bool $is_ajax;
 

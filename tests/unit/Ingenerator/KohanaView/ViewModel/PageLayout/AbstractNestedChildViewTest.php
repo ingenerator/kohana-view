@@ -9,7 +9,6 @@ namespace test\unit\Ingenerator\KohanaView\ViewModel\PageLayout;
 
 use BadMethodCallException;
 use Ingenerator\KohanaView\ViewModel\NestedChildView;
-use Ingenerator\KohanaView\ViewModel\NestedParentView;
 use PHPUnit\Framework\TestCase;
 use test\mock\ViewModel\PageLayout\DummyIntermediateLayoutView;
 use test\mock\ViewModel\PageLayout\DummyNestedChildView;
@@ -18,7 +17,7 @@ use test\mock\ViewModel\PageLayout\DummyPageLayoutView;
 class AbstractNestedChildViewTest extends TestCase
 {
     /**
-     * @var \test\mock\ViewModel\PageLayout\DummyPageLayoutView
+     * @var DummyPageLayoutView
      */
     protected $parent_view;
 

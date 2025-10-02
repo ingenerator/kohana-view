@@ -8,6 +8,8 @@
 
 namespace Ingenerator\KohanaView\TemplateManager;
 
+use Kohana;
+
 /**
  * Very simple wrapper around Kohana's cascading file system to allow injection (and mocking/stubbing) as required.
  *
@@ -20,6 +22,6 @@ class CFSWrapper
      */
     public function find_file($dir, $file)
     {
-        return \Kohana::find_file($dir, $file, null, false);
+        return Kohana::find_file($dir, $file, null, false);
     }
 }

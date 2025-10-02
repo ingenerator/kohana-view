@@ -3,6 +3,12 @@
 namespace Ingenerator\KohanaView;
 
 use Ingenerator\KohanaView\Exception\UnspecifiedTemplateNameException;
+use UnexpectedValueException;
+
+use function get_class;
+use function is_string;
+use function preg_replace;
+use function strtolower;
 
 /**
  * The ViewTemplateSelector maps ViewModel classes to the appropriate template file. By default this is done by
@@ -40,17 +46,17 @@ class ViewTemplateSelector
      * @param TemplateSpecifyingViewModel $view
      *
      * @return string
-     * @throws \UnexpectedValueException if no template is provided
+     * @throws UnexpectedValueException if no template is provided
      */
     protected function validateSpecifiedTemplateName(TemplateSpecifyingViewModel $view)
     {
         $template = $view->getTemplateName();
-        $view_class = \get_class($view);
+        $view_class = get_class($view);
         if ( ! $template) {
             throw UnspecifiedTemplateNameException::forEmptyValue($view_class);
         }
 
-        if ( ! \is_string($template)) {
+        if ( ! is_string($template)) {
             throw UnspecifiedTemplateNameException::forNonStringValue($view_class, $template);
         }
 
@@ -64,11 +70,11 @@ class ViewTemplateSelector
      */
     protected function calculateTemplateFromClassName(ViewModel $view)
     {
-        $template = \get_class($view);
-        $template = \preg_replace('/\\\\|_/', '/', $template);
-        $template = \preg_replace('#(^view/?(model)?/)|(?<!/)(view/?(model)?$)#i', '', $template);
-        $template = \preg_replace('/([a-z])([A-Z])/', '\1_\2', $template);
-        $template = \strtolower($template);
+        $template = get_class($view);
+        $template = preg_replace('/\\\\|_/', '/', $template);
+        $template = preg_replace('#(^view/?(model)?/)|(?<!/)(view/?(model)?$)#i', '', $template);
+        $template = preg_replace('/([a-z])([A-Z])/', '\1_\2', $template);
+        $template = strtolower($template);
 
         return $template;
     }

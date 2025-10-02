@@ -12,6 +12,7 @@ use Ingenerator\KohanaView\Renderer;
 use Ingenerator\KohanaView\ViewModel\NestedChildView;
 use Ingenerator\KohanaView\ViewModel\PageContentView;
 use Ingenerator\KohanaView\ViewModel\PageLayoutView;
+use Request;
 
 /**
  * Renders a PageContentView and - when appropriate - renders the generated output inside a PageLayoutView. By
@@ -45,11 +46,11 @@ class PageLayoutRenderer
     protected $view_renderer;
 
     /**
-     * @var \Request
+     * @var Request
      */
     protected $current_request;
 
-    public function __construct(Renderer $view_renderer, ?\Request $current_request = null)
+    public function __construct(Renderer $view_renderer, ?Request $current_request = null)
     {
         $this->view_renderer = $view_renderer;
         $this->current_request = $current_request;

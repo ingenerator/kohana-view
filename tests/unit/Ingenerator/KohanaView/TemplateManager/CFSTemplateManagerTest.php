@@ -16,12 +16,20 @@ use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
 use test\mock\CFSWrapper\SingleDirectoryCFSWrapperMock;
 
+use function chmod;
+use function dirname;
+use function file_exists;
+use function file_get_contents;
+use function file_put_contents;
+use function is_dir;
+use function mkdir;
+
 class CFSTemplateManagerTest extends \PHPUnit\Framework\TestCase
 {
     protected $options = [];
 
     /**
-     * @var \test\mock\CFSWrapper\SingleDirectoryCFSWrapperMock
+     * @var SingleDirectoryCFSWrapperMock
      */
     protected $cfs_wrapper;
 
@@ -59,7 +67,7 @@ class CFSTemplateManagerTest extends \PHPUnit\Framework\TestCase
     public function test_it_throws_if_it_cannot_create_cache_dir()
     {
         $this->options['cache_dir'] = vfsStream::url('template/cache');
-        \chmod($this->options['cache_dir'], 0500);
+        chmod($this->options['cache_dir'], 0500);
         $this->givenFile('module/views/any/view.php', 'Raw view file');
 
         $this->expectException(TemplateCacheException::class);
@@ -71,7 +79,7 @@ class CFSTemplateManagerTest extends \PHPUnit\Framework\TestCase
     public function test_it_throws_if_it_cannot_create_compiled_file()
     {
         $this->options['cache_dir'] = vfsStream::url('template/cache');
-        \chmod($this->options['cache_dir'], 0500);
+        chmod($this->options['cache_dir'], 0500);
         $this->givenFile('module/views/anything.php', 'Raw view file');
 
         $this->expectException(TemplateCacheException::class);
@@ -160,8 +168,8 @@ class CFSTemplateManagerTest extends \PHPUnit\Framework\TestCase
      */
     protected function assertCompiledToFile($compiled_url)
     {
-        $this->assertTrue(\file_exists($compiled_url), "Compiled file $compiled_url should exist");
-        $this->assertSame(SpyingTemplateCompiler::COMPILED_OUTPUT, \file_get_contents($compiled_url));
+        $this->assertTrue(file_exists($compiled_url), "Compiled file $compiled_url should exist");
+        $this->assertSame(SpyingTemplateCompiler::COMPILED_OUTPUT, file_get_contents($compiled_url));
         $this->assertStringStartsWith(
             $this->options['cache_dir'],
             $compiled_url,
@@ -172,11 +180,11 @@ class CFSTemplateManagerTest extends \PHPUnit\Framework\TestCase
     protected function givenFile($path_to_file, $content)
     {
         $file = vfsStream::url('template/'.$path_to_file);
-        $path = \dirname($file);
-        if ( ! \is_dir($path)) {
-            \mkdir($path, 0777, true);
+        $path = dirname($file);
+        if ( ! is_dir($path)) {
+            mkdir($path, 0777, true);
         }
-        \file_put_contents($file, $content);
+        file_put_contents($file, $content);
     }
 }
 

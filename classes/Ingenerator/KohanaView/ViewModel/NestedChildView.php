@@ -11,7 +11,7 @@ interface NestedChildView extends PageContentView
 {
     /**
      *
-     * @return \Ingenerator\KohanaView\ViewModel\NestedParentView
+     * @return NestedParentView
      */
     public function getParentView();
 }

@@ -11,5 +11,5 @@
  */
 function raw($value)
 {
-    throw new \BadFunctionCallException('Unexpected call to '.__FUNCTION__);
+    throw new BadFunctionCallException('Unexpected call to '.__FUNCTION__);
 }

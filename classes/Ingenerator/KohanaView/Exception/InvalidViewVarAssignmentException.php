@@ -8,12 +8,14 @@
 
 namespace Ingenerator\KohanaView\Exception;
 
+use BadMethodCallException;
+
 /**
  * Thrown when attempting to assign variables to a view model directly
  *
  * @package Ingenerator\KohanaView\Exception
  */
-class InvalidViewVarAssignmentException extends \BadMethodCallException
+class InvalidViewVarAssignmentException extends BadMethodCallException
 {
     /**
      * @param string $view_class

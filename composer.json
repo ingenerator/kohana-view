@@ -32,6 +32,16 @@
             "url": "https://php-packages.ingenerator.com"
         }
     ],
+    "autoload": {
+      "psr-4": {
+        "Ingenerator\\KohanaView\\": "src"
+      }
+    },
+    "autoload-dev": {
+      "psr-4": {
+        "test\\": "tests"
+      }
+    },
     "require": {
         "composer/installers": "^1.12 || ^2.0",
         "php": "~8.4.0",

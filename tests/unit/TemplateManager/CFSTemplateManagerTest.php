@@ -1,6 +1,6 @@
 <?php
 
-namespace test\unit\Ingenerator\KohanaView\TemplateManager;
+namespace test\unit\TemplateManager;
 
 use Ingenerator\KohanaView\Exception\TemplateCacheException;
 use Ingenerator\KohanaView\Exception\TemplateNotFoundException;

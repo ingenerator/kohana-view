@@ -2,13 +2,9 @@
 
 declare(strict_types=1);
 
-use Rector\Php81\Rector\Property\ReadOnlyPropertyRector;
 use Rector\Config\RectorConfig;
-use Rector\Php55\Rector\Class_\ClassConstantToSelfClassRector;
-use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
-use Rector\Php80\Rector\Catch_\RemoveUnusedVariableInCatchRector;
-use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
-use Rector\Php81\Rector\FuncCall\NullToStrictStringFuncCallArgRector;
+use Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\ReturnNeverTypeRector;
 
 return RectorConfig::configure()
     ->withPaths([
@@ -18,16 +14,16 @@ return RectorConfig::configure()
     ])
     ->withRootFiles()
     ->withCodeQualityLevel(100)
-//    ->withPhpSets()
-    ->withRules([
-        ClassConstantToSelfClassRector::class,
-        StringClassNameToClassConstantRector::class,
-        ClassPropertyAssignToConstructorPromotionRector::class,
-        // ClosureToArrowFunctionRector::class,
-        // ReturnNeverTypeRector::class,
-        RemoveUnusedVariableInCatchRector::class,
-        NullToStrictStringFuncCallArgRector::class,
-                ReadOnlyPropertyRector::class,
+    ->withPhpSets()
+    ->withSkip([
+        ClosureToArrowFunctionRector::class => [
+            // Needs to be a traditional function in order to restrict the scope
+            __DIR__.'/classes/Ingenerator/KohanaView/Renderer/HTMLRenderer.php',
+        ],
+        ReturnNeverTypeRector::class => [
+            // This stub function shouldn't return `never` as it will actually "return" a string
+            __DIR__.'/classes/raw_fn_stub.php',
+        ],
     ])
     ->withImportNames(
         removeUnusedImports: true,

@@ -14,6 +14,7 @@ return array (
   ),
   'blank_line_between_import_groups' => true,
   'blank_lines_before_namespace' => true,
+  'cast_spaces' => true,
   'class_reference_name_casing' => true,
   'constant_case' => true,
   'encoding' => true,
@@ -48,16 +49,31 @@ return array (
     ),
   ),
   'no_multiline_whitespace_around_double_arrow' => true,
+  'no_singleline_whitespace_before_semicolons' => true,
+  'no_space_around_double_colon' => true,
+  'no_spaces_after_function_name' => true,
+  'no_spaces_around_offset' => true,
   'no_trailing_comma_in_singleline' => true,
+  'no_trailing_whitespace' => true,
+  'no_trailing_whitespace_in_comment' => true,
   'no_whitespace_before_comma_in_array' => true,
   'no_whitespace_in_blank_line' => true,
   'not_operator_with_space' => true,
+  'object_operator_without_whitespace' => true,
   'single_blank_line_at_eof' => true,
   'single_line_after_imports' => true,
+  'single_space_around_construct' => true,
+  'space_after_semicolon' => 
+  array (
+    'remove_in_empty_for_expressions' => true,
+  ),
+  'spaces_inside_parentheses' => true,
   'statement_indentation' => 
   array (
     'stick_comment_to_next_continuous_control_statement' => true,
   ),
+  'switch_case_space' => true,
+  'ternary_operator_spaces' => true,
   'trailing_comma_in_multiline' => 
   array (
     'after_heredoc' => true,

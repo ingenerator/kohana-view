@@ -12,7 +12,6 @@ use test\mock\CFSWrapper\SingleDirectoryCFSWrapperMock;
 
 use function chmod;
 use function dirname;
-use function file_exists;
 use function file_get_contents;
 use function file_put_contents;
 use function is_dir;
@@ -162,7 +161,7 @@ class CFSTemplateManagerTest extends \PHPUnit\Framework\TestCase
      */
     protected function assertCompiledToFile($compiled_url)
     {
-        $this->assertTrue(file_exists($compiled_url), "Compiled file $compiled_url should exist");
+        $this->assertFileExists($compiled_url, "Compiled file $compiled_url should exist");
         $this->assertSame(SpyingTemplateCompiler::COMPILED_OUTPUT, file_get_contents($compiled_url));
         $this->assertStringStartsWith(
             $this->options['cache_dir'],

@@ -13,6 +13,7 @@ return (new PhpCsFixer\Config())
         // @todo: Bump to php84 migration when we drop 8.2 support
         '@PHP82Migration' => true,
         '@PHP82Migration:risky' => true,
+        '@PHPUnit9x1Migration:risky' => true,
         // --- Initial set taken from Behat/Behat
         '@Symfony' => true,
         '@Symfony:risky' => true,

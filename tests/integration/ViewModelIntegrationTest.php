@@ -174,7 +174,7 @@ class ViewModelIntegrationTest extends \PHPUnit\Framework\TestCase
     protected function tearDown(): void
     {
         shell_exec("rm -rf $this->tmp_dir");
-        $this->assertFileNotExists($this->tmp_dir, 'Temp directory should have been cleared up');
+        $this->assertFileDoesNotExist($this->tmp_dir, 'Temp directory should have been cleared up');
         parent::tearDown();
     }
 

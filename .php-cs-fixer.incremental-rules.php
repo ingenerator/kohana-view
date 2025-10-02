@@ -71,6 +71,7 @@ return array (
     'import_functions' => true,
   ),
   'heredoc_indentation' => true,
+  'increment_style' => true,
   'indentation_type' => true,
   'integer_literal_case' => true,
   'lambda_not_used_import' => true,
@@ -280,6 +281,7 @@ return array (
     'remove_in_empty_for_expressions' => true,
   ),
   'spaces_inside_parentheses' => true,
+  'standardize_increment' => true,
   'statement_indentation' => 
   array (
     'stick_comment_to_next_continuous_control_statement' => true,

@@ -17,6 +17,7 @@ return array (
   'indentation_type' => true,
   'integer_literal_case' => true,
   'lowercase_cast' => true,
+  'lowercase_keywords' => true,
   'lowercase_static_reference' => true,
   'magic_constant_casing' => true,
   'magic_method_casing' => true,

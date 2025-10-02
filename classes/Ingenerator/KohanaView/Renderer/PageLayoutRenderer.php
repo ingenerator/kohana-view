@@ -102,7 +102,7 @@ class PageLayoutRenderer
             return $this->use_layout;
         }
 
-        if ($this->current_request AND $this->current_request->is_ajax()) {
+        if ($this->current_request and $this->current_request->is_ajax()) {
             return false;
         } else {
             return true;

@@ -99,7 +99,7 @@ class CFSTemplateManager implements TemplateManager
      */
     protected function isCompileRequired($compiled_path)
     {
-        if ($this->recompile_always AND ! isset($this->compiled_paths[$compiled_path])) {
+        if ($this->recompile_always and ! isset($this->compiled_paths[$compiled_path])) {
             return true;
         }
 

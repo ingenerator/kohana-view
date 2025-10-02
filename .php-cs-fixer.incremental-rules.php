@@ -1,5 +1,6 @@
 <?php
 return array (
+  'Custom/remove_kohana_banner' => true,
   'align_multiline_comment' => true,
   'array_indentation' => true,
   'array_syntax' => true,

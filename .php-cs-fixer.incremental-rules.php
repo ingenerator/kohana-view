@@ -95,6 +95,7 @@ return array (
   array (
     'anonymous_class' => false,
   ),
+  'no_alias_language_construct_call' => true,
   'no_blank_lines_after_class_opening' => true,
   'no_blank_lines_after_phpdoc' => true,
   'no_break_comment' => true,

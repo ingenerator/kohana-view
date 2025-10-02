@@ -3,6 +3,7 @@ return array (
   'align_multiline_comment' => true,
   'array_indentation' => true,
   'array_syntax' => true,
+  'binary_operator_spaces' => true,
   'blank_line_after_namespace' => true,
   'blank_line_after_opening_tag' => true,
   'blank_line_before_statement' => 
@@ -18,6 +19,7 @@ return array (
   'class_reference_name_casing' => true,
   'constant_case' => true,
   'encoding' => true,
+  'function_declaration' => true,
   'heredoc_indentation' => true,
   'indentation_type' => true,
   'integer_literal_case' => true,
@@ -27,6 +29,10 @@ return array (
   'lowercase_static_reference' => true,
   'magic_constant_casing' => true,
   'magic_method_casing' => true,
+  'method_argument_space' => 
+  array (
+    'on_multiline' => 'ignore',
+  ),
   'native_function_casing' => true,
   'native_type_declaration_casing' => true,
   'no_blank_lines_after_class_opening' => true,
@@ -81,9 +87,13 @@ return array (
     array (
       0 => 'array_destructuring',
       1 => 'arrays',
+      2 => 'match',
+      3 => 'parameters',
     ),
   ),
   'trim_array_spaces' => true,
+  'type_declaration_spaces' => true,
+  'types_spaces' => true,
   'unary_operator_spaces' => true,
   'whitespace_after_comma_in_array' => true,
 );

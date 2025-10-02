@@ -27,7 +27,7 @@ class ViewModelIntegrationTest extends \PHPUnit\Framework\TestCase
     public function test_dependency_container_provides_shared_html_renderer()
     {
         $dependencies = $this->givenDependenciesBootstrapped();
-        $renderer     = $dependencies->get('kohanaview.renderer.html');
+        $renderer = $dependencies->get('kohanaview.renderer.html');
         $this->assertInstanceOf('Ingenerator\KohanaView\Renderer\HTMLRenderer', $renderer);
         $this->assertSame($renderer, $dependencies->get('kohanaview.renderer.html'));
     }
@@ -40,8 +40,8 @@ class ViewModelIntegrationTest extends \PHPUnit\Framework\TestCase
     public function test_template_manager_cache_dir_defaults_to_inside_kohana_cache_dir()
     {
         $this->givenFileWithContent('module/views/integration/test_view.php', 'Project source template');
-        $dependencies  = $this->givenDependenciesBootstrapped();
-        $manager       = $this->getTemplateManager($dependencies);
+        $dependencies = $this->givenDependenciesBootstrapped();
+        $manager = $this->getTemplateManager($dependencies);
         $compiled_path = $manager->getPath('integration/test_view');
         $this->assertStringStartsWith(\Kohana::$cache_dir.'/compiled_templates/', $compiled_path);
     }
@@ -57,7 +57,7 @@ class ViewModelIntegrationTest extends \PHPUnit\Framework\TestCase
         $this->givenFileWithContent('module/views/any_view.php', 'Project source template');
 
         \Kohana::$environment = \constant('\Kohana::'.$environment);
-        $dependencies         = $this->givenDependenciesBootstrapped();
+        $dependencies = $this->givenDependenciesBootstrapped();
 
         $cache_file = $this->getTemplateManager($dependencies)->getPath('any_view');
         $this->assertSame('Project source template', \file_get_contents($cache_file));
@@ -75,7 +75,7 @@ class ViewModelIntegrationTest extends \PHPUnit\Framework\TestCase
         $this->givenFileWithContent('module/views/any_view.php', 'Project source template');
 
         \Kohana::$environment = \constant('\Kohana::'.$environment);
-        $dependencies         = $this->givenDependenciesBootstrapped();
+        $dependencies = $this->givenDependenciesBootstrapped();
 
         $cache_file = $this->getTemplateManager($dependencies)->getPath('any_view');
 
@@ -157,7 +157,7 @@ class ViewModelIntegrationTest extends \PHPUnit\Framework\TestCase
         \PHPUnit\Framework\Assert::assertTrue($this->preserveGlobalState, 'Integration tests must run without globals');
         $this->expectOutputRegex('/^$/');
 
-        $this->tmp_dir      = \sys_get_temp_dir().'/kohana-view-integration/'.\uniqid('test');
+        $this->tmp_dir = \sys_get_temp_dir().'/kohana-view-integration/'.\uniqid('test');
         \Kohana::$cache_dir = $this->tmp_dir.'/cache';
         \mkdir($this->tmp_dir.'/module', 0700, true);
 
@@ -173,8 +173,8 @@ class ViewModelIntegrationTest extends \PHPUnit\Framework\TestCase
 
     protected function givenDependenciesBootstrapped()
     {
-        $modules                     = \Kohana::modules();
-        $modules['dependencies']     = TEST_ROOT_PATH.'/../vendor/ingenerator/kohana-dependencies';
+        $modules = \Kohana::modules();
+        $modules['dependencies'] = TEST_ROOT_PATH.'/../vendor/ingenerator/kohana-dependencies';
         $modules['integration_test'] = $this->tmp_dir.'/module';
         \Kohana::modules($modules);
 

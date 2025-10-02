@@ -120,7 +120,7 @@ abstract class AbstractViewModel implements ViewModel
      */
     protected function validateDisplayVariables(array $variables)
     {
-        $errors             = [];
+        $errors = [];
         $provided_variables = \array_keys($variables);
         foreach (\array_diff($provided_variables, $this->expect_var_names) as $unexpected_var) {
             if (\method_exists($this, 'var_'.$unexpected_var)) {

@@ -98,7 +98,7 @@ class CFSTemplateManagerTest extends \PHPUnit\Framework\TestCase
 
     public function test_it_does_not_recompile_templates_when_disabled()
     {
-        $this->options['cache_dir']        = vfsStream::url('template/cache');
+        $this->options['cache_dir'] = vfsStream::url('template/cache');
         $this->options['recompile_always'] = false;
         $this->givenFile('cache/some/compiled_view.php', 'Any compiled content');
         $this->assertSame(
@@ -110,7 +110,7 @@ class CFSTemplateManagerTest extends \PHPUnit\Framework\TestCase
 
     public function test_it_recompiles_once_per_instance_when_enabled()
     {
-        $this->options['cache_dir']        = vfsStream::url('template/cache');
+        $this->options['cache_dir'] = vfsStream::url('template/cache');
         $this->options['recompile_always'] = true;
         $this->givenFile('cache/some/compiled_view.php', 'Any compiled content');
         $this->givenFile('module/views/some/compiled_view.php', 'Raw template content');
@@ -126,7 +126,7 @@ class CFSTemplateManagerTest extends \PHPUnit\Framework\TestCase
 
     public function test_its_source_template_path_is_configurable()
     {
-        $this->options['template_dir']  = 'templates';
+        $this->options['template_dir'] = 'templates';
         $this->givenFile('module/templates/any/template_file.php', 'This is raw view in templates');
 
         $compiled_url = $this->newSubject()->getPath('any/template_file');
@@ -136,17 +136,17 @@ class CFSTemplateManagerTest extends \PHPUnit\Framework\TestCase
 
     public function setUp(): void
     {
-        $this->compiler             = new SpyingTemplateCompiler;
-        $this->vfs_root             = vfsStream::setup(
+        $this->compiler = new SpyingTemplateCompiler;
+        $this->vfs_root = vfsStream::setup(
             'template',
             0700,
             [
-                'cache'  => [],
+                'cache' => [],
                 'module' => [],
             ]
         );
         $this->options['cache_dir'] = vfsStream::url('template/cache');
-        $this->cfs_wrapper          = new SingleDirectoryCFSWrapperMock(vfsStream::url('template/module'));
+        $this->cfs_wrapper = new SingleDirectoryCFSWrapperMock(vfsStream::url('template/module'));
         parent::setUp();
     }
 

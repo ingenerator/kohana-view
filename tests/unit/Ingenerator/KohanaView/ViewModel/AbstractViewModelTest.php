@@ -98,7 +98,7 @@ class AbstractViewModelTest extends TestCase
         $subject = $this->newSubject();
         $subject->display(
             [
-                'some_defined_var'   => 'required',
+                'some_defined_var' => 'required',
                 'some_defaulted_var' => 'custom',
             ]
         );
@@ -110,7 +110,7 @@ class AbstractViewModelTest extends TestCase
         $subject = $this->newSubject();
         $subject->display(
             [
-                'some_defined_var'   => 'required',
+                'some_defined_var' => 'required',
                 'some_defaulted_var' => 'custom',
             ]
         );

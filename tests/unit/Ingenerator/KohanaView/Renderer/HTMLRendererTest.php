@@ -136,10 +136,10 @@ class HTMLRendererTest extends TestCase
     public function test_it_can_render_same_template_multiple_times_with_same_or_different_views()
     {
         $this->givenTemplate('Number<?=$view->number;?>');
-        $view_1  = new NumberViewModel;
-        $view_2  = new NumberViewModel;
+        $view_1 = new NumberViewModel;
+        $view_2 = new NumberViewModel;
         $subject = $this->newSubject();
-        $output  = [];
+        $output = [];
 
         $view_1->display(['number' => 1]);
         $output[] = $subject->render($view_1);
@@ -173,9 +173,9 @@ class HTMLRendererTest extends TestCase
     public function setUp(): void
     {
         $this->old_error_reporting = \error_reporting();
-        $this->template_selector   = new ViewTemplateSelectorSpy;
-        $this->template_manager    = new TemplateManagerSpy;
-        $this->vfs_root            = vfsStream::setup('templates');
+        $this->template_selector = new ViewTemplateSelectorSpy;
+        $this->template_manager = new TemplateManagerSpy;
+        $this->vfs_root = vfsStream::setup('templates');
         $this->givenTemplate('Default');
 
         parent::__construct();
@@ -197,7 +197,7 @@ class HTMLRendererTest extends TestCase
     protected function givenTemplate($content)
     {
         $filename = \uniqid('test-template').'.php';
-        $file     = new vfsStreamFile($filename);
+        $file = new vfsStreamFile($filename);
         $file->setContent($content);
         $this->vfs_root->addChild($file);
         $this->template_manager->setTemplatePath($file->url());

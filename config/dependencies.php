@@ -12,39 +12,39 @@ return [
         'renderer' => [
             'html' => [
                 '_settings' => [
-                    'class'     => '\Ingenerator\KohanaView\Renderer\HTMLRenderer',
+                    'class' => '\Ingenerator\KohanaView\Renderer\HTMLRenderer',
                     'arguments' => ['%kohanaview.template.selector%', '%kohanaview.template.manager%'],
-                    'shared'    => true,
+                    'shared' => true,
                 ],
             ],
             'page_layout' => [
                 '_settings' => [
-                    'class'     => \Ingenerator\KohanaView\Renderer\PageLayoutRenderer::class,
+                    'class' => \Ingenerator\KohanaView\Renderer\PageLayoutRenderer::class,
                     'arguments' => ['%kohanaview.renderer.html%', '%kohana.request%'],
-                    'shared'    => true,
+                    'shared' => true,
                 ],
             ],
         ],
         'template' => [
             'compiler' => [
                 '_settings' => [
-                    'class'     => '\Ingenerator\KohanaView\TemplateCompiler',
+                    'class' => '\Ingenerator\KohanaView\TemplateCompiler',
                     'arguments' => [],
-                    'shared'    => true,
+                    'shared' => true,
                 ],
             ],
-            'manager'  => [
+            'manager' => [
                 '_settings' => [
-                    'class'     => '\Ingenerator\KohanaView\TemplateManager\CFSTemplateManager',
+                    'class' => '\Ingenerator\KohanaView\TemplateManager\CFSTemplateManager',
                     'arguments' => ['%kohanaview.template.compiler%', '@kohanaview.template_manager@'],
-                    'shared'    => true,
+                    'shared' => true,
                 ],
             ],
             'selector' => [
                 '_settings' => [
-                    'class'     => '\Ingenerator\KohanaView\ViewTemplateSelector',
+                    'class' => '\Ingenerator\KohanaView\ViewTemplateSelector',
                     'arguments' => [],
-                    'shared'    => true,
+                    'shared' => true,
                 ],
             ],
         ],

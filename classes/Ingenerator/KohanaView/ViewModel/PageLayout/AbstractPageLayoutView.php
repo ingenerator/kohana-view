@@ -30,7 +30,7 @@ abstract class AbstractPageLayoutView extends AbstractViewModel implements ViewM
      */
     protected $variables = [
         'body_html' => null,
-        'title'     => null,
+        'title' => null,
     ];
 
     /**

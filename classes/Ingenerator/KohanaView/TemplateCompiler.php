@@ -77,8 +77,8 @@ class TemplateCompiler
      */
     protected function compilePhpShortTag($matches)
     {
-        $var           = \trim($matches[1]);
-        $terminator    = $matches[2];
+        $var = \trim($matches[1]);
+        $terminator = $matches[2];
         $escape_method = $this->options['escape_method'];
 
         if ($this->startsWith($var, 'raw(')) {

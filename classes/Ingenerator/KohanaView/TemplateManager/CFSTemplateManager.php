@@ -68,11 +68,11 @@ class CFSTemplateManager implements TemplateManager
      */
     public function __construct(TemplateCompiler $compiler, array $options, ?CFSWrapper $cascading_files = null)
     {
-        $this->cascading_files  = $cascading_files ?: new CFSWrapper;
-        $this->compiler         = $compiler;
-        $this->cache_dir        = \rtrim($options['cache_dir'], '/');
+        $this->cascading_files = $cascading_files ?: new CFSWrapper;
+        $this->compiler = $compiler;
+        $this->cache_dir = \rtrim($options['cache_dir'], '/');
         $this->recompile_always = \Arr::get($options, 'recompile_always', false);
-        $this->template_dir     = \rtrim(\Arr::get($options, 'template_dir', 'views'), '/');
+        $this->template_dir = \rtrim(\Arr::get($options, 'template_dir', 'views'), '/');
     }
 
     /**
@@ -83,7 +83,7 @@ class CFSTemplateManager implements TemplateManager
         $compiled_path = $this->cache_dir.'/'.$template_name.'.php';
 
         if ($this->isCompileRequired($compiled_path)) {
-            $source   = $this->requireSourceFileContent($template_name);
+            $source = $this->requireSourceFileContent($template_name);
             $compiled = $this->compiler->compile($source);
             $this->writeFile($compiled_path, $compiled);
             $this->compiled_paths[$compiled_path] = true;

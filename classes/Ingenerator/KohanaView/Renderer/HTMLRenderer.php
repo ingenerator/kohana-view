@@ -35,7 +35,7 @@ class HTMLRenderer implements Renderer
     public function __construct(ViewTemplateSelector $template_selector, TemplateManager $template_manager)
     {
         $this->template_selector = $template_selector;
-        $this->template_manager  = $template_manager;
+        $this->template_manager = $template_manager;
     }
 
     /**
@@ -63,7 +63,7 @@ class HTMLRenderer implements Renderer
     protected function getTemplatePath(ViewModel $view)
     {
         $template_name = $this->template_selector->getTemplateName($view);
-        $template      = $this->template_manager->getPath($template_name);
+        $template = $this->template_manager->getPath($template_name);
 
         return $template;
     }
@@ -80,7 +80,7 @@ class HTMLRenderer implements Renderer
             /** @noinspection PhpIncludeInspection */
             return include $template;
         };
-        $anon_capture  = $bound_capture->bindTo(null);
+        $anon_capture = $bound_capture->bindTo(null);
 
         // A user's own error handler may throw an exception here if the include fails - which we will bubble as-is.
         // If they have not configured an error handler, we need to throw an exception of our own.

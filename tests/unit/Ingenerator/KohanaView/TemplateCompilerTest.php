@@ -152,7 +152,7 @@ class TemplateCompilerTest extends \PHPUnit\Framework\TestCase
 
     public function test_it_compiles_complex_template()
     {
-        $source   = <<<'PHP'
+        $source = <<<'PHP'
             <?php
             /**
              * Some view file or other

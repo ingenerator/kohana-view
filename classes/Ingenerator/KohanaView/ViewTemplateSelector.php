@@ -44,7 +44,7 @@ class ViewTemplateSelector
      */
     protected function validateSpecifiedTemplateName(TemplateSpecifyingViewModel $view)
     {
-        $template   = $view->getTemplateName();
+        $template = $view->getTemplateName();
         $view_class = \get_class($view);
         if ( ! $template) {
             throw UnspecifiedTemplateNameException::forEmptyValue($view_class);

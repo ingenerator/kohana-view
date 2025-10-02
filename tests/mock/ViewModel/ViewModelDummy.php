@@ -29,8 +29,8 @@ class ViewModelDummy implements ViewModel
         }
 
         $simple_class = \trim(\strrchr($class_name, '\\') ?: $class_name, '\\');
-        $namespace    = \trim(\substr($class_name, 0, -\strlen($simple_class)), '\\');
-        $definition   = \sprintf(
+        $namespace = \trim(\substr($class_name, 0, -\strlen($simple_class)), '\\');
+        $definition = \sprintf(
             "%s class %s extends %s {}",
             $namespace ? "namespace $namespace;" : "",
             $simple_class,

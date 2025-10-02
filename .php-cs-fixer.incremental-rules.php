@@ -3,6 +3,7 @@ return array (
   'align_multiline_comment' => true,
   'array_indentation' => true,
   'array_syntax' => true,
+  'backtick_to_shell_exec' => true,
   'binary_operator_spaces' => true,
   'blank_line_after_namespace' => true,
   'blank_line_after_opening_tag' => true,

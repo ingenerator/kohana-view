@@ -42,7 +42,7 @@ class StaticPageContentViewTest extends \PHPUnit\Framework\TestCase
     protected function newSubject()
     {
         return new StaticPageContentView(
-            new DummyPageLayoutView
+            new DummyPageLayoutView()
         );
     }
 }

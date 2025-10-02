@@ -139,7 +139,7 @@ class AbstractViewModelTest extends TestCase
 
     protected function newSubject()
     {
-        return new TestViewModel;
+        return new TestViewModel();
     }
 }
 

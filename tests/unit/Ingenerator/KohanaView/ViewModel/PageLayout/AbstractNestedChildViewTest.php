@@ -36,13 +36,13 @@ class AbstractNestedChildViewTest extends TestCase
     {
         return [
             [
-                $page = new DummyPageLayoutView,
+                $page = new DummyPageLayoutView(),
                 $page,
             ],
             [
                 new DummyIntermediateLayoutView(
                     new DummyIntermediateLayoutView(
-                        $page = new DummyPageLayoutView
+                        $page = new DummyPageLayoutView()
                     )
                 ),
                 $page,
@@ -62,7 +62,7 @@ class AbstractNestedChildViewTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->parent_view = new DummyPageLayoutView;
+        $this->parent_view = new DummyPageLayoutView();
     }
 
     protected function newSubject()

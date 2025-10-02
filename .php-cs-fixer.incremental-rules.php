@@ -86,6 +86,11 @@ return array (
   ),
   'native_function_casing' => true,
   'native_type_declaration_casing' => true,
+  'new_expression_parentheses' => true,
+  'new_with_parentheses' => 
+  array (
+    'anonymous_class' => false,
+  ),
   'no_blank_lines_after_class_opening' => true,
   'no_blank_lines_after_phpdoc' => true,
   'no_empty_comment' => true,

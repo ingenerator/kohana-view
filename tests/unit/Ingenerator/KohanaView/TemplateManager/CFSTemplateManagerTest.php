@@ -138,7 +138,7 @@ class CFSTemplateManagerTest extends \PHPUnit\Framework\TestCase
 
     public function setUp(): void
     {
-        $this->compiler = new SpyingTemplateCompiler;
+        $this->compiler = new SpyingTemplateCompiler();
         $this->vfs_root = vfsStream::setup(
             'template',
             0700,

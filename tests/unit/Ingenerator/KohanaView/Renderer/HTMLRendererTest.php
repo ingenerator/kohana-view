@@ -52,14 +52,14 @@ class HTMLRendererTest extends TestCase
 
     public function test_it_selects_template_for_view()
     {
-        $view = new ViewModelDummy;
+        $view = new ViewModelDummy();
         $this->newSubject()->render($view);
         $this->template_selector->assertCalledOnceWith($view);
     }
 
     public function test_it_locates_required_template()
     {
-        $this->newSubject()->render(new ViewModelDummy);
+        $this->newSubject()->render(new ViewModelDummy());
         $this->template_manager->assertCalledOnceWith(ViewTemplateSelectorSpy::FIXED_TEMPLATE_NAME);
     }
 
@@ -68,14 +68,14 @@ class HTMLRendererTest extends TestCase
         $this->givenTemplate('Any <?="string";?>');
         $this->assertSame(
             'Any string',
-            $this->newSubject()->render(new ViewModelDummy)
+            $this->newSubject()->render(new ViewModelDummy())
         );
     }
 
     public function test_it_provides_view_as_variable_in_template_scope()
     {
         $this->givenTemplate('View:<?=spl_object_hash($view);?>');
-        $view = new ViewModelDummy;
+        $view = new ViewModelDummy();
         $this->assertSame(
             'View:'.spl_object_hash($view),
             $this->newSubject()->render($view)
@@ -88,7 +88,7 @@ class HTMLRendererTest extends TestCase
         $subject = $this->newSubject();
         $this->assertSame(
             'Renderer:'.spl_object_hash($subject),
-            $subject->render(new ViewModelDummy)
+            $subject->render(new ViewModelDummy())
         );
     }
 
@@ -99,7 +99,7 @@ class HTMLRendererTest extends TestCase
         );
         $this->assertSame(
             'OK, no $this',
-            $this->newSubject()->render(new ViewModelDummy)
+            $this->newSubject()->render(new ViewModelDummy())
         );
     }
 
@@ -110,7 +110,7 @@ class HTMLRendererTest extends TestCase
         );
         $this->assertSame(
             "view\nrenderer\ntemplate",
-            $this->newSubject()->render(new ViewModelDummy)
+            $this->newSubject()->render(new ViewModelDummy())
         );
     }
 
@@ -126,7 +126,7 @@ class HTMLRendererTest extends TestCase
         $this->expectOutputRegex('/^$/');
         $this->givenTemplate('Stuff <?="that works";?> then <?php throw new \InvalidArgumentException("dammit");?>');
         try {
-            $this->newSubject()->render(new ViewModelDummy);
+            $this->newSubject()->render(new ViewModelDummy());
             $this->fail('Expected exception to bubble from the template rendering phase');
         } catch (InvalidArgumentException $e) {
             $this->assertSame('dammit', $e->getMessage(), 'Ensure it is the expected exception');
@@ -137,8 +137,8 @@ class HTMLRendererTest extends TestCase
     public function test_it_can_render_same_template_multiple_times_with_same_or_different_views()
     {
         $this->givenTemplate('Number<?=$view->number;?>');
-        $view_1 = new NumberViewModel;
-        $view_2 = new NumberViewModel;
+        $view_1 = new NumberViewModel();
+        $view_2 = new NumberViewModel();
         $subject = $this->newSubject();
         $output = [];
 
@@ -158,7 +158,7 @@ class HTMLRendererTest extends TestCase
         $this->expectException(ErrorException::class);
         $this->expectExceptionMessage("path/to/undefined/file");
 
-        $this->newSubject()->render(new ViewModelDummy);
+        $this->newSubject()->render(new ViewModelDummy());
     }
 
     public function test_it_throws_if_inclusion_fails_even_with_error_reporting_off()
@@ -168,14 +168,14 @@ class HTMLRendererTest extends TestCase
 
         $this->expectException(TemplateNotFoundException::class);
         $this->expectExceptionMessage("path/to/undefined/file");
-        $this->newSubject()->render(new ViewModelDummy);
+        $this->newSubject()->render(new ViewModelDummy());
     }
 
     public function setUp(): void
     {
         $this->old_error_reporting = error_reporting();
-        $this->template_selector = new ViewTemplateSelectorSpy;
-        $this->template_manager = new TemplateManagerSpy;
+        $this->template_selector = new ViewTemplateSelectorSpy();
+        $this->template_manager = new TemplateManagerSpy();
         $this->vfs_root = vfsStream::setup('templates');
         $this->givenTemplate('Default');
 

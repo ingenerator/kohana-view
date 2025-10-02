@@ -23,7 +23,7 @@ class ViewModelDummy implements ViewModel
     public static function make($class_name)
     {
         if (class_exists($class_name)) {
-            $instance = new $class_name;
+            $instance = new $class_name();
             \PHPUnit\Framework\Assert::assertInstanceOf(__CLASS__, $instance);
 
             return $instance;
@@ -39,7 +39,7 @@ class ViewModelDummy implements ViewModel
         );
         eval($definition);
 
-        return new $class_name;
+        return new $class_name();
     }
 
     public function display(array $variables)

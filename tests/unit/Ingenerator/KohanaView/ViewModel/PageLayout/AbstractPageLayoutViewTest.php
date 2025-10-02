@@ -53,7 +53,7 @@ class AbstractPageLayoutViewTest extends \PHPUnit\Framework\TestCase
 
     protected function newSubject()
     {
-        return new TestablePageLayoutView;
+        return new TestablePageLayoutView();
     }
 }
 

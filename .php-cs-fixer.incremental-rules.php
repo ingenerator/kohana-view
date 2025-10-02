@@ -4,6 +4,7 @@ return array (
   'align_multiline_comment' => true,
   'array_indentation' => true,
   'array_syntax' => true,
+  'assign_null_coalescing_to_coalesce_equal' => true,
   'backtick_to_shell_exec' => true,
   'binary_operator_spaces' => true,
   'blank_line_after_namespace' => true,

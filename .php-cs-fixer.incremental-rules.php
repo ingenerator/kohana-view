@@ -41,6 +41,7 @@ return array (
   'constant_case' => true,
   'control_structure_braces' => true,
   'control_structure_continuation_position' => true,
+  'echo_tag_syntax' => false,
   'elseif' => true,
   'empty_loop_body' => 
   array (
@@ -97,6 +98,10 @@ return array (
     'anonymous_class' => false,
   ),
   'no_alias_language_construct_call' => true,
+  'no_alternative_syntax' => 
+  array (
+    'fix_non_monolithic_code' => false,
+  ),
   'no_blank_lines_after_class_opening' => true,
   'no_blank_lines_after_phpdoc' => true,
   'no_break_comment' => true,

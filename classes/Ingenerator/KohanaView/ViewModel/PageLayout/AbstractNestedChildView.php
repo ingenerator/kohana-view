@@ -9,8 +9,6 @@ use Ingenerator\KohanaView\ViewModel\NestedParentView;
 use Ingenerator\KohanaView\ViewModel\PageLayoutView;
 use UnexpectedValueException;
 
-use function get_class;
-
 abstract class AbstractNestedChildView extends AbstractViewModel implements NestedChildView
 {
     /**
@@ -52,7 +50,7 @@ abstract class AbstractNestedChildView extends AbstractViewModel implements Nest
             $parent = $parent->getParentView();
         }
         if ( ! $parent instanceof PageLayoutView) {
-            throw new UnexpectedValueException('No ultimate PageLayoutView for '.get_class($this));
+            throw new UnexpectedValueException('No ultimate PageLayoutView for '.static::class);
         }
 
         return $parent;

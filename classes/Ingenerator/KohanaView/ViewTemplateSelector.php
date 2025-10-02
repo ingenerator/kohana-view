@@ -5,7 +5,6 @@ namespace Ingenerator\KohanaView;
 use Ingenerator\KohanaView\Exception\UnspecifiedTemplateNameException;
 use UnexpectedValueException;
 
-use function get_class;
 use function is_string;
 use function preg_replace;
 use function strtolower;
@@ -44,7 +43,7 @@ class ViewTemplateSelector
     protected function validateSpecifiedTemplateName(TemplateSpecifyingViewModel $view)
     {
         $template = $view->getTemplateName();
-        $view_class = get_class($view);
+        $view_class = $view::class;
         if ( ! $template) {
             throw UnspecifiedTemplateNameException::forEmptyValue($view_class);
         }
@@ -61,7 +60,7 @@ class ViewTemplateSelector
      */
     protected function calculateTemplateFromClassName(ViewModel $view)
     {
-        $template = get_class($view);
+        $template = $view::class;
         $template = preg_replace('/\\\\|_/', '/', $template);
         $template = preg_replace('#(^view/?(model)?/)|(?<!/)(view/?(model)?$)#i', '', $template);
         $template = preg_replace('/([a-z])([A-Z])/', '\1_\2', $template);

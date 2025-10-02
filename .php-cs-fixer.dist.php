@@ -8,9 +8,11 @@ $finder = (new PhpCsFixer\Finder())
 
 return (new PhpCsFixer\Config())
     ->setParallelConfig(PhpCsFixer\Runner\Parallel\ParallelConfigFactory::detect())
+    ->setRiskyAllowed(true)
     ->setRules([
         // @todo: Bump to php84 migration when we drop 8.2 support
         '@PHP82Migration' => true,
+//        '@PHP82Migration:risky' => true,
         // --- Initial set taken from Behat/Behat
         '@Symfony' => true,
         'concat_space' => false, // override Symfony
@@ -55,5 +57,7 @@ return (new PhpCsFixer\Config())
                 'var',
             ],
         ],
+        // TEMPORARY
+        'get_class_to_class_keyword' => true,
     ])
     ->setFinder($finder);

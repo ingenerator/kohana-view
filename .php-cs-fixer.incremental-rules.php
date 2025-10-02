@@ -85,6 +85,10 @@ return array (
   'no_whitespace_in_blank_line' => true,
   'not_operator_with_space' => true,
   'object_operator_without_whitespace' => true,
+  'operator_linebreak' => 
+  array (
+    'only_booleans' => true,
+  ),
   'semicolon_after_instruction' => true,
   'single_blank_line_at_eof' => true,
   'single_line_after_imports' => true,

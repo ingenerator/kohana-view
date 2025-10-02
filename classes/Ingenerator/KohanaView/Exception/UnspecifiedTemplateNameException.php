@@ -4,8 +4,6 @@ namespace Ingenerator\KohanaView\Exception;
 
 use UnexpectedValueException;
 
-use function gettype;
-use function is_object;
 use function sprintf;
 
 /**
@@ -37,7 +35,7 @@ class UnspecifiedTemplateNameException extends UnexpectedValueException
             sprintf(
                 '%s::getTemplateName() must return a string template name, %s value returned',
                 $view_class,
-                is_object($template) ? $template::class : gettype($template)
+                get_debug_type($template)
             )
         );
     }

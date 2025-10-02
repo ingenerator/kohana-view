@@ -80,7 +80,7 @@ class HTMLRenderer implements Renderer
         /** @noinspection PhpUnusedParameterInspection */
         /** @noinspection PhpDocSignatureInspection */
         $bound_capture = function (ViewModel $view, Renderer $renderer, $template) {
-            /** @noinspection PhpIncludeInspection */
+            /* @noinspection PhpIncludeInspection */
             return include $template;
         };
         $anon_capture = $bound_capture->bindTo(null);

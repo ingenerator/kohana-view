@@ -212,7 +212,7 @@ class SimpleRendererStub implements Renderer
         if ($view instanceof DummyPageContentView) {
             return "<Content#$id_letter/>";
         } elseif ($view instanceof DummyPageLayoutView) {
-            /** @noinspection PhpUndefinedFieldInspection */
+            /* @noinspection PhpUndefinedFieldInspection */
             return "<Layout#$id_letter>\n".$view->body_html."\n</Layout#$id_letter>";
         } elseif ($view instanceof DummyNestedChildView) {
             return "<Child#$id_letter/>";

@@ -112,6 +112,13 @@ return array (
     ),
     'sort_algorithm' => 'alpha',
   ),
+  'phpdoc_to_comment' => 
+  array (
+    'ignored_tags' => 
+    array (
+      0 => 'var',
+    ),
+  ),
   'semicolon_after_instruction' => true,
   'single_blank_line_at_eof' => true,
   'single_import_per_statement' => true,

@@ -18,7 +18,7 @@ use Kohana;
 class CFSWrapper
 {
     /**
-     * @see \Kohana::find_file
+     * @see Kohana::find_file
      */
     public function find_file($dir, $file)
     {

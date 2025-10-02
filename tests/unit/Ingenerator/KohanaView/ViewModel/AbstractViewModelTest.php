@@ -50,7 +50,7 @@ class AbstractViewModelTest extends TestCase
     {
         $this->expectException(UndefinedViewVarException::class);
         $this->expectExceptionMessage("TestViewModel does not define a 'some_undefined_var' field");
-        /** @noinspection PhpUndefinedFieldInspection */
+        /* @noinspection PhpUndefinedFieldInspection */
         $this->newSubject()->some_undefined_var;
     }
 

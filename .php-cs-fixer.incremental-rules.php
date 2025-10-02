@@ -16,6 +16,7 @@ return array (
   'class_reference_name_casing' => true,
   'constant_case' => true,
   'encoding' => true,
+  'heredoc_indentation' => true,
   'indentation_type' => true,
   'integer_literal_case' => true,
   'list_syntax' => true,

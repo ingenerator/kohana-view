@@ -92,11 +92,11 @@ class ViewModelIntegrationTest extends \PHPUnit\Framework\TestCase
         $this->givenFileWithContent(
             'module/classes/View/Test/SomeModel.php',
             <<<'PHP'
-<?php
-namespace View\Test;
+                <?php
+                namespace View\Test;
 
-class SomeModel extends \Ingenerator\KohanaView\ViewModel\AbstractViewModel {}
-PHP
+                class SomeModel extends \Ingenerator\KohanaView\ViewModel\AbstractViewModel {}
+                PHP
         );
 
         $this->givenFileWithContent('module/views/test/some_model.php', 'This is raw view stuff');
@@ -121,16 +121,16 @@ PHP
         $this->givenFileWithContent(
             'module/classes/View/Test/CustomView.php',
             <<<'PHP'
-<?php
-namespace View\Test;
+                <?php
+                namespace View\Test;
 
-class CustomView extends \Ingenerator\KohanaView\ViewModel\AbstractViewModel
-{
-    protected $variables = [
-        'html_string' => '<p>Stuff&Things</p>'
-    ];
-}
-PHP
+                class CustomView extends \Ingenerator\KohanaView\ViewModel\AbstractViewModel
+                {
+                    protected $variables = [
+                        'html_string' => '<p>Stuff&Things</p>'
+                    ];
+                }
+                PHP
         );
 
         $this->givenFileWithContent(

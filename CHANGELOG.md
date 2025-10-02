@@ -1,5 +1,9 @@
 ## Unreleased
+#
 
+## 4.9.0 (2025-10-03)
+
+* Refactor to use consistent code structures & newer PHP language features
 * Update and enforce coding standards
 
 ## 4.8.1 (2025-07-25)

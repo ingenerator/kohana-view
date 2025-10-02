@@ -59,5 +59,7 @@ return (new PhpCsFixer\Config())
         ],
         // TEMPORARY
         'get_class_to_class_keyword' => true,
+        'modernize_strpos' => true,
+        'no_alias_functions' => true,
     ])
     ->setFinder($finder);

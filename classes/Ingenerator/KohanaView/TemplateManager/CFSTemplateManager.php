@@ -14,7 +14,7 @@ use function dirname;
 use function file_exists;
 use function file_get_contents;
 use function file_put_contents;
-use function is_writeable;
+use function is_writable;
 use function rtrim;
 
 /**
@@ -135,7 +135,7 @@ class CFSTemplateManager implements TemplateManager
             throw TemplateCacheException::cannotCreateDirectory($path);
         }
 
-        if ( ! is_writeable($path)) {
+        if ( ! is_writable($path)) {
             throw TemplateCacheException::pathNotWriteable($path);
         }
     }

@@ -9,6 +9,9 @@ use Ingenerator\KohanaView\TemplateManager\CFSTemplateManager;
 use Ingenerator\KohanaView\ViewModel;
 use Kohana;
 use PHPUnit\Framework\Assert;
+use PHPUnit\Framework\Attributes\PreserveGlobalState;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
 use View\Test\CustomView;
 use View\Test\SomeModel;
@@ -24,13 +27,12 @@ use function uniqid;
 
 /**
  * @slow
- *
- * @runTestsInSeparateProcesses
- *
- * @preserveGlobalState disabled
  */
+#[PreserveGlobalState(false)]
+#[RunTestsInSeparateProcesses]
 class ViewModelIntegrationTest extends TestCase
 {
+    private $preserveGlobalState;
     public const STALE_COMPILED_STRING = 'Stale content from previous compile';
 
     protected $tmp_dir;
@@ -43,7 +45,7 @@ class ViewModelIntegrationTest extends TestCase
         $this->assertSame($renderer, $dependencies->get('kohanaview.renderer.html'));
     }
 
-    public function test_dependency_container_provides_shared_page_layout_renderer()
+    public function test_dependency_container_provides_shared_page_layout_renderer(): never
     {
         $this->markTestIncomplete('Cannot put the page layout renderer in the container without defining request');
     }
@@ -57,12 +59,10 @@ class ViewModelIntegrationTest extends TestCase
         $this->assertStringStartsWith(Kohana::$cache_dir.'/compiled_templates/', $compiled_path);
     }
 
-    /**
-     * @testWith ["DEVELOPMENT"]
-     *           ["TESTING"]
-     *           ["STAGING"]
-     *           ["PRODUCTION"]
-     */
+    #[TestWith(['DEVELOPMENT'])]
+    #[TestWith(['TESTING'])]
+    #[TestWith(['STAGING'])]
+    #[TestWith(['PRODUCTION'])]
     public function test_template_compiler_always_compiles_when_no_compiled_template($environment)
     {
         $this->givenFileWithContent('module/views/any_view.php', 'Project source template');
@@ -74,12 +74,10 @@ class ViewModelIntegrationTest extends TestCase
         $this->assertSame('Project source template', file_get_contents($cache_file));
     }
 
-    /**
-     * @testWith ["DEVELOPMENT", true]
-     *           ["TESTING", false]
-     *           ["STAGING", false]
-     *           ["PRODUCTION", false]
-     */
+    #[TestWith(['DEVELOPMENT', true])]
+    #[TestWith(['TESTING', false])]
+    #[TestWith(['STAGING', false])]
+    #[TestWith(['PRODUCTION', false])]
     public function test_template_compiler_recompiles_always_only_in_development($environment, $expect_recompile)
     {
         $this->givenFileWithContent('cache/compiled_templates/any_view.php', self::STALE_COMPILED_STRING);

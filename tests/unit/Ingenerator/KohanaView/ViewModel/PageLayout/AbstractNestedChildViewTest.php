@@ -4,6 +4,7 @@ namespace test\unit\Ingenerator\KohanaView\ViewModel\PageLayout;
 
 use BadMethodCallException;
 use Ingenerator\KohanaView\ViewModel\NestedChildView;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use test\mock\ViewModel\PageLayout\DummyIntermediateLayoutView;
 use test\mock\ViewModel\PageLayout\DummyNestedChildView;
@@ -32,7 +33,7 @@ class AbstractNestedChildViewTest extends TestCase
         $this->newSubject()->page;
     }
 
-    public function provider_parent_page()
+    public static function provider_parent_page()
     {
         return [
             [
@@ -50,9 +51,7 @@ class AbstractNestedChildViewTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider provider_parent_page
-     */
+    #[DataProvider('provider_parent_page')]
     public function test_it_can_provide_ultimate_parent_page_up_the_chain($parent, $expect_page)
     {
         $this->parent_view = $parent;

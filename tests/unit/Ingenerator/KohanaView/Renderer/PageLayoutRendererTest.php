@@ -8,6 +8,8 @@ use Ingenerator\KohanaView\ViewModel;
 use Ingenerator\KohanaView\ViewModel\PageContentView;
 use Ingenerator\KohanaView\ViewModel\PageLayoutView;
 use PHPUnit\Framework\Assert;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
 use Request;
 use test\mock\ViewModel\PageLayout\DummyIntermediateLayoutView;
@@ -38,11 +40,9 @@ class PageLayoutRendererTest extends TestCase
         );
     }
 
-    /**
-     * @testWith [{"is_ajax": true}]
-     *           [{"is_ajax": false}]
-     *           [null]
-     */
+    #[TestWith([['is_ajax' => true]])]
+    #[TestWith([['is_ajax' => false]])]
+    #[TestWith([null])]
     public function test_it_renders_just_content_for_all_requests_when_use_layout_explicit_false(
         $request,
     ) {
@@ -56,11 +56,9 @@ class PageLayoutRendererTest extends TestCase
         $this->assertSame('<Content#A/>', $subject->render($content));
     }
 
-    /**
-     * @testWith [{"is_ajax": true}]
-     *           [{"is_ajax": false}]
-     *           [null]
-     */
+    #[TestWith([['is_ajax' => true]])]
+    #[TestWith([['is_ajax' => false]])]
+    #[TestWith([null])]
     public function test_it_renders_layout_containing_content_for_all_requests_when_use_layout_explicit_true(
         $request,
     ) {
@@ -102,7 +100,7 @@ class PageLayoutRendererTest extends TestCase
         );
     }
 
-    public function provider_render_chain()
+    public static function provider_render_chain()
     {
         return [
             [
@@ -122,9 +120,7 @@ class PageLayoutRendererTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider provider_render_chain
-     */
+    #[DataProvider('provider_render_chain')]
     public function test_it_renders_full_chain_if_with_layout_or_only_first_child_if_not(
         $use_layout,
         $expect,

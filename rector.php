@@ -18,6 +18,7 @@ return RectorConfig::configure()
         earlyReturn: true,
     )
     ->withPhpSets()
+    ->withAttributesSets(all: true)
     ->withSkip([
         ClosureToArrowFunctionRector::class => [
             // Needs to be a traditional function in order to restrict the scope

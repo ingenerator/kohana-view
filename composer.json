@@ -42,7 +42,8 @@
         "mikey179/vfsstream": "^1.6.12",
         "ingenerator/kohana-dependencies": "^1.3.0",
         "phpunit/phpunit": "^9.6.23",
-        "friendsofphp/php-cs-fixer": "^3.88"
+        "friendsofphp/php-cs-fixer": "^3.88",
+        "rector/rector": "^2.1"
     },
     "suggest": {
         "ingenerator/kohana-dependencies": "Dependency Injection container for Kohana 3.x"

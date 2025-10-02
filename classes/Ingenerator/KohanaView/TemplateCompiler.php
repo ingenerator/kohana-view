@@ -9,7 +9,6 @@ use function array_merge;
 use function preg_match;
 use function preg_replace_callback;
 use function strlen;
-use function strncmp;
 use function substr;
 use function trim;
 
@@ -113,6 +112,6 @@ class TemplateCompiler
      */
     protected function startsWith($string, $prefix)
     {
-        return strncmp($string, $prefix, strlen($prefix)) === 0;
+        return str_starts_with($string, $prefix);
     }
 }

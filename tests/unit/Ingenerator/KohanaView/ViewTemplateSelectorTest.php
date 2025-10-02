@@ -4,16 +4,16 @@ namespace test\unit\Ingenerator\KohanaView;
 
 use DateTime;
 use Ingenerator\KohanaView\Exception\UnspecifiedTemplateNameException;
-use Ingenerator\KohanaView\ViewModel;
 use Ingenerator\KohanaView\ViewTemplateSelector;
+use PHPUnit\Framework\TestCase;
 use test\mock\ViewModel\FixedTemplateViewModelStub;
 use test\mock\ViewModel\ViewModelDummy;
 
-class ViewTemplateSelectorTest extends \PHPUnit\Framework\TestCase
+class ViewTemplateSelectorTest extends TestCase
 {
     public function test_it_is_initialisable()
     {
-        $this->assertInstanceOf('Ingenerator\KohanaView\ViewTemplateSelector', $this->newSubject());
+        $this->assertInstanceOf(ViewTemplateSelector::class, $this->newSubject());
     }
 
     /**

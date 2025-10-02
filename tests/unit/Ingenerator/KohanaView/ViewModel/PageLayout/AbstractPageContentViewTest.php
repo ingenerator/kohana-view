@@ -2,10 +2,13 @@
 
 namespace test\unit\Ingenerator\KohanaView\ViewModel\PageLayout;
 
+use Ingenerator\KohanaView\ViewModel;
+use Ingenerator\KohanaView\ViewModel\PageContentView;
 use Ingenerator\KohanaView\ViewModel\PageLayout\AbstractPageContentView;
+use PHPUnit\Framework\TestCase;
 use test\mock\ViewModel\PageLayout\DummyPageLayoutView;
 
-class AbstractPageContentViewTest extends \PHPUnit\Framework\TestCase
+class AbstractPageContentViewTest extends TestCase
 {
     protected $page_layout;
 
@@ -13,15 +16,15 @@ class AbstractPageContentViewTest extends \PHPUnit\Framework\TestCase
     {
         $subject = $this->newSubject();
         $this->assertInstanceOf(
-            'Ingenerator\KohanaView\ViewModel\PageLayout\AbstractPageContentView',
+            AbstractPageContentView::class,
             $subject
         );
         $this->assertInstanceOf(
-            'Ingenerator\KohanaView\ViewModel\PageContentView',
+            PageContentView::class,
             $subject
         );
         $this->assertInstanceOf(
-            'Ingenerator\KohanaView\ViewModel',
+            ViewModel::class,
             $subject
         );
     }

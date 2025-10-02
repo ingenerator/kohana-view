@@ -2,8 +2,9 @@
 
 namespace Ingenerator\KohanaView\ViewModel\PageLayout;
 
-use Ingenerator\KohanaView\ViewModel;
 use Ingenerator\KohanaView\ViewModel\AbstractViewModel;
+use Ingenerator\KohanaView\ViewModel\NestedParentView;
+use Ingenerator\KohanaView\ViewModel\PageLayoutView;
 
 /**
  * Provides a base class for all views that are intended to provide a complete HTML template that will
@@ -15,7 +16,7 @@ use Ingenerator\KohanaView\ViewModel\AbstractViewModel;
  * @property-read string $body_html The content to display in the body HTML area
  * @property-read string $title The page title
  */
-abstract class AbstractPageLayoutView extends AbstractViewModel implements ViewModel\PageLayoutView, ViewModel\NestedParentView
+abstract class AbstractPageLayoutView extends AbstractViewModel implements PageLayoutView, NestedParentView
 {
     /**
      * @var array

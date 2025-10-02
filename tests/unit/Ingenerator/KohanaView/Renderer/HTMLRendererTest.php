@@ -8,11 +8,13 @@ use Ingenerator\KohanaView\Renderer;
 use Ingenerator\KohanaView\Renderer\HTMLRenderer;
 use Ingenerator\KohanaView\TemplateManager;
 use Ingenerator\KohanaView\ViewModel;
+use Ingenerator\KohanaView\ViewModel\AbstractViewModel;
 use Ingenerator\KohanaView\ViewTemplateSelector;
 use InvalidArgumentException;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
 use org\bovigo\vfs\vfsStreamFile;
+use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 use test\mock\ViewModel\ViewModelDummy;
 
@@ -220,7 +222,7 @@ class ViewTemplateSelectorSpy extends ViewTemplateSelector
 
     public function assertCalledOnceWith(ViewModel $view)
     {
-        \PHPUnit\Framework\Assert::assertSame([$view], $this->calls);
+        Assert::assertSame([$view], $this->calls);
     }
 }
 
@@ -243,11 +245,11 @@ class TemplateManagerSpy implements TemplateManager
 
     public function assertCalledOnceWith($template_name)
     {
-        \PHPUnit\Framework\Assert::assertSame([$template_name], $this->calls);
+        Assert::assertSame([$template_name], $this->calls);
     }
 }
 
-class NumberViewModel extends ViewModel\AbstractViewModel
+class NumberViewModel extends AbstractViewModel
 {
     protected $variables = [
         'number' => 0,

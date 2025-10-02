@@ -4,8 +4,10 @@ namespace test\unit\Ingenerator\KohanaView\ViewModel\PageLayout;
 
 use Ingenerator\KohanaView\ViewModel;
 use Ingenerator\KohanaView\ViewModel\PageLayout\AbstractPageLayoutView;
+use Ingenerator\KohanaView\ViewModel\PageLayoutView;
+use PHPUnit\Framework\TestCase;
 
-class AbstractPageLayoutViewTest extends \PHPUnit\Framework\TestCase
+class AbstractPageLayoutViewTest extends TestCase
 {
     /**
      * @var ViewModel
@@ -16,15 +18,15 @@ class AbstractPageLayoutViewTest extends \PHPUnit\Framework\TestCase
     {
         $subject = $this->newSubject();
         $this->assertInstanceOf(
-            'Ingenerator\KohanaView\ViewModel\PageLayout\AbstractPageLayoutView',
+            AbstractPageLayoutView::class,
             $subject
         );
         $this->assertInstanceOf(
-            'Ingenerator\KohanaView\ViewModel\PageLayoutView',
+            PageLayoutView::class,
             $subject
         );
         $this->assertInstanceOf(
-            'Ingenerator\KohanaView\ViewModel',
+            ViewModel::class,
             $subject
         );
     }

@@ -3,6 +3,7 @@
 namespace test\mock\ViewModel;
 
 use Ingenerator\KohanaView\ViewModel;
+use PHPUnit\Framework\Assert;
 
 use function class_exists;
 use function sprintf;
@@ -24,7 +25,7 @@ class ViewModelDummy implements ViewModel
     {
         if (class_exists($class_name)) {
             $instance = new $class_name();
-            \PHPUnit\Framework\Assert::assertInstanceOf(__CLASS__, $instance);
+            Assert::assertInstanceOf(self::class, $instance);
 
             return $instance;
         }
@@ -33,9 +34,9 @@ class ViewModelDummy implements ViewModel
         $namespace = trim(substr($class_name, 0, -strlen($simple_class)), '\\');
         $definition = sprintf(
             '%s class %s extends %s {}',
-            $namespace ? "namespace $namespace;" : '',
+            $namespace !== '' ? "namespace $namespace;" : '',
             $simple_class,
-            '\\'.__CLASS__
+            '\\'.self::class
         );
         eval($definition);
 

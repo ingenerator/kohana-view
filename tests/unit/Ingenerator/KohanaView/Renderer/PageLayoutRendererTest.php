@@ -8,6 +8,7 @@ use Ingenerator\KohanaView\ViewModel;
 use Ingenerator\KohanaView\ViewModel\PageContentView;
 use Ingenerator\KohanaView\ViewModel\PageLayoutView;
 use PHPUnit\Framework\Assert;
+use PHPUnit\Framework\TestCase;
 use Request;
 use test\mock\ViewModel\PageLayout\DummyIntermediateLayoutView;
 use test\mock\ViewModel\PageLayout\DummyNestedChildView;
@@ -17,7 +18,7 @@ use UnexpectedValueException;
 
 use function spl_object_hash;
 
-class PageLayoutRendererTest extends \PHPUnit\Framework\TestCase
+class PageLayoutRendererTest extends TestCase
 {
     /**
      * @var SimpleRendererStub
@@ -32,7 +33,7 @@ class PageLayoutRendererTest extends \PHPUnit\Framework\TestCase
     public function test_it_is_initialisable()
     {
         $this->assertInstanceOf(
-            'Ingenerator\KohanaView\Renderer\PageLayoutRenderer',
+            PageLayoutRenderer::class,
             $this->newSubject()
         );
     }
@@ -202,12 +203,15 @@ class SimpleRendererStub implements Renderer
         $id_letter = $this->expected_views[$hash];
         if ($view instanceof DummyPageContentView) {
             return "<Content#$id_letter/>";
-        } elseif ($view instanceof DummyPageLayoutView) {
+        }
+        if ($view instanceof DummyPageLayoutView) {
             /* @noinspection PhpUndefinedFieldInspection */
             return "<Layout#$id_letter>\n".$view->body_html."\n</Layout#$id_letter>";
-        } elseif ($view instanceof DummyNestedChildView) {
+        }
+        if ($view instanceof DummyNestedChildView) {
             return "<Child#$id_letter/>";
-        } elseif ($view instanceof DummyIntermediateLayoutView) {
+        }
+        if ($view instanceof DummyIntermediateLayoutView) {
             return "<Intermediate#$id_letter>\n".$view->child_html."\n</Intermediate#$id_letter>";
         }
 
@@ -217,11 +221,8 @@ class SimpleRendererStub implements Renderer
 
 class IsAjaxRequestStub extends Request
 {
-    private bool $is_ajax;
-
-    public function __construct(bool $is_ajax)
+    public function __construct(private readonly bool $is_ajax)
     {
-        $this->is_ajax = $is_ajax;
     }
 
     public function is_ajax(): bool

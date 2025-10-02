@@ -30,9 +30,9 @@ class ViewTemplateSelector
     {
         if ($view instanceof TemplateSpecifyingViewModel) {
             return $this->validateSpecifiedTemplateName($view);
-        } else {
-            return $this->calculateTemplateFromClassName($view);
         }
+
+        return $this->calculateTemplateFromClassName($view);
     }
 
     /**
@@ -62,9 +62,9 @@ class ViewTemplateSelector
     {
         $template = $view::class;
         $template = preg_replace('/\\\\|_/', '/', $template);
-        $template = preg_replace('#(^view/?(model)?/)|(?<!/)(view/?(model)?$)#i', '', $template);
-        $template = preg_replace('/([a-z])([A-Z])/', '\1_\2', $template);
-        $template = strtolower($template);
+        $template = preg_replace('#(^view/?(model)?/)|(?<!/)(view/?(model)?$)#i', '', (string) $template);
+        $template = preg_replace('/([a-z])([A-Z])/', '\1_\2', (string) $template);
+        $template = strtolower((string) $template);
 
         return $template;
     }

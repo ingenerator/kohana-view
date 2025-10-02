@@ -3,11 +3,12 @@
 namespace test\mock\ViewModel\PageLayout;
 
 use Ingenerator\KohanaView\ViewModel\PageLayout\AbstractIntermediateLayoutView;
+use Ingenerator\KohanaView\ViewModel\PageLayoutView;
 
 class DummyIntermediateLayoutView extends AbstractIntermediateLayoutView
 {
     /**
-     * @return \Ingenerator\KohanaView\ViewModel\PageLayoutView
+     * @return PageLayoutView
      */
     public function getUltimatePageView()
     {

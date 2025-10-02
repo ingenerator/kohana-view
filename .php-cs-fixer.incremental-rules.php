@@ -241,6 +241,14 @@ return array (
   'single_blank_line_at_eof' => true,
   'single_import_per_statement' => true,
   'single_line_after_imports' => true,
+  'single_line_comment_spacing' => true,
+  'single_line_comment_style' => 
+  array (
+    'comment_types' => 
+    array (
+      0 => 'hash',
+    ),
+  ),
   'single_space_around_construct' => true,
   'space_after_semicolon' => 
   array (

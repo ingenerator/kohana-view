@@ -47,10 +47,10 @@ class PageLayoutRendererTest extends \PHPUnit\Framework\TestCase
     public function test_it_renders_just_content_for_all_requests_when_use_layout_explicit_false(
         $request
     ) {
-        $this->request = $request ? new IsAjaxRequestStub($request['is_ajax']) : NULL;
+        $this->request = $request ? new IsAjaxRequestStub($request['is_ajax']) : null;
 
         $subject = $this->newSubject();
-        $subject->setUseLayout(FALSE);
+        $subject->setUseLayout(false);
         $content = new DummyPageContentView($layout = new DummyPageLayoutView);
 
         $this->renderer->registerViews(['A' => $content, 'B' => $layout]);
@@ -65,9 +65,9 @@ class PageLayoutRendererTest extends \PHPUnit\Framework\TestCase
     public function test_it_renders_layout_containing_content_for_all_requests_when_use_layout_explicit_true(
         $request
     ) {
-        $this->request = $request ? new IsAjaxRequestStub($request['is_ajax']) : NULL;
+        $this->request = $request ? new IsAjaxRequestStub($request['is_ajax']) : null;
         $subject       = $this->newSubject();
-        $subject->setUseLayout(TRUE);
+        $subject->setUseLayout(true);
         $content = new DummyPageContentView($layout = new DummyPageLayoutView);
 
         $this->renderer->registerViews(['A' => $content, 'B' => $layout]);
@@ -76,7 +76,7 @@ class PageLayoutRendererTest extends \PHPUnit\Framework\TestCase
 
     public function test_by_default_it_renders_layout_containing_content_when_no_request()
     {
-        $this->request = NULL;
+        $this->request = null;
         $content       = new DummyPageContentView($layout = new DummyPageLayoutView);
         $subject       = $this->newSubject();
         $this->renderer->registerViews(['A' => $content, 'B' => $layout]);
@@ -85,7 +85,7 @@ class PageLayoutRendererTest extends \PHPUnit\Framework\TestCase
 
     public function test_by_default_it_renders_layout_containing_content_when_request_not_ajax()
     {
-        $this->request = new IsAjaxRequestStub(FALSE);
+        $this->request = new IsAjaxRequestStub(false);
         $content       = new DummyPageContentView($layout = new DummyPageLayoutView);
         $subject       = $this->newSubject();
         $this->renderer->registerViews(['A' => $content, 'B' => $layout]);
@@ -94,7 +94,7 @@ class PageLayoutRendererTest extends \PHPUnit\Framework\TestCase
 
     public function test_by_default_it_renders_just_content_when_request_is_ajax()
     {
-        $this->request = new IsAjaxRequestStub(TRUE);
+        $this->request = new IsAjaxRequestStub(true);
         $content       = new DummyPageContentView($layout = new DummyPageLayoutView);
         $this->renderer->registerViews(['A' => $content, 'B' => $layout]);
         $this->assertSame(
@@ -107,7 +107,7 @@ class PageLayoutRendererTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [
-                TRUE,
+                true,
                 "<Layout#A>\n"
                 ."<Intermediate#B>\n"
                 ."<Intermediate#C>\n"
@@ -117,7 +117,7 @@ class PageLayoutRendererTest extends \PHPUnit\Framework\TestCase
                 ."\n</Layout#A>"
             ],
             [
-                FALSE,
+                false,
                 "<Child#D/>"
             ],
         ];

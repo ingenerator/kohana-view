@@ -75,7 +75,7 @@ class AbstractViewModelTest extends TestCase
     public function test_its_display_method_can_define_null_variables()
     {
         $subject = $this->newSubject();
-        $subject->display(['some_defined_var' => NULL]);
+        $subject->display(['some_defined_var' => null]);
         $this->assertNull($subject->some_defined_var);
     }
 
@@ -140,7 +140,7 @@ class AbstractViewModelTest extends TestCase
         $subject->display(['some_defined_var' => 'ok']);
 
         // We got this far successfully, provide assertion to keep PHPUnit happy.
-        $this->assertTrue(TRUE);
+        $this->assertTrue(true);
     }
 
     protected function newSubject()

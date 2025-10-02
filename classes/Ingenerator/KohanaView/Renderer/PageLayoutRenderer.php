@@ -49,7 +49,7 @@ class PageLayoutRenderer
      */
     protected $current_request;
 
-    public function __construct(Renderer $view_renderer, ?\Request $current_request = NULL)
+    public function __construct(Renderer $view_renderer, ?\Request $current_request = null)
     {
         $this->view_renderer   = $view_renderer;
         $this->current_request = $current_request;
@@ -98,14 +98,14 @@ class PageLayoutRenderer
      */
     protected function shouldUseLayout()
     {
-        if ($this->use_layout !== NULL) {
+        if ($this->use_layout !== null) {
             return $this->use_layout;
         }
 
         if ($this->current_request AND $this->current_request->is_ajax()) {
-            return FALSE;
+            return false;
         } else {
-            return TRUE;
+            return true;
         }
     }
 

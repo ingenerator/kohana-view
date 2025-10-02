@@ -159,7 +159,7 @@ PHP
 
         $this->tmp_dir      = \sys_get_temp_dir().'/kohana-view-integration/'.\uniqid('test');
         \Kohana::$cache_dir = $this->tmp_dir.'/cache';
-        \mkdir($this->tmp_dir.'/module', 0700, TRUE);
+        \mkdir($this->tmp_dir.'/module', 0700, true);
 
         parent::setUp();
     }
@@ -206,7 +206,7 @@ PHP
 
         $path = \dirname($full_path);
         if ( ! \is_dir($path)) {
-            \mkdir($path, 0777, TRUE);
+            \mkdir($path, 0777, true);
         }
 
         \file_put_contents($full_path, $content);

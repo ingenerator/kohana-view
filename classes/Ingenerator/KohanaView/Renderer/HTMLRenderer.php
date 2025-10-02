@@ -80,11 +80,11 @@ class HTMLRenderer implements Renderer
             /** @noinspection PhpIncludeInspection */
             return include $template;
         };
-        $anon_capture  = $bound_capture->bindTo(NULL);
+        $anon_capture  = $bound_capture->bindTo(null);
 
         // A user's own error handler may throw an exception here if the include fails - which we will bubble as-is.
         // If they have not configured an error handler, we need to throw an exception of our own.
-        if ($anon_capture($view, $this, $template_path) === FALSE) {
+        if ($anon_capture($view, $this, $template_path) === false) {
             throw TemplateNotFoundException::forFullPath($template_path);
         }
     }

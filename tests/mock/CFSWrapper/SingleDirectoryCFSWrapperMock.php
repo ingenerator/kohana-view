@@ -33,7 +33,7 @@ class SingleDirectoryCFSWrapperMock extends CFSWrapper
         if (\file_exists($path)) {
             return $path;
         } else {
-            return FALSE;
+            return false;
         }
     }
 }

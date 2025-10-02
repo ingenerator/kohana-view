@@ -20,6 +20,6 @@ class CFSWrapper
      */
     public function find_file($dir, $file)
     {
-        return \Kohana::find_file($dir, $file, NULL, FALSE);
+        return \Kohana::find_file($dir, $file, null, false);
     }
 }

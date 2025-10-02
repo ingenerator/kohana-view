@@ -14,14 +14,14 @@ return [
                 '_settings' => [
                     'class'     => '\Ingenerator\KohanaView\Renderer\HTMLRenderer',
                     'arguments' => ['%kohanaview.template.selector%', '%kohanaview.template.manager%'],
-                    'shared'    => TRUE,
+                    'shared'    => true,
                 ],
             ],
             'page_layout' => [
                 '_settings' => [
                     'class'     => \Ingenerator\KohanaView\Renderer\PageLayoutRenderer::class,
                     'arguments' => ['%kohanaview.renderer.html%', '%kohana.request%'],
-                    'shared'    => TRUE,
+                    'shared'    => true,
                 ],
             ],
         ],
@@ -30,21 +30,21 @@ return [
                 '_settings' => [
                     'class'     => '\Ingenerator\KohanaView\TemplateCompiler',
                     'arguments' => [],
-                    'shared'    => TRUE,
+                    'shared'    => true,
                 ],
             ],
             'manager'  => [
                 '_settings' => [
                     'class'     => '\Ingenerator\KohanaView\TemplateManager\CFSTemplateManager',
                     'arguments' => ['%kohanaview.template.compiler%', '@kohanaview.template_manager@'],
-                    'shared'    => TRUE,
+                    'shared'    => true,
                 ],
             ],
             'selector' => [
                 '_settings' => [
                     'class'     => '\Ingenerator\KohanaView\ViewTemplateSelector',
                     'arguments' => [],
-                    'shared'    => TRUE,
+                    'shared'    => true,
                 ],
             ],
         ],

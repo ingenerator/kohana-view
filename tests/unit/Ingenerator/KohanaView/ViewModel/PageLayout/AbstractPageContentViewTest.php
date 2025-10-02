@@ -42,7 +42,7 @@ class AbstractPageContentViewTest extends \PHPUnit\Framework\TestCase
         $this->newSubject()->display(['message' => 'anything']);
 
         // We got this far successfully, provide assertion to keep PHPUnit happy.
-        $this->assertTrue(TRUE);
+        $this->assertTrue(true);
     }
 
     public function setUp(): void
@@ -62,6 +62,6 @@ class AbstractPageContentViewTest extends \PHPUnit\Framework\TestCase
 class TestableAbstractPageContentView extends AbstractPageContentView
 {
     protected $variables = [
-        'message' => NULL,
+        'message' => null,
     ];
 }

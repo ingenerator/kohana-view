@@ -99,7 +99,7 @@ class CFSTemplateManagerTest extends \PHPUnit\Framework\TestCase
     public function test_it_does_not_recompile_templates_when_disabled()
     {
         $this->options['cache_dir']        = vfsStream::url('template/cache');
-        $this->options['recompile_always'] = FALSE;
+        $this->options['recompile_always'] = false;
         $this->givenFile('cache/some/compiled_view.php', 'Any compiled content');
         $this->assertSame(
             vfsStream::url('template/cache/some/compiled_view.php'),
@@ -111,7 +111,7 @@ class CFSTemplateManagerTest extends \PHPUnit\Framework\TestCase
     public function test_it_recompiles_once_per_instance_when_enabled()
     {
         $this->options['cache_dir']        = vfsStream::url('template/cache');
-        $this->options['recompile_always'] = TRUE;
+        $this->options['recompile_always'] = true;
         $this->givenFile('cache/some/compiled_view.php', 'Any compiled content');
         $this->givenFile('module/views/some/compiled_view.php', 'Raw template content');
         $subject = $this->newSubject();
@@ -174,7 +174,7 @@ class CFSTemplateManagerTest extends \PHPUnit\Framework\TestCase
         $file = vfsStream::url('template/'.$path_to_file);
         $path = \dirname($file);
         if ( ! \is_dir($path)) {
-            \mkdir($path, 0777, TRUE);
+            \mkdir($path, 0777, true);
         }
         \file_put_contents($file, $content);
     }

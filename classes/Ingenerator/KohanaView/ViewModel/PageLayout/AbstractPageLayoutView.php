@@ -29,8 +29,8 @@ abstract class AbstractPageLayoutView extends AbstractViewModel implements ViewM
      * @var array
      */
     protected $variables = [
-        'body_html' => NULL,
-        'title'     => NULL,
+        'body_html' => null,
+        'title'     => null,
     ];
 
     /**

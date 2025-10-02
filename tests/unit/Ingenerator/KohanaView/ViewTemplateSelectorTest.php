@@ -55,7 +55,7 @@ class ViewTemplateSelectorTest extends \PHPUnit\Framework\TestCase
     public function test_it_throws_if_template_specifying_view_does_not_specify_a_template()
     {
         $this->expectException(UnspecifiedTemplateNameException::class);
-        $this->newSubject()->getTemplateName(new FixedTemplateViewModelStub(NULL));
+        $this->newSubject()->getTemplateName(new FixedTemplateViewModelStub(null));
     }
 
     public function test_it_throws_if_template_specifying_view_returns_non_string_template_name()

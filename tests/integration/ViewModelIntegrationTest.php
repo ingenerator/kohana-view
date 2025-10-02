@@ -114,7 +114,7 @@ class ViewModelIntegrationTest extends \PHPUnit\Framework\TestCase
         /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
         /** @noinspection PhpUndefinedClassInspection */
         $view = new \View\Test\SomeModel();
-        /** @var $view ViewModel */
+        /** @var ViewModel $view */
         $result = $this->getHTMLRenderer($dependencies)->render($view);
 
         $this->assertSame(
@@ -151,7 +151,7 @@ class ViewModelIntegrationTest extends \PHPUnit\Framework\TestCase
         /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
         /** @noinspection PhpUndefinedClassInspection */
         $view = new \View\Test\CustomView();
-        /** @var $view ViewModel */
+        /** @var ViewModel $view */
         $this->assertSame(
             'View with &lt;p&gt;Stuff&amp;Things&lt;/p&gt;, <p>Stuff&Things</p>',
             $this->getHTMLRenderer($dependencies)->render($view)

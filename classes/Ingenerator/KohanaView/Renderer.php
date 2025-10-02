@@ -18,7 +18,6 @@ namespace Ingenerator\KohanaView;
 interface Renderer
 {
     /**
-     * @param ViewModel $view
      *
      * @return string
      */

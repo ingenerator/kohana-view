@@ -57,7 +57,6 @@ class PageLayoutRenderer
     }
 
     /**
-     * @param PageContentView $content_view
      *
      * @return string
      */
@@ -78,8 +77,6 @@ class PageLayoutRenderer
     }
 
     /**
-     * @param PageLayoutView $parent
-     * @param string         $content
      *
      * @return string
      */

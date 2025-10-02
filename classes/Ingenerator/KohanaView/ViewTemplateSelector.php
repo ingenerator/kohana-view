@@ -29,7 +29,6 @@ use function strtolower;
 class ViewTemplateSelector
 {
     /**
-     * @param ViewModel $view
      *
      * @return string
      */
@@ -43,7 +42,6 @@ class ViewTemplateSelector
     }
 
     /**
-     * @param TemplateSpecifyingViewModel $view
      *
      * @return string
      * @throws UnexpectedValueException if no template is provided
@@ -64,7 +62,6 @@ class ViewTemplateSelector
     }
 
     /**
-     * @param ViewModel $view
      *
      * @return string
      */

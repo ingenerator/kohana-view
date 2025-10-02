@@ -77,7 +77,6 @@ abstract class AbstractViewModel implements ViewModel
      *
      * @param string $name
      *
-     * @return mixed
      */
     public function __get($name)
     {
@@ -94,7 +93,6 @@ abstract class AbstractViewModel implements ViewModel
 
     /**
      * @param string $name
-     * @param mixed  $value
      *
      * @throws BadMethodCallException values cannot be assigned except with the display method
      */
@@ -106,7 +104,6 @@ abstract class AbstractViewModel implements ViewModel
     /**
      * Set the data to be rendered in the view - note this does not actually render the view.
      *
-     * @param array $variables
      */
     public function display(array $variables)
     {
@@ -121,7 +118,6 @@ abstract class AbstractViewModel implements ViewModel
     }
 
     /**
-     * @param array $variables
      *
      * @return string[] of errors
      */

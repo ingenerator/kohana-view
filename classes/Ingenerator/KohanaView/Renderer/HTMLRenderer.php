@@ -59,7 +59,6 @@ class HTMLRenderer implements Renderer
     }
 
     /**
-     * @param ViewModel $view
      *
      * @return string
      */
@@ -72,7 +71,6 @@ class HTMLRenderer implements Renderer
     }
 
     /**
-     * @param ViewModel $view
      * @param string    $template_path
      */
     protected function includeWithAnonymousScope(ViewModel $view, $template_path)

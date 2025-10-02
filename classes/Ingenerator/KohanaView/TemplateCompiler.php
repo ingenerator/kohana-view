@@ -49,9 +49,6 @@ class TemplateCompiler
         'escape_method' => 'HTML::chars',
     ];
 
-    /**
-     * @param array $options
-     */
     public function __construct(array $options = [])
     {
         $this->options = array_merge($this->options, $options);

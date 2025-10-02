@@ -17,7 +17,6 @@ namespace Ingenerator\KohanaView;
 interface ViewModel
 {
     /**
-     * @param  array $variables
      *
      * @return void
      */

@@ -71,9 +71,6 @@ class CFSTemplateManager implements TemplateManager
      * * recompile_always => whether to recompile each template on every execution,
      * * template_dir     => directory (in the cascading filesystem) to search for templates
      *
-     * @param TemplateCompiler $compiler
-     * @param array            $options
-     * @param null|CFSWrapper  $cascading_files
      */
     public function __construct(TemplateCompiler $compiler, array $options, ?CFSWrapper $cascading_files = null)
     {

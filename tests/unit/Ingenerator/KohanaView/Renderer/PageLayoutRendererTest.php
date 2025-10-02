@@ -196,7 +196,6 @@ class SimpleRendererStub implements Renderer
     }
 
     /**
-     * @param ViewModel $view
      *
      * @return string
      */

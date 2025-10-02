@@ -63,6 +63,7 @@ return array (
   'no_blank_lines_after_class_opening' => true,
   'no_blank_lines_after_phpdoc' => true,
   'no_empty_comment' => true,
+  'no_empty_phpdoc' => true,
   'no_empty_statement' => true,
   'no_extra_blank_lines' => 
   array (
@@ -89,6 +90,10 @@ return array (
   'no_space_around_double_colon' => true,
   'no_spaces_after_function_name' => true,
   'no_spaces_around_offset' => true,
+  'no_superfluous_phpdoc_tags' => 
+  array (
+    'allow_hidden_params' => true,
+  ),
   'no_trailing_comma_in_singleline' => true,
   'no_trailing_whitespace' => true,
   'no_trailing_whitespace_in_comment' => true,

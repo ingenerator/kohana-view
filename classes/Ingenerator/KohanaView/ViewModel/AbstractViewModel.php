@@ -67,10 +67,9 @@ abstract class AbstractViewModel implements ViewModel
     }
 
     /**
-     * Get field values
+     * Get field values.
      *
      * @param string $name
-     *
      */
     public function __get($name)
     {
@@ -97,7 +96,6 @@ abstract class AbstractViewModel implements ViewModel
 
     /**
      * Set the data to be rendered in the view - note this does not actually render the view.
-     *
      */
     public function display(array $variables)
     {
@@ -112,7 +110,6 @@ abstract class AbstractViewModel implements ViewModel
     }
 
     /**
-     *
      * @return string[] of errors
      */
     protected function validateDisplayVariables(array $variables)

@@ -6,8 +6,6 @@ use Kohana;
 
 /**
  * Very simple wrapper around Kohana's cascading file system to allow injection (and mocking/stubbing) as required.
- *
- * @package Ingenerator\KohanaView\TemplateManager
  */
 class CFSWrapper
 {

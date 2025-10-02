@@ -13,9 +13,7 @@ use Ingenerator\KohanaView\ViewModel\AbstractViewModel;
  * of this page layout and display any html string directly for simpler cases.
  *
  * @property-read string $body_html The content to display in the body HTML area
- * @property-read string $title     The page title
- *
- * @package Ingenerator\KohanaView\ViewModel\PageLayoutView
+ * @property-read string $title The page title
  */
 abstract class AbstractPageLayoutView extends AbstractViewModel implements ViewModel\PageLayoutView, ViewModel\NestedParentView
 {

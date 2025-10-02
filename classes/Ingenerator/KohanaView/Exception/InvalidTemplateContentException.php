@@ -5,9 +5,7 @@ namespace Ingenerator\KohanaView\Exception;
 use InvalidArgumentException;
 
 /**
- * Thrown when the content of a template is not valid for some reason
- *
- * @package Ingenerator\KohanaView\Exception
+ * Thrown when the content of a template is not valid for some reason.
  */
 class InvalidTemplateContentException extends InvalidArgumentException
 {

@@ -7,9 +7,7 @@ use BadMethodCallException;
 use function sprintf;
 
 /**
- * Thrown when a required view variable has not been assigned before use
- *
- * @package Ingenerator\KohanaView\Exception
+ * Thrown when a required view variable has not been assigned before use.
  */
 class UnassignedViewVarException extends BadMethodCallException
 {

@@ -10,9 +10,7 @@ use function is_object;
 use function sprintf;
 
 /**
- * Thrown when a TemplateSpecifyingView does not return a valid template name
- *
- * @package Ingenerator\KohanaView\Exception
+ * Thrown when a TemplateSpecifyingView does not return a valid template name.
  */
 class UnspecifiedTemplateNameException extends UnexpectedValueException
 {

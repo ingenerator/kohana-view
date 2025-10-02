@@ -49,6 +49,13 @@ return array (
       4 => 'copyright',
     ),
   ),
+  'general_phpdoc_tag_rename' => 
+  array (
+    'replacements' => 
+    array (
+      'inheritDocs' => 'inheritDoc',
+    ),
+  ),
   'global_namespace_import' => 
   array (
     'import_classes' => true,
@@ -128,6 +135,83 @@ return array (
     ),
     'sort_algorithm' => 'alpha',
   ),
+  'phpdoc_align' => 
+  array (
+    'align' => 'left',
+    'tags' => 
+    array (
+      0 => 'method',
+      1 => 'param',
+      2 => 'property',
+      3 => 'property-read',
+      4 => 'return',
+      5 => 'throws',
+      6 => 'type',
+      7 => 'var',
+    ),
+  ),
+  'phpdoc_annotation_without_dot' => true,
+  'phpdoc_indent' => true,
+  'phpdoc_inline_tag_normalizer' => true,
+  'phpdoc_no_access' => true,
+  'phpdoc_no_alias_tag' => false,
+  'phpdoc_no_package' => true,
+  'phpdoc_order' => 
+  array (
+    'order' => 
+    array (
+      0 => 'param',
+      1 => 'return',
+      2 => 'throws',
+    ),
+  ),
+  'phpdoc_return_self_reference' => true,
+  'phpdoc_scalar' => true,
+  'phpdoc_separation' => 
+  array (
+    'groups' => 
+    array (
+      0 => 
+      array (
+        0 => 'Annotation',
+        1 => 'NamedArgumentConstructor',
+        2 => 'Target',
+      ),
+      1 => 
+      array (
+        0 => 'Given',
+        1 => 'When',
+        2 => 'Then',
+      ),
+      2 => 
+      array (
+        0 => 'author',
+        1 => 'copyright',
+        2 => 'license',
+      ),
+      3 => 
+      array (
+        0 => 'category',
+        1 => 'package',
+        2 => 'subpackage',
+      ),
+      4 => 
+      array (
+        0 => 'property',
+        1 => 'property-read',
+        2 => 'property-write',
+      ),
+      5 => 
+      array (
+        0 => 'deprecated',
+        1 => 'link',
+        2 => 'see',
+        3 => 'since',
+      ),
+    ),
+  ),
+  'phpdoc_single_line_var_spacing' => true,
+  'phpdoc_summary' => true,
   'phpdoc_to_comment' => 
   array (
     'ignored_tags' => 
@@ -135,6 +219,15 @@ return array (
       0 => 'var',
     ),
   ),
+  'phpdoc_trim' => true,
+  'phpdoc_trim_consecutive_blank_line_separation' => true,
+  'phpdoc_types' => true,
+  'phpdoc_types_order' => 
+  array (
+    'null_adjustment' => 'always_last',
+    'sort_algorithm' => 'none',
+  ),
+  'phpdoc_var_without_name' => true,
   'semicolon_after_instruction' => true,
   'single_blank_line_at_eof' => true,
   'single_import_per_statement' => true,

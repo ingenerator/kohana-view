@@ -16,8 +16,6 @@ use Ingenerator\KohanaView\ViewModel\PageLayoutView;
  * to set the title or otherwise interact with the <head> and <meta> parts of the page.
  *
  * @property-read PageLayoutView $page
- *
- * @package Ingenerator\KohanaView\ViewModel\PageLayout
  */
 abstract class AbstractPageContentView extends AbstractViewModel implements PageContentView, NestedChildView
 {

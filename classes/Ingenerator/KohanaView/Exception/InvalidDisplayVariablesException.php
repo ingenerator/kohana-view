@@ -10,13 +10,11 @@ use function sprintf;
 /**
  * Thrown when the application attempts to pass invalid variables to a view's display
  * method.
- *
- * @package Ingenerator\KohanaView\Exception
  */
 class InvalidDisplayVariablesException extends InvalidArgumentException
 {
     /**
-     * @param string   $view_class
+     * @param string $view_class
      * @param string[] $errors
      *
      * @return static

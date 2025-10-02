@@ -5,9 +5,7 @@ namespace Ingenerator\KohanaView\Exception;
 use InvalidArgumentException;
 
 /**
- * Thrown when a template cannot be found
- *
- * @package Ingenerator\KohanaView\Exception
+ * Thrown when a template cannot be found.
  */
 class TemplateNotFoundException extends InvalidArgumentException
 {

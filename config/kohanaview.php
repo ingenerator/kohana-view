@@ -1,8 +1,7 @@
 <?php
 
 /**
- * Configuration for the KohanaView module
- *
+ * Configuration for the KohanaView module.
  */
 return [
     'template_manager' => [

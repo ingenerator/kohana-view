@@ -31,8 +31,6 @@ use function trim;
  *    <?php echo $stuff;?>
  *
  * The raw output prefix and escape method are configurable via the options array passed to the constructor.
- *
- * @package Ingenerator\KohanaView
  */
 class TemplateCompiler
 {
@@ -55,6 +53,7 @@ class TemplateCompiler
      * @param string $source
      *
      * @return string
+     *
      * @throws InvalidArgumentException if the template is empty or invalid
      */
     public function compile($source)

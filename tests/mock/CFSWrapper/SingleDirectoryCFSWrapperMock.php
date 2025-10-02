@@ -7,9 +7,7 @@ use Ingenerator\KohanaView\TemplateManager\CFSWrapper;
 use function file_exists;
 
 /**
- * Works like a cascading filesystem with a single directory
- *
- * @package test\mock\CFSWrapper\SingleDirectoryCFSWrapper
+ * Works like a cascading filesystem with a single directory.
  */
 class SingleDirectoryCFSWrapperMock extends CFSWrapper
 {

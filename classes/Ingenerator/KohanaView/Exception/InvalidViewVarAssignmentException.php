@@ -5,9 +5,7 @@ namespace Ingenerator\KohanaView\Exception;
 use BadMethodCallException;
 
 /**
- * Thrown when attempting to assign variables to a view model directly
- *
- * @package Ingenerator\KohanaView\Exception
+ * Thrown when attempting to assign variables to a view model directly.
  */
 class InvalidViewVarAssignmentException extends BadMethodCallException
 {

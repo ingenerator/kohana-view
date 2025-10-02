@@ -190,7 +190,6 @@ class SimpleRendererStub implements Renderer
     }
 
     /**
-     *
      * @return string
      */
     public function render(ViewModel $view)

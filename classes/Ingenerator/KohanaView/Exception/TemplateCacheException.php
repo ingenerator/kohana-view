@@ -5,9 +5,7 @@ namespace Ingenerator\KohanaView\Exception;
 use RuntimeException;
 
 /**
- * Thrown when there are problems caching a template
- *
- * @package Ingenerator\KohanaView\Exception
+ * Thrown when there are problems caching a template.
  */
 class TemplateCacheException extends RuntimeException
 {

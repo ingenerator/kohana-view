@@ -14,7 +14,7 @@ use function trim;
 class ViewModelDummy implements ViewModel
 {
     /**
-     * Create an instance with any arbitrary class name
+     * Create an instance with any arbitrary class name.
      *
      * @param string $class_name
      *

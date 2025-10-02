@@ -21,12 +21,10 @@ use function strtolower;
  *   \Other\View\HierarchyViewModel     => other/view/hierarchy
  *
  * Views can also implement TemplateSpecifyingViewModel to provide a custom template file name when required.
- *
  */
 class ViewTemplateSelector
 {
     /**
-     *
      * @return string
      */
     public function getTemplateName(ViewModel $view)
@@ -39,8 +37,8 @@ class ViewTemplateSelector
     }
 
     /**
-     *
      * @return string
+     *
      * @throws UnexpectedValueException if no template is provided
      */
     protected function validateSpecifiedTemplateName(TemplateSpecifyingViewModel $view)
@@ -59,7 +57,6 @@ class ViewTemplateSelector
     }
 
     /**
-     *
      * @return string
      */
     protected function calculateTemplateFromClassName(ViewModel $view)

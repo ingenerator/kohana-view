@@ -25,7 +25,6 @@ abstract class AbstractNestedChildView extends AbstractViewModel implements Nest
     }
 
     /**
-     *
      * @return NestedParentView
      */
     public function getParentView()
@@ -34,7 +33,7 @@ abstract class AbstractNestedChildView extends AbstractViewModel implements Nest
     }
 
     /**
-     * The page layout that this content view will be rendered into
+     * The page layout that this content view will be rendered into.
      *
      * @return PageLayoutView
      */

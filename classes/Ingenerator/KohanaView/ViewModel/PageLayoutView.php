@@ -9,8 +9,6 @@ use Ingenerator\KohanaView\ViewModel;
  *
  * @see     AbstractPageLayoutView
  * @see     PageContentView
- *
- * @package Ingenerator\KohanaView\ViewModel
  */
 interface PageLayoutView extends ViewModel
 {

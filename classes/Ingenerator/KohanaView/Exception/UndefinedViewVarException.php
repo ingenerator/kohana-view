@@ -5,9 +5,7 @@ namespace Ingenerator\KohanaView\Exception;
 use BadMethodCallException;
 
 /**
- * Thrown when attempting to access a view variable that is not defined
- *
- * @package Ingenerator\KohanaView\Exception
+ * Thrown when attempting to access a view variable that is not defined.
  */
 class UndefinedViewVarException extends BadMethodCallException
 {

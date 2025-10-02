@@ -9,13 +9,11 @@ use Ingenerator\KohanaView\ViewModel;
  *
  * @see     AbstractPageContentView
  * @see     PageLayoutView
- *
- * @package Ingenerator\KohanaView\ViewModel
  */
 interface PageContentView extends ViewModel
 {
     /**
-     * The page layout that this content view will be rendered into
+     * The page layout that this content view will be rendered into.
      *
      * @return PageLayoutView
      */

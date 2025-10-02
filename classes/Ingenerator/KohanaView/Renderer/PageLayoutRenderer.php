@@ -24,8 +24,6 @@ use Request;
  *    }
  *
  * Obviously in real life the creation of the views and renderers would happen in your dependency container.
- *
- * @package Ingenerator\KohanaView\Renderer
  */
 class PageLayoutRenderer
 {
@@ -51,7 +49,6 @@ class PageLayoutRenderer
     }
 
     /**
-     *
      * @return string
      */
     public function render(PageContentView $content_view)
@@ -71,7 +68,6 @@ class PageLayoutRenderer
     }
 
     /**
-     *
      * @return string
      */
     protected function renderParent(PageLayoutView $parent, $content_html)
@@ -103,7 +99,7 @@ class PageLayoutRenderer
 
     /**
      * Configure whether to always wrap the content in the layout (TRUE), never (FALSE) or automatically for
-     * non-AJAX requests (NULL)
+     * non-AJAX requests (NULL).
      *
      * @param bool $use_layout
      *

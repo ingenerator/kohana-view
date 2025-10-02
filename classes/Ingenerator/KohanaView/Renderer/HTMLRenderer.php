@@ -14,8 +14,6 @@ use function ob_start;
 /**
  * Renders a ViewModel to an HTML string for return to the user. The template is rendered with an anonymous scope
  * which only has access to the ViewModel, the Renderer (for rendering any subviews) and the template file path.
- *
- * @package Ingenerator\KohanaView\Renderer
  */
 class HTMLRenderer implements Renderer
 {
@@ -53,7 +51,6 @@ class HTMLRenderer implements Renderer
     }
 
     /**
-     *
      * @return string
      */
     protected function getTemplatePath(ViewModel $view)
@@ -65,7 +62,7 @@ class HTMLRenderer implements Renderer
     }
 
     /**
-     * @param string    $template_path
+     * @param string $template_path
      */
     protected function includeWithAnonymousScope(ViewModel $view, $template_path)
     {

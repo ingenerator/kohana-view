@@ -24,8 +24,6 @@ use function rtrim;
  * Templates will be dynamically compiled and cached to disk:
  *  * If the recompile_always option is TRUE, then once for every execution
  *  * If the recompile_always option is FALSE, then only if the compiled template does not yet exist
- *
- * @package Ingenerator\KohanaView\TemplateManager
  */
 class CFSTemplateManager implements TemplateManager
 {
@@ -50,7 +48,7 @@ class CFSTemplateManager implements TemplateManager
     protected $compiler;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $recompile_always;
 
@@ -64,7 +62,6 @@ class CFSTemplateManager implements TemplateManager
      * * cache_dir        => the path where compiled templates will be cached
      * * recompile_always => whether to recompile each template on every execution,
      * * template_dir     => directory (in the cascading filesystem) to search for templates
-     *
      */
     public function __construct(TemplateCompiler $compiler, array $options, ?CFSWrapper $cascading_files = null)
     {

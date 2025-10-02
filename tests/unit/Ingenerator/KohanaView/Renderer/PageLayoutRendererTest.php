@@ -203,12 +203,15 @@ class SimpleRendererStub implements Renderer
         $id_letter = $this->expected_views[$hash];
         if ($view instanceof DummyPageContentView) {
             return "<Content#$id_letter/>";
-        } elseif ($view instanceof DummyPageLayoutView) {
+        }
+        if ($view instanceof DummyPageLayoutView) {
             /* @noinspection PhpUndefinedFieldInspection */
             return "<Layout#$id_letter>\n".$view->body_html."\n</Layout#$id_letter>";
-        } elseif ($view instanceof DummyNestedChildView) {
+        }
+        if ($view instanceof DummyNestedChildView) {
             return "<Child#$id_letter/>";
-        } elseif ($view instanceof DummyIntermediateLayoutView) {
+        }
+        if ($view instanceof DummyIntermediateLayoutView) {
             return "<Intermediate#$id_letter>\n".$view->child_html."\n</Intermediate#$id_letter>";
         }
 

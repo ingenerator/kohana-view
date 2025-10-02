@@ -23,8 +23,8 @@ class SingleDirectoryCFSWrapperMock extends CFSWrapper
         $path = $this->root_path.'/'.$dir.'/'.$file.EXT;
         if (file_exists($path)) {
             return $path;
-        } else {
-            return false;
         }
+
+        return false;
     }
 }

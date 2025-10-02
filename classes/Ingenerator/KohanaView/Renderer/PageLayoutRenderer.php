@@ -76,9 +76,9 @@ class PageLayoutRenderer
 
         if ($parent instanceof NestedChildView) {
             return $this->render($parent);
-        } else {
-            return $this->view_renderer->render($parent);
         }
+
+        return $this->view_renderer->render($parent);
     }
 
     /**
@@ -90,11 +90,7 @@ class PageLayoutRenderer
             return $this->use_layout;
         }
 
-        if ($this->current_request && $this->current_request->is_ajax()) {
-            return false;
-        } else {
-            return true;
-        }
+        return ! ($this->current_request && $this->current_request->is_ajax());
     }
 
     /**

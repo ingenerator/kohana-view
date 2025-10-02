@@ -30,9 +30,9 @@ class ViewTemplateSelector
     {
         if ($view instanceof TemplateSpecifyingViewModel) {
             return $this->validateSpecifiedTemplateName($view);
-        } else {
-            return $this->calculateTemplateFromClassName($view);
         }
+
+        return $this->calculateTemplateFromClassName($view);
     }
 
     /**

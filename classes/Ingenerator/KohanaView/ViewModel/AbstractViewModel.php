@@ -75,13 +75,15 @@ abstract class AbstractViewModel implements ViewModel
     {
         if (array_key_exists($name, $this->variables)) {
             return $this->variables[$name];
-        } elseif (method_exists($this, 'var_'.$name)) {
+        }
+        if (method_exists($this, 'var_'.$name)) {
             $method = 'var_'.$name;
 
             return $this->$method();
-        } else {
-            throw UndefinedViewVarException::forClassAndVar(static::class, $name);
         }
+        throw UndefinedViewVarException::forClassAndVar(static::class, $name);
+
+        return null;
     }
 
     /**

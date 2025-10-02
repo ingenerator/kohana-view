@@ -1,5 +1,7 @@
 ## Unreleased
 
+* Update and enforce coding standards
+
 ## 4.8.1 (2025-07-25)
 
 * Add support for v2.x of composer/installers

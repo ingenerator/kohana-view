@@ -25,7 +25,7 @@ class ViewModelDummy implements ViewModel
     {
         if (class_exists($class_name)) {
             $instance = new $class_name();
-            Assert::assertInstanceOf(__CLASS__, $instance);
+            Assert::assertInstanceOf(self::class, $instance);
 
             return $instance;
         }
@@ -36,7 +36,7 @@ class ViewModelDummy implements ViewModel
             '%s class %s extends %s {}',
             $namespace !== '' ? "namespace $namespace;" : '',
             $simple_class,
-            '\\'.__CLASS__
+            '\\'.self::class
         );
         eval($definition);
 

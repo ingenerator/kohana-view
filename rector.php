@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Rector\Php55\Rector\Class_\ClassConstantToSelfClassRector;
 use Rector\Config\RectorConfig;
 
 return RectorConfig::configure()
@@ -12,6 +13,17 @@ return RectorConfig::configure()
     ])
     ->withRootFiles()
     ->withCodeQualityLevel(100)
+//    ->withPhpSets()
+    ->withRules([
+        ClassConstantToSelfClassRector::class,
+//        \Rector\Php55\Rector\String_\StringClassNameToClassConstantRector::class,
+//        \Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector::class,
+//        \Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector::class,
+//        \Rector\TypeDeclaration\Rector\ClassMethod\ReturnNeverTypeRector::class,
+//        \Rector\Php80\Rector\Catch_\RemoveUnusedVariableInCatchRector::class,
+//        \Rector\Php81\Rector\FuncCall\NullToStrictStringFuncCallArgRector::class,
+//        \Rector\Php81\Rector\Property\ReadOnlyPropertyRector::class,
+    ])
     ->withImportNames(
         removeUnusedImports: true,
     );

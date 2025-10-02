@@ -6,6 +6,7 @@ use Rector\Config\RectorConfig;
 use Rector\Php55\Rector\Class_\ClassConstantToSelfClassRector;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\Php80\Rector\Catch_\RemoveUnusedVariableInCatchRector;
+use Rector\Php81\Rector\FuncCall\NullToStrictStringFuncCallArgRector;
 
 return RectorConfig::configure()
     ->withPaths([
@@ -23,7 +24,7 @@ return RectorConfig::configure()
         // ClosureToArrowFunctionRector::class,
         // ReturnNeverTypeRector::class,
         RemoveUnusedVariableInCatchRector::class,
-        //        \Rector\Php81\Rector\FuncCall\NullToStrictStringFuncCallArgRector::class,
+        NullToStrictStringFuncCallArgRector::class,
         //        \Rector\Php81\Rector\Property\ReadOnlyPropertyRector::class,
     ])
     ->withImportNames(

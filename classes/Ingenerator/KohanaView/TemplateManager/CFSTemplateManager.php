@@ -67,7 +67,7 @@ class CFSTemplateManager implements TemplateManager
     {
         $this->cascading_files = $cascading_files ?: new CFSWrapper();
         $this->compiler = $compiler;
-        $this->cache_dir = rtrim($options['cache_dir'], '/');
+        $this->cache_dir = rtrim((string) $options['cache_dir'], '/');
         $this->recompile_always = Arr::get($options, 'recompile_always', false);
         $this->template_dir = rtrim(Arr::get($options, 'template_dir', 'views'), '/');
     }

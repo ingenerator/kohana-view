@@ -27,6 +27,7 @@ return array (
   ),
   'class_reference_name_casing' => true,
   'clean_namespace' => true,
+  'compact_nullable_type_declaration' => true,
   'constant_case' => true,
   'control_structure_braces' => true,
   'control_structure_continuation_position' => true,
@@ -120,6 +121,8 @@ return array (
   'no_whitespace_before_comma_in_array' => true,
   'no_whitespace_in_blank_line' => true,
   'not_operator_with_space' => true,
+  'nullable_type_declaration' => true,
+  'nullable_type_declaration_for_default_null_value' => true,
   'object_operator_without_whitespace' => true,
   'operator_linebreak' => 
   array (
@@ -134,6 +137,11 @@ return array (
       2 => 'const',
     ),
     'sort_algorithm' => 'alpha',
+  ),
+  'ordered_types' => 
+  array (
+    'null_adjustment' => 'always_last',
+    'sort_algorithm' => 'none',
   ),
   'phpdoc_align' => 
   array (
@@ -228,6 +236,7 @@ return array (
     'sort_algorithm' => 'none',
   ),
   'phpdoc_var_without_name' => true,
+  'return_type_declaration' => true,
   'semicolon_after_instruction' => true,
   'single_blank_line_at_eof' => true,
   'single_import_per_statement' => true,

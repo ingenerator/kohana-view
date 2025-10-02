@@ -186,7 +186,9 @@ class SpyingTemplateCompiler extends TemplateCompiler
     protected $compiled = [];
 
     /** @noinspection PhpMissingParentConstructorInspection */
-    public function __construct() { }
+    public function __construct()
+    {
+    }
 
     public function compile($source)
     {

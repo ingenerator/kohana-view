@@ -15,9 +15,21 @@ return array (
   ),
   'blank_line_between_import_groups' => true,
   'blank_lines_before_namespace' => true,
+  'braces_position' => 
+  array (
+    'allow_single_line_anonymous_functions' => true,
+    'allow_single_line_empty_anonymous_classes' => true,
+  ),
   'cast_spaces' => true,
   'class_reference_name_casing' => true,
   'constant_case' => true,
+  'control_structure_braces' => true,
+  'control_structure_continuation_position' => true,
+  'elseif' => true,
+  'empty_loop_body' => 
+  array (
+    'style' => 'braces',
+  ),
   'encoding' => true,
   'function_declaration' => true,
   'heredoc_indentation' => true,
@@ -78,6 +90,7 @@ return array (
   array (
     'stick_comment_to_next_continuous_control_statement' => true,
   ),
+  'switch_case_semicolon_to_colon' => true,
   'switch_case_space' => true,
   'ternary_operator_spaces' => true,
   'trailing_comma_in_multiline' => 

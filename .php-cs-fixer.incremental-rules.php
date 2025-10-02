@@ -93,6 +93,7 @@ return array (
   ),
   'no_blank_lines_after_class_opening' => true,
   'no_blank_lines_after_phpdoc' => true,
+  'no_break_comment' => true,
   'no_empty_comment' => true,
   'no_empty_phpdoc' => true,
   'no_empty_statement' => true,
@@ -282,6 +283,7 @@ return array (
   ),
   'switch_case_semicolon_to_colon' => true,
   'switch_case_space' => true,
+  'switch_continue_to_break' => true,
   'ternary_operator_spaces' => true,
   'trailing_comma_in_multiline' => 
   array (

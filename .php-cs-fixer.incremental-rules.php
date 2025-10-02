@@ -21,6 +21,10 @@ return array (
     'allow_single_line_empty_anonymous_classes' => true,
   ),
   'cast_spaces' => true,
+  'class_definition' => 
+  array (
+    'single_line' => true,
+  ),
   'class_reference_name_casing' => true,
   'constant_case' => true,
   'control_structure_braces' => true,

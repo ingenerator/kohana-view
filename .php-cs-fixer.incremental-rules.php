@@ -41,13 +41,17 @@ return array (
   'constant_case' => true,
   'control_structure_braces' => true,
   'control_structure_continuation_position' => true,
+  'declare_equal_normalize' => true,
+  'declare_parentheses' => true,
   'echo_tag_syntax' => false,
   'elseif' => true,
   'empty_loop_body' => 
   array (
     'style' => 'braces',
   ),
+  'empty_loop_condition' => true,
   'encoding' => true,
+  'full_opening_tag' => true,
   'fully_qualified_strict_types' => true,
   'function_declaration' => true,
   'general_phpdoc_annotation_remove' => 
@@ -80,6 +84,8 @@ return array (
   'indentation_type' => true,
   'integer_literal_case' => true,
   'lambda_not_used_import' => true,
+  'line_ending' => true,
+  'linebreak_after_opening_tag' => true,
   'list_syntax' => true,
   'lowercase_cast' => true,
   'lowercase_keywords' => true,
@@ -102,9 +108,11 @@ return array (
   array (
     'fix_non_monolithic_code' => false,
   ),
+  'no_binary_string' => true,
   'no_blank_lines_after_class_opening' => true,
   'no_blank_lines_after_phpdoc' => true,
   'no_break_comment' => true,
+  'no_closing_tag' => true,
   'no_empty_comment' => true,
   'no_empty_phpdoc' => true,
   'no_empty_statement' => true,
@@ -131,6 +139,7 @@ return array (
   'no_multiline_whitespace_around_double_arrow' => true,
   'no_multiple_statements_per_line' => true,
   'no_null_property_initialization' => true,
+  'no_short_bool_cast' => true,
   'no_singleline_whitespace_before_semicolons' => true,
   'no_space_around_double_colon' => true,
   'no_spaces_after_function_name' => true,
@@ -143,6 +152,10 @@ return array (
   'no_trailing_comma_in_singleline' => true,
   'no_trailing_whitespace' => true,
   'no_trailing_whitespace_in_comment' => true,
+  'no_unneeded_braces' => 
+  array (
+    'namespaces' => true,
+  ),
   'no_unneeded_control_parentheses' => 
   array (
     'statements' => 
@@ -159,10 +172,13 @@ return array (
     ),
   ),
   'no_unneeded_import_alias' => true,
+  'no_unset_cast' => true,
   'no_unused_imports' => true,
   'no_useless_concat_operator' => true,
+  'no_useless_nullsafe_operator' => true,
   'no_whitespace_before_comma_in_array' => true,
   'no_whitespace_in_blank_line' => true,
+  'normalize_index_brace' => true,
   'not_operator_with_space' => true,
   'nullable_type_declaration' => true,
   'nullable_type_declaration_for_default_null_value' => true,
@@ -194,6 +210,7 @@ return array (
     'null_adjustment' => 'always_last',
     'sort_algorithm' => 'none',
   ),
+  'php_unit_fqcn_annotation' => true,
   'phpdoc_align' => 
   array (
     'align' => 'left',
@@ -297,6 +314,7 @@ return array (
   'phpdoc_var_without_name' => true,
   'return_type_declaration' => true,
   'semicolon_after_instruction' => true,
+  'short_scalar_cast' => true,
   'simple_to_complex_string_variable' => true,
   'single_blank_line_at_eof' => true,
   'single_class_element_per_statement' => true,
@@ -312,12 +330,14 @@ return array (
   ),
   'single_quote' => true,
   'single_space_around_construct' => true,
+  'single_trait_insert_per_statement' => true,
   'space_after_semicolon' => 
   array (
     'remove_in_empty_for_expressions' => true,
   ),
   'spaces_inside_parentheses' => true,
   'standardize_increment' => true,
+  'standardize_not_equals' => true,
   'statement_indentation' => 
   array (
     'stick_comment_to_next_continuous_control_statement' => true,

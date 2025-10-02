@@ -132,6 +132,7 @@ return array (
   'no_superfluous_phpdoc_tags' => 
   array (
     'allow_hidden_params' => true,
+    'remove_inheritdoc' => true,
   ),
   'no_trailing_comma_in_singleline' => true,
   'no_trailing_whitespace' => true,
@@ -207,6 +208,7 @@ return array (
   'phpdoc_no_access' => true,
   'phpdoc_no_alias_tag' => false,
   'phpdoc_no_package' => true,
+  'phpdoc_no_useless_inheritdoc' => true,
   'phpdoc_order' => 
   array (
     'order' => 
@@ -263,6 +265,13 @@ return array (
   ),
   'phpdoc_single_line_var_spacing' => true,
   'phpdoc_summary' => true,
+  'phpdoc_tag_type' => 
+  array (
+    'tags' => 
+    array (
+      'inheritDoc' => 'inline',
+    ),
+  ),
   'phpdoc_to_comment' => 
   array (
     'ignored_tags' => 

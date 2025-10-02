@@ -72,9 +72,6 @@ class CFSTemplateManager implements TemplateManager
         $this->template_dir = rtrim(Arr::get($options, 'template_dir', 'views'), '/');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getPath($template_name)
     {
         $compiled_path = $this->cache_dir.'/'.$template_name.'.php';

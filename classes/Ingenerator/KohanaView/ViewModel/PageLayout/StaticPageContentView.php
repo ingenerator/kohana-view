@@ -11,9 +11,6 @@ class StaticPageContentView extends AbstractPageContentView implements TemplateS
         'page_path' => null,
     ];
 
-    /**
-     * {@inheritdoc}
-     */
     public function getTemplateName()
     {
         if ( ! $this->variables['page_path']) {

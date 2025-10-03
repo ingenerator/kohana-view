@@ -2,6 +2,7 @@
 
 namespace test\unit\Ingenerator\KohanaView\ViewModel\PageLayout;
 
+use Override;
 use test\mock\ViewModel\PageLayout\DummyIntermediateLayoutView;
 
 class AbstractIntermediateLayoutViewTest extends AbstractNestedChildViewTest
@@ -13,6 +14,7 @@ class AbstractIntermediateLayoutViewTest extends AbstractNestedChildViewTest
         $this->assertSame('<p>I am the middle bit of your page</p>', $subject->child_html);
     }
 
+    #[Override]
     protected function newSubject()
     {
         return new DummyIntermediateLayoutView($this->parent_view);

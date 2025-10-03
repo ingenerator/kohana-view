@@ -3,6 +3,7 @@
 namespace test\mock\CFSWrapper;
 
 use Ingenerator\KohanaView\TemplateManager\CFSWrapper;
+use Override;
 
 use function file_exists;
 
@@ -18,6 +19,7 @@ class SingleDirectoryCFSWrapperMock extends CFSWrapper
     {
     }
 
+    #[Override]
     public function find_file($dir, $file)
     {
         $path = $this->root_path.'/'.$dir.'/'.$file.EXT;

@@ -9,6 +9,7 @@ use Ingenerator\KohanaView\TemplateManager;
 use Ingenerator\KohanaView\TemplateManager\CFSTemplateManager;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
+use Override;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 use test\mock\CFSWrapper\SingleDirectoryCFSWrapperMock;
@@ -194,6 +195,7 @@ class SpyingTemplateCompiler extends TemplateCompiler
     {
     }
 
+    #[Override]
     public function compile($source)
     {
         $this->compiled[] = $source;

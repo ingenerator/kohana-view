@@ -6,10 +6,10 @@ use PhpCsFixer\Config;
 use PhpCsFixer\Runner\Parallel\ParallelConfigFactory;
 use PhpCsFixer\Fixer\Phpdoc\PhpdocSeparationFixer;
 
-$finder = (new Finder())
+$finder = new Finder()
     ->in(__DIR__);
 
-return (new Config())
+return new Config()
     ->setParallelConfig(ParallelConfigFactory::detect())
     ->setRiskyAllowed(true)
     ->setRules([

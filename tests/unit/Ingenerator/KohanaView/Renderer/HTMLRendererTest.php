@@ -14,6 +14,7 @@ use InvalidArgumentException;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
 use org\bovigo\vfs\vfsStreamFile;
+use Override;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 use test\mock\ViewModel\ViewModelDummy;
@@ -213,6 +214,7 @@ class ViewTemplateSelectorSpy extends ViewTemplateSelector
 
     protected $calls = [];
 
+    #[Override]
     public function getTemplateName(ViewModel $view)
     {
         $this->calls[] = $view;

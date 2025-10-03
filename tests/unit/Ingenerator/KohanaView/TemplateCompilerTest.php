@@ -4,6 +4,7 @@ namespace test\unit\Ingenerator\KohanaView;
 
 use Ingenerator\KohanaView\Exception\InvalidTemplateContentException;
 use Ingenerator\KohanaView\TemplateCompiler;
+use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
 
 class TemplateCompilerTest extends TestCase
@@ -69,12 +70,10 @@ class TemplateCompilerTest extends TestCase
         );
     }
 
-    /**
-     * @testWith ["<?=$view->stuff;?>", "<?=HTML::chars($view->stuff);?>"]
-     *           ["<?=$view->someMethod();?>", "<?=HTML::chars($view->someMethod());?>"]
-     *           ["<?=$any_var;?>", "<?=HTML::chars($any_var);?>"]
-     *           ["<?=$any_var?>", "<?=HTML::chars($any_var);?>"]
-     */
+    #[TestWith(['<?=$view->stuff;?>', '<?=HTML::chars($view->stuff);?>'])]
+    #[TestWith(['<?=$view->someMethod();?>', '<?=HTML::chars($view->someMethod());?>'])]
+    #[TestWith(['<?=$any_var;?>', '<?=HTML::chars($any_var);?>'])]
+    #[TestWith(['<?=$any_var?>', '<?=HTML::chars($any_var);?>'])]
     public function test_it_automatically_escapes_short_echo_tags_by_default($source, $expect)
     {
         $source = "<p>$source</p>";
@@ -84,33 +83,32 @@ class TemplateCompilerTest extends TestCase
         );
     }
 
-    /**
-     * @testWith ["<?=$view->anything ? : '';?>", "<?=HTML::chars($view->anything ? : '');?>"]
-     *           ["<?=$view->anything\n? 'stuff'\n: ''\n;?>", "<?=HTML::chars($view->anything\n? 'stuff'\n: '');?>"]
-     */
+    #[TestWith(["<?=\$view->anything ? : '';?>", '<?=HTML::chars($view->anything ? : \'\');?>'])]
+    #[TestWith(['<?=$view->anything
+? \'stuff\'
+: \'\'
+;?>', '<?=HTML::chars($view->anything
+? \'stuff\'
+: \'\');?>'])]
     public function test_it_properly_escapes_short_echo_tags_with_ternaries($source, $expect)
     {
         $this->assertSame($expect, $this->newSubject()->compile($source));
     }
 
-    /**
-     * @testWith ["<?=$foo; //comment?>", "<?=HTML::chars($foo); //comment?>"]
-     *           ["<?=raw($foo); //comment?>", "<?php echo($foo); //comment?>"]
-     *           ["<?=//$foo?>", "<?='';//$foo;?>"]
-     *           ["<?=//$foo;?>", "<?='';//$foo;?>"]
-     */
+    #[TestWith(['<?=$foo; //comment?>', '<?=HTML::chars($foo); //comment?>'])]
+    #[TestWith(['<?=raw($foo); //comment?>', '<?php echo($foo); //comment?>'])]
+    #[TestWith(['<?=//$foo?>', "<?='';//\$foo;?>"])]
+    #[TestWith(['<?=//$foo;?>', "<?='';//\$foo;?>"])]
     public function test_it_properly_escapes_short_echo_tags_with_comments($source, $expect)
     {
         $this->assertSame($expect, $this->newSubject()->compile($source));
     }
 
-    /**
-     * @testWith ["<?=raw($foo);?>", "<?php echo($foo);?>"]
-     *           ["<?=raw($foo)?>", "<?php echo($foo);?>"]
-     *           ["<?= raw($foo);?>", "<?php echo($foo);?>"]
-     *           ["<?= raw(HTML::chars($foo));?>", "<?php echo(HTML::chars($foo));?>"]
-     *           ["<?=raw(do(lots(of(nested(things()))))) ;?>", "<?php echo(do(lots(of(nested(things())))));?>"]
-     */
+    #[TestWith(['<?=raw($foo);?>', '<?php echo($foo);?>'])]
+    #[TestWith(['<?=raw($foo)?>', '<?php echo($foo);?>'])]
+    #[TestWith(['<?= raw($foo);?>', '<?php echo($foo);?>'])]
+    #[TestWith(['<?= raw(HTML::chars($foo));?>', '<?php echo(HTML::chars($foo));?>'])]
+    #[TestWith(['<?=raw(do(lots(of(nested(things()))))) ;?>', '<?php echo(do(lots(of(nested(things())))));?>'])]
     public function test_it_does_not_escape_short_echo_tags_when_marked_as_raw($source, $expect)
     {
         $this->assertSame($expect, $this->newSubject()->compile($source));

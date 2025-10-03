@@ -3,18 +3,23 @@
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          bootstrap="tests/bootstrap.php"
          colors="true"
-         convertErrorsToExceptions="true"
-         convertNoticesToExceptions="true"
-         convertWarningsToExceptions="true"
-         convertDeprecationsToExceptions="true"
-         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
-  <coverage/>
-  <testsuites>
-    <testsuite name="Unit Tests">
-      <directory>tests/unit</directory>
-    </testsuite>
-    <testsuite name="Integration Tests">
-      <directory>tests/integration</directory>
-    </testsuite>
-  </testsuites>
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/12.3/phpunit.xsd"
+         cacheDirectory=".phpunit.cache"
+         failOnDeprecation="true"
+         failOnPhpunitDeprecation="true"
+         failOnPhpunitWarning="true"
+         failOnNotice="true"
+         failOnRisky="true"
+         failOnWarning="true"
+         displayDetailsOnAllIssues="true"
+>
+    <testsuites>
+        <testsuite name="Unit Tests">
+            <directory>tests/unit</directory>
+        </testsuite>
+        <testsuite name="Integration Tests">
+            <directory>tests/integration</directory>
+        </testsuite>
+    </testsuites>
+    <source/>
 </phpunit>

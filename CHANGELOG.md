@@ -1,5 +1,6 @@
 ## Unreleased
 
+* Upgrade to PHPUnit 12.x
 * Drop support for PHP < 8.4
 
 ## 4.9.0 (2025-10-03)

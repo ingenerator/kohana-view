@@ -117,7 +117,7 @@ class HTMLRendererTest extends TestCase
         );
     }
 
-    public function test_it_does_not_allow_access_to_superglobals_in_template_scope()
+    public function test_it_does_not_allow_access_to_superglobals_in_template_scope(): never
     {
         // @todo: Find a way to prevent templates accessing superglobals - possibly needs to happen at compile stage
         $this->markTestIncomplete('Appears to be impossible to remove superglobals from template scope');
@@ -181,8 +181,6 @@ class HTMLRendererTest extends TestCase
         $this->template_manager = new TemplateManagerSpy();
         $this->vfs_root = vfsStream::setup('templates');
         $this->givenTemplate('Default');
-
-        parent::__construct();
     }
 
     protected function tearDown(): void

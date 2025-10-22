@@ -1,5 +1,6 @@
 ## Unreleased
 
+* Reorganise file structure and move to composer (PSR-4) autoloading instead of Kohana CFS 
 * Upgrade to PHPUnit 12.x
 * Drop support for PHP < 8.4
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace test\unit\Ingenerator\KohanaView\Renderer;
+namespace test\unit\Renderer;
 
 use ErrorException;
 use Ingenerator\KohanaView\Exception\TemplateNotFoundException;

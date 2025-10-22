@@ -1,6 +1,6 @@
 <?php
 
-namespace test\unit\Ingenerator\KohanaView;
+namespace test\unit;
 
 use DateTime;
 use Ingenerator\KohanaView\Exception\UnspecifiedTemplateNameException;

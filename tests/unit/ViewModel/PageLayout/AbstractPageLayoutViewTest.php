@@ -3,8 +3,8 @@
 namespace test\unit\ViewModel\PageLayout;
 
 use Ingenerator\KohanaView\ViewModel;
+use Ingenerator\KohanaView\ViewModel\NestedParentView;
 use Ingenerator\KohanaView\ViewModel\PageLayout\AbstractPageLayoutView;
-use Ingenerator\KohanaView\ViewModel\PageLayoutView;
 use PHPUnit\Framework\TestCase;
 
 class AbstractPageLayoutViewTest extends TestCase
@@ -22,7 +22,7 @@ class AbstractPageLayoutViewTest extends TestCase
             $subject
         );
         $this->assertInstanceOf(
-            PageLayoutView::class,
+            NestedParentView::class,
             $subject
         );
         $this->assertInstanceOf(

@@ -2,7 +2,9 @@
 
 namespace Ingenerator\KohanaView\ViewModel;
 
-interface NestedParentView extends PageLayoutView
+use Ingenerator\KohanaView\ViewModel;
+
+interface NestedParentView extends ViewModel
 {
     /**
      * @param string $html

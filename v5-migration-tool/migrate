@@ -1,0 +1,12 @@
+#!/bin/sh
+set -o errexit
+set -o nounset
+
+SCRIPT_PATH="${BASH_SOURCE:-$0}"
+ABS_SCRIPT_PATH="$(realpath "$SCRIPT_PATH")"
+DIR="$(dirname "$ABS_SCRIPT_PATH")"
+
+$DIR/vendor/bin/rector \
+  --config "$DIR/rector.php" \
+  --clear-cache \
+  --no-diffs

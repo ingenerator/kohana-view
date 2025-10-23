@@ -3,7 +3,7 @@
 namespace test\unit\ViewModel\PageLayout;
 
 use Ingenerator\KohanaView\ViewModel;
-use Ingenerator\KohanaView\ViewModel\PageContentView;
+use Ingenerator\KohanaView\ViewModel\NestedChildView;
 use Ingenerator\KohanaView\ViewModel\PageLayout\AbstractPageContentView;
 use PHPUnit\Framework\TestCase;
 use test\mock\ViewModel\PageLayout\DummyPageLayoutView;
@@ -20,7 +20,7 @@ class AbstractPageContentViewTest extends TestCase
             $subject
         );
         $this->assertInstanceOf(
-            PageContentView::class,
+            NestedChildView::class,
             $subject
         );
         $this->assertInstanceOf(

@@ -4,13 +4,12 @@ namespace Ingenerator\KohanaView\Renderer;
 
 use Ingenerator\KohanaView\Renderer;
 use Ingenerator\KohanaView\ViewModel\NestedChildView;
-use Ingenerator\KohanaView\ViewModel\PageContentView;
-use Ingenerator\KohanaView\ViewModel\PageLayoutView;
+use Ingenerator\KohanaView\ViewModel\NestedParentView;
 use Request;
 
 /**
- * Renders a PageContentView and - when appropriate - renders the generated output inside a PageLayoutView. By
- * default it will render the layout on normal requests (or when no request is present) but not on AJAX requests.
+ * Renders a NestedChildView and - when appropriate - renders the generated output inside a tree of NestedParentView.
+ * By default it will render the parents on normal requests (or when no request is present) but not on AJAX requests.
  * This behaviour can be customised by calling the setUseLayout method.
  *
  * For example, from a controller:
@@ -51,26 +50,20 @@ class PageLayoutRenderer
     /**
      * @return string
      */
-    public function render(PageContentView $content_view)
+    public function render(NestedChildView $content_view)
     {
         $content = $this->view_renderer->render($content_view);
         if ( ! $this->shouldUseLayout()) {
             return $content;
         }
 
-        if ($content_view instanceof NestedChildView) {
-            $parent = $content_view->getParentView();
-        } else {
-            $parent = $content_view->var_page();
-        }
-
-        return $this->renderParent($parent, $content);
+        return $this->renderParent($content_view->getParentView(), $content);
     }
 
     /**
      * @return string
      */
-    protected function renderParent(PageLayoutView $parent, $content_html)
+    protected function renderParent(NestedParentView $parent, $content_html)
     {
         $parent->setBodyHTML($content_html);
 

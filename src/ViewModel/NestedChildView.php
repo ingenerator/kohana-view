@@ -2,10 +2,9 @@
 
 namespace Ingenerator\KohanaView\ViewModel;
 
-interface NestedChildView extends PageContentView
+use Ingenerator\KohanaView\ViewModel;
+
+interface NestedChildView extends ViewModel
 {
-    /**
-     * @return NestedParentView
-     */
-    public function getParentView();
+    public function getParentView(): NestedParentView;
 }

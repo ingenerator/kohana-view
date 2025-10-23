@@ -7,7 +7,9 @@ use PhpCsFixer\Runner\Parallel\ParallelConfigFactory;
 use PhpCsFixer\Fixer\Phpdoc\PhpdocSeparationFixer;
 
 $finder = new Finder()
-    ->in(__DIR__);
+    ->in(__DIR__)
+    ->notPath('tests/e2e/build/')
+    ->notPath('tests/e2e/examples/');
 
 return new Config()
     ->setParallelConfig(ParallelConfigFactory::detect())

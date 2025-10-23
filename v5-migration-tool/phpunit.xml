@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!-- Config file for PHPUnit automated tests -->
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         colors="true"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/12.3/phpunit.xsd"
+         cacheDirectory=".phpunit.cache"
+         failOnDeprecation="true"
+         failOnPhpunitDeprecation="true"
+         failOnPhpunitWarning="true"
+         failOnNotice="true"
+         failOnRisky="true"
+         failOnWarning="true"
+         displayDetailsOnAllIssues="true"
+>
+    <testsuites>
+        <testsuite name="e2e">
+            <directory>tests/e2e</directory>
+        </testsuite>
+    </testsuites>
+    <source/>
+</phpunit>

@@ -32,3 +32,4 @@ README  text eol=lf
 /tests export-ignore
 /koharness.php export-ignore
 /phpunit.xml export-ignore
+/v5-migration-tool export-ignore

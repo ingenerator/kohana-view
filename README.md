@@ -163,12 +163,11 @@ etc. As with the old Controller_Template, for AJAX requests the renderer by defa
 and not any of the containing template(s) - this can be customised. This also means you can have your controller extend 
 any arbitrary base class.
 
-To use `PageLayoutRenderer` you need a minimum of two views - one implementing `PageLayoutView` and one implementing
-`PageContentView`. Note that these interfaces are now deprecated in favour of the more flexible `NestedChildView` and 
-`NestedParentView` and will be removed in a future release.
+To use `PageLayoutRenderer` you need a minimum of two views - one implementing `NestedChildView` and one implementing
+`NestedParentView`.
 
-You may want to extend from the provided `AbstractIntermediateLayoutView` and `AbstractNestedChildView` though this is 
-in no way compulsory. Your top-level page view should be an instance of `PageLayoutView`.
+You may want to extend from the provided `AbstractIntermediateLayoutView`, `AbstractPageContentView` and 
+`AbstractPageLayoutView` - though this is in no way compulsory.
 
 ```php
 <?php
@@ -209,31 +208,48 @@ class ContentWithSidebarLayoutView extends Ingenerator\KohanaView\ViewModel\Page
 <?php
 namespace View\Layout;
 
-class SidebarView extends AbstractViewModel
+class SidebarView extends Ingenerator\KohanaView\ViewModel\AbstractViewModel
 {
     // Whatever you want it to show
 }
 ```
 
 ```php
+namespace View\Layout;
+
+/**
+ * @property-read SitePageTemplateView $page 
+ */
+class SitePageContentView extends Ingenerator\KohanaView\ViewModel\PageLayout\AbstractPageContentView {
+
+  #[\Override]
+  protected function var_page(): SitePageTemplateView {
+    /*
+     * $view->page will be the top-level parent view. The generic AbstractPageContentView types this as any
+     * NestedParentView - if you know that your site will always inject a SitePageTemplateView then you can
+     * extend this view variable with the correct type to allow autocompletion in your templates.
+     */ 
+    $page = parent::var_page();
+    assert($page instanceof SitePageTemplateView, 'Expected to be within a SitePageTemplateView, got ' . $page::class);
+    return $page;    
+  }
+}
+```
+
+
+```php
 <?php
 namespace View\Pages;
 
 /**
- * @property-read View\Layout\SitePageTemplateView $page
- * @property-read string                           $name
+ * @property-read string $name
  */
-class HelloWorldView extends Ingenerator\KohanaView\ViewModel\PageLayout\AbstractNestedChildView
+class HelloWorldView extends View\Layout\SitePageContentView
 {
   protected $variables = [
     'name' => NULL
   ];
   
-  protected function var_page()
-  {
-      // If you want to make this available to set things from the view : it's not required
-      return $this->getUltimatePageView();
-  }
 }
 ```
 

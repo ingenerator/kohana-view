@@ -20,7 +20,7 @@ class AbstractPageContentViewTest extends TestCase
             $subject
         );
         $this->assertInstanceOf(
-            PageContentView::class,
+            ViewModel\NestedChildView::class,
             $subject
         );
         $this->assertInstanceOf(

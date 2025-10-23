@@ -1,5 +1,7 @@
 ## Unreleased
 
+* BREAKING: Drop PageContentView and PageLayoutView interfaces in favour
+  of the newer / more generic NestedChildView and NestedParentView.
 * Reorganise file structure and move to composer (PSR-4) autoloading instead of Kohana CFS 
 * Upgrade to PHPUnit 12.x
 * Drop support for PHP < 8.4

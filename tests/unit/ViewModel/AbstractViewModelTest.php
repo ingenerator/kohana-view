@@ -1,6 +1,6 @@
 <?php
 
-namespace test\unit\Ingenerator\KohanaView\ViewModel;
+namespace test\unit\ViewModel;
 
 use Ingenerator\KohanaView\Exception\InvalidDisplayVariablesException;
 use Ingenerator\KohanaView\Exception\InvalidViewVarAssignmentException;

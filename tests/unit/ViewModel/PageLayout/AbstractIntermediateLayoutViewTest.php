@@ -1,6 +1,6 @@
 <?php
 
-namespace test\unit\Ingenerator\KohanaView\ViewModel\PageLayout;
+namespace test\unit\ViewModel\PageLayout;
 
 use Override;
 use test\mock\ViewModel\PageLayout\DummyIntermediateLayoutView;

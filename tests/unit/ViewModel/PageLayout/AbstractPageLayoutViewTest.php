@@ -1,6 +1,6 @@
 <?php
 
-namespace test\unit\Ingenerator\KohanaView\ViewModel\PageLayout;
+namespace test\unit\ViewModel\PageLayout;
 
 use Ingenerator\KohanaView\ViewModel;
 use Ingenerator\KohanaView\ViewModel\PageLayout\AbstractPageLayoutView;

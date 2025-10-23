@@ -1,5 +1,7 @@
 ## Unreleased
 
+* Add a migration tool to assist with upgrading existing projects to 5.x
+  See [v5-migration-tool/UPGRADING-to-5.x.md](v5-migration-tool/UPGRADING-to-5.x.md)
 * BREAKING: Drop PageContentView and PageLayoutView interfaces in favour
   of the newer / more generic NestedChildView and NestedParentView.
 * Reorganise file structure and move to composer (PSR-4) autoloading instead of Kohana CFS 

@@ -5,8 +5,6 @@ namespace test\unit\ViewModel\PageLayout;
 use Ingenerator\KohanaView\Exception\UnassignedViewVarException;
 use Ingenerator\KohanaView\TemplateSpecifyingViewModel;
 use Ingenerator\KohanaView\ViewModel\NestedChildView;
-use Ingenerator\KohanaView\ViewModel\PageContentView;
-use Ingenerator\KohanaView\ViewModel\PageLayout\AbstractPageContentView;
 use Ingenerator\KohanaView\ViewModel\PageLayout\StaticPageContentView;
 use PHPUnit\Framework\TestCase;
 use test\mock\ViewModel\PageLayout\DummyPageLayoutView;

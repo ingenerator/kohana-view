@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Ingenerator\RiskyRectorRules\PhpDocToStrictTypes\AddPropertyTypeFromPhpDocRector;
 use Rector\Config\RectorConfig;
 use Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
@@ -40,4 +41,9 @@ return RectorConfig::configure()
     ])
     ->withImportNames(
         removeUnusedImports: true,
-    );
+    )
+    ->withRules([
+        AddPropertyTypeFromPhpDocRector::class,
+        Ingenerator\RiskyRectorRules\PhpDocToStrictTypes\AddParamTypeFromPhpDocRector::class,
+        Ingenerator\RiskyRectorRules\PhpDocToStrictTypes\AddReturnTypeFromPhpDocRector::class,
+    ]);

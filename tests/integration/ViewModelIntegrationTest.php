@@ -35,7 +35,7 @@ class ViewModelIntegrationTest extends TestCase
 
     protected $tmp_dir;
 
-    public function test_dependency_container_provides_shared_html_renderer()
+    public function test_dependency_container_provides_shared_html_renderer(): void
     {
         $dependencies = $this->givenDependenciesBootstrapped();
         $renderer = $dependencies->get('kohanaview.renderer.html');
@@ -48,7 +48,7 @@ class ViewModelIntegrationTest extends TestCase
         $this->markTestIncomplete('Cannot put the page layout renderer in the container without defining request');
     }
 
-    public function test_template_manager_cache_dir_defaults_to_inside_kohana_cache_dir()
+    public function test_template_manager_cache_dir_defaults_to_inside_kohana_cache_dir(): void
     {
         $this->givenFileWithContent('module/views/integration/test_view.php', 'Project source template');
         $dependencies = $this->givenDependenciesBootstrapped();
@@ -61,7 +61,7 @@ class ViewModelIntegrationTest extends TestCase
     #[TestWith(['TESTING'])]
     #[TestWith(['STAGING'])]
     #[TestWith(['PRODUCTION'])]
-    public function test_template_compiler_always_compiles_when_no_compiled_template($environment)
+    public function test_template_compiler_always_compiles_when_no_compiled_template($environment): void
     {
         $this->givenFileWithContent('module/views/any_view.php', 'Project source template');
 
@@ -76,7 +76,7 @@ class ViewModelIntegrationTest extends TestCase
     #[TestWith(['TESTING', false])]
     #[TestWith(['STAGING', false])]
     #[TestWith(['PRODUCTION', false])]
-    public function test_template_compiler_recompiles_always_only_in_development($environment, $expect_recompile)
+    public function test_template_compiler_recompiles_always_only_in_development($environment, $expect_recompile): void
     {
         $this->givenFileWithContent('cache/compiled_templates/any_view.php', self::STALE_COMPILED_STRING);
         $this->givenFileWithContent('module/views/any_view.php', 'Project source template');
@@ -94,7 +94,7 @@ class ViewModelIntegrationTest extends TestCase
         }
     }
 
-    public function test_it_renders_expected_view_for_view_model()
+    public function test_it_renders_expected_view_for_view_model(): void
     {
         $this->givenFileWithContent(
             'module/classes/View/Test/SomeModel.php',
@@ -123,7 +123,7 @@ class ViewModelIntegrationTest extends TestCase
         );
     }
 
-    public function test_it_automatically_escapes_view_variables()
+    public function test_it_automatically_escapes_view_variables(): void
     {
         $this->givenFileWithContent(
             'module/classes/View/Test/CustomView.php',

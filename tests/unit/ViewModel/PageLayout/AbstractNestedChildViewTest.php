@@ -17,17 +17,17 @@ class AbstractNestedChildViewTest extends TestCase
      */
     protected $parent_view;
 
-    public function test_it_is_initialisable()
+    public function test_it_is_initialisable(): void
     {
         $this->assertInstanceOf(NestedChildView::class, $this->newSubject());
     }
 
-    public function test_it_exposes_parent_view_on_new_interface()
+    public function test_it_exposes_parent_view_on_new_interface(): void
     {
         $this->assertSame($this->parent_view, $this->newSubject()->getParentView());
     }
 
-    public function test_it_throws_on_attempt_to_access_page_on_old_interface()
+    public function test_it_throws_on_attempt_to_access_page_on_old_interface(): void
     {
         $this->expectException(BadMethodCallException::class);
         $this->newSubject()->page;
@@ -52,7 +52,7 @@ class AbstractNestedChildViewTest extends TestCase
     }
 
     #[DataProvider('provider_parent_page')]
-    public function test_it_can_provide_ultimate_parent_page_up_the_chain($parent, $expect_page)
+    public function test_it_can_provide_ultimate_parent_page_up_the_chain($parent, $expect_page): void
     {
         $this->parent_view = $parent;
         $this->assertSame($expect_page, $this->newSubject()->getUltimatePageView());

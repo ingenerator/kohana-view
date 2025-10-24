@@ -11,14 +11,14 @@ use test\mock\ViewModel\PageLayout\DummyPageLayoutView;
 
 class StaticPageContentViewTest extends TestCase
 {
-    public function test_it_is_initialisable()
+    public function test_it_is_initialisable(): void
     {
         $subject = $this->newSubject();
         $this->assertInstanceOf(StaticPageContentView::class, $subject);
         $this->assertInstanceOf(NestedChildView::class, $subject);
     }
 
-    public function test_it_is_a_template_specifying_view()
+    public function test_it_is_a_template_specifying_view(): void
     {
         $this->assertInstanceOf(
             TemplateSpecifyingViewModel::class,
@@ -26,7 +26,7 @@ class StaticPageContentViewTest extends TestCase
         );
     }
 
-    public function test_it_specifies_template_based_on_page_path()
+    public function test_it_specifies_template_based_on_page_path(): void
     {
         $subject = $this->newSubject();
         $subject->display(['page_path' => 'some/content/page']);
@@ -36,7 +36,7 @@ class StaticPageContentViewTest extends TestCase
         );
     }
 
-    public function test_it_throws_if_page_path_not_set_before_get_template_name()
+    public function test_it_throws_if_page_path_not_set_before_get_template_name(): void
     {
         $this->expectException(UnassignedViewVarException::class);
         $this->newSubject()->getTemplateName();

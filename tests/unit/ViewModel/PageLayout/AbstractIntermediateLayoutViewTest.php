@@ -7,7 +7,7 @@ use test\mock\ViewModel\PageLayout\DummyIntermediateLayoutView;
 
 class AbstractIntermediateLayoutViewTest extends AbstractNestedChildViewTest
 {
-    public function test_it_exposes_injected_body_html_as_child_html()
+    public function test_it_exposes_injected_body_html_as_child_html(): void
     {
         $subject = $this->newSubject();
         $subject->setBodyHtml('<p>I am the middle bit of your page</p>');

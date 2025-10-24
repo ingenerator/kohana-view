@@ -12,7 +12,7 @@ use test\mock\ViewModel\ViewModelDummy;
 
 class ViewTemplateSelectorTest extends TestCase
 {
-    public function test_it_is_initialisable()
+    public function test_it_is_initialisable(): void
     {
         $this->assertInstanceOf(ViewTemplateSelector::class, $this->newSubject());
     }
@@ -28,7 +28,7 @@ class ViewTemplateSelectorTest extends TestCase
     #[TestWith(['Some\Namespaced\View', 'some/namespaced/view'])]
     #[TestWith(['Some_Underscore_DefaultView', 'some/underscore/default'])]
     #[TestWith(['Some_Underscore_DefaultViewModel', 'some/underscore/default'])]
-    public function test_by_default_it_selects_template_from_view_class_name($class_name, $expect_template)
+    public function test_by_default_it_selects_template_from_view_class_name($class_name, $expect_template): void
     {
         $this->assertSame(
             $expect_template,
@@ -38,19 +38,19 @@ class ViewTemplateSelectorTest extends TestCase
 
     #[TestWith(['some_template'])]
     #[TestWith(['some/nested/template'])]
-    public function test_template_specifying_view_class_can_indicate_which_template_to_use($template)
+    public function test_template_specifying_view_class_can_indicate_which_template_to_use($template): void
     {
         $view = new FixedTemplateViewModelStub($template);
         $this->assertSame($template, $this->newSubject()->getTemplateName($view));
     }
 
-    public function test_it_throws_if_template_specifying_view_does_not_specify_a_template()
+    public function test_it_throws_if_template_specifying_view_does_not_specify_a_template(): void
     {
         $this->expectException(UnspecifiedTemplateNameException::class);
         $this->newSubject()->getTemplateName(new FixedTemplateViewModelStub(null));
     }
 
-    public function test_it_throws_if_template_specifying_view_returns_non_string_template_name()
+    public function test_it_throws_if_template_specifying_view_returns_non_string_template_name(): void
     {
         $this->expectException(UnspecifiedTemplateNameException::class);
         $this->newSubject()->getTemplateName(new FixedTemplateViewModelStub(new DateTime()));

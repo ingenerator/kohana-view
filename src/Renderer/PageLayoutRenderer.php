@@ -85,10 +85,8 @@ class PageLayoutRenderer
      * non-AJAX requests (NULL).
      *
      * @param bool $use_layout
-     *
-     * @return void
      */
-    public function setUseLayout($use_layout)
+    public function setUseLayout($use_layout): void
     {
         $this->use_layout = $use_layout;
     }

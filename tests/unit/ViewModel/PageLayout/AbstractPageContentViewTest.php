@@ -12,7 +12,7 @@ class AbstractPageContentViewTest extends TestCase
 {
     protected $page_layout;
 
-    public function test_it_is_initialisable()
+    public function test_it_is_initialisable(): void
     {
         $subject = $this->newSubject();
         $this->assertInstanceOf(
@@ -29,12 +29,12 @@ class AbstractPageContentViewTest extends TestCase
         );
     }
 
-    public function test_it_exposes_page_as_view_variable()
+    public function test_it_exposes_page_as_view_variable(): void
     {
         $this->assertSame($this->page_layout, $this->newSubject()->page);
     }
 
-    public function test_it_does_not_take_page_as_display_value()
+    public function test_it_does_not_take_page_as_display_value(): void
     {
         $this->newSubject()->display(['message' => 'anything']);
 

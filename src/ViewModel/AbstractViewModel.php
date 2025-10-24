@@ -99,7 +99,7 @@ abstract class AbstractViewModel implements ViewModel
     /**
      * Set the data to be rendered in the view - note this does not actually render the view.
      */
-    public function display(array $variables)
+    public function display(array $variables): void
     {
         // Reinstate default variables to ensure they are in expected state when using view in a loop
         $variables = array_merge($this->default_variables, $variables);

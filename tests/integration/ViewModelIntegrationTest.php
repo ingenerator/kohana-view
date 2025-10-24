@@ -202,10 +202,8 @@ class ViewModelIntegrationTest extends TestCase
     /**
      * @param string $relative_path
      * @param string $content
-     *
-     * @return string
      */
-    protected function givenFileWithContent($relative_path, $content)
+    protected function givenFileWithContent($relative_path, $content): string
     {
         $full_path = $this->tmp_dir.'/'.$relative_path;
 

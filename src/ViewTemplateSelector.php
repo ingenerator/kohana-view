@@ -36,11 +36,9 @@ class ViewTemplateSelector
     }
 
     /**
-     * @return string
-     *
      * @throws UnexpectedValueException if no template is provided
      */
-    protected function validateSpecifiedTemplateName(TemplateSpecifyingViewModel $view)
+    protected function validateSpecifiedTemplateName(TemplateSpecifyingViewModel $view): string
     {
         $template = $view->getTemplateName();
         $view_class = $view::class;
@@ -55,10 +53,7 @@ class ViewTemplateSelector
         return $template;
     }
 
-    /**
-     * @return string
-     */
-    protected function calculateTemplateFromClassName(ViewModel $view)
+    protected function calculateTemplateFromClassName(ViewModel $view): string
     {
         $template = $view::class;
         $template = preg_replace('/\\\\|_/', '/', $template);

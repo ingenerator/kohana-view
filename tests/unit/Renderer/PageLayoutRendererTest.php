@@ -182,10 +182,7 @@ class SimpleRendererStub implements Renderer
         }
     }
 
-    /**
-     * @return string
-     */
-    public function render(ViewModel $view)
+    public function render(ViewModel $view): string
     {
         $hash = spl_object_hash($view);
         Assert::assertArrayHasKey(

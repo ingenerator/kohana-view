@@ -7,6 +7,7 @@ use Ingenerator\KohanaView\Renderer;
 use Ingenerator\KohanaView\TemplateManager;
 use Ingenerator\KohanaView\ViewModel;
 use Ingenerator\KohanaView\ViewTemplateSelector;
+use RuntimeException;
 
 use function ob_get_clean;
 use function ob_start;
@@ -27,7 +28,7 @@ class HTMLRenderer implements Renderer
         $this->template_manager = $template_manager;
     }
 
-    public function render(ViewModel $view): string|false
+    public function render(ViewModel $view): string
     {
         $template_path = $this->getTemplatePath($view);
 
@@ -36,6 +37,12 @@ class HTMLRenderer implements Renderer
             $this->includeWithAnonymousScope($view, $template_path);
         } finally {
             $output = ob_get_clean();
+        }
+
+        if ($output === false) {
+            // Has code within the view cleared out our output buffering? Whatever, we no longer have access
+            // to the expected content.
+            throw new RuntimeException('Could not render view: output buffering is not active');
         }
 
         return $output;

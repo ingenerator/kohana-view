@@ -137,7 +137,7 @@ class AbstractViewModelTest extends TestCase
         $this->assertTrue(true);
     }
 
-    protected function newSubject()
+    protected function newSubject(): TestViewModel
     {
         return new TestViewModel();
     }

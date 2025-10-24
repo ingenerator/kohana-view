@@ -48,7 +48,7 @@ class AbstractPageContentViewTest extends TestCase
         parent::setUp();
     }
 
-    protected function newSubject()
+    protected function newSubject(): TestableAbstractPageContentView
     {
         return new TestableAbstractPageContentView(
             $this->page_layout

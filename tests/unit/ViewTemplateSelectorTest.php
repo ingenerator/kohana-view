@@ -56,10 +56,7 @@ class ViewTemplateSelectorTest extends TestCase
         $this->newSubject()->getTemplateName(new FixedTemplateViewModelStub(new DateTime()));
     }
 
-    /**
-     * @return ViewTemplateSelector
-     */
-    protected function newSubject()
+    protected function newSubject(): ViewTemplateSelector
     {
         return new ViewTemplateSelector();
     }

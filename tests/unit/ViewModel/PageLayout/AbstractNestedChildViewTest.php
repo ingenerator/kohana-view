@@ -64,7 +64,7 @@ class AbstractNestedChildViewTest extends TestCase
         $this->parent_view = new DummyPageLayoutView();
     }
 
-    protected function newSubject()
+    protected function newSubject(): DummyNestedChildView
     {
         return new DummyNestedChildView($this->parent_view);
     }

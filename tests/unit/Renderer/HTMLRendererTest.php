@@ -188,7 +188,7 @@ class HTMLRendererTest extends TestCase
         error_reporting($this->old_error_reporting);
     }
 
-    protected function newSubject()
+    protected function newSubject(): HTMLRenderer
     {
         return new HTMLRenderer(
             $this->template_selector,

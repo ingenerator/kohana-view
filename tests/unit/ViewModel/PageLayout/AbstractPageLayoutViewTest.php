@@ -53,7 +53,7 @@ class AbstractPageLayoutViewTest extends TestCase
         $this->assertSame('And the title', $subject->title);
     }
 
-    protected function newSubject()
+    protected function newSubject(): TestablePageLayoutView
     {
         return new TestablePageLayoutView();
     }

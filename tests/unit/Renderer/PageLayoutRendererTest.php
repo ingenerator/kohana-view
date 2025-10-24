@@ -142,7 +142,7 @@ class PageLayoutRendererTest extends TestCase
         $this->renderer = new SimpleRendererStub();
     }
 
-    protected function newSubject()
+    protected function newSubject(): PageLayoutRenderer
     {
         return new PageLayoutRenderer(
             $this->renderer,

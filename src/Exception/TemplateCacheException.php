@@ -11,10 +11,8 @@ class TemplateCacheException extends RuntimeException
 {
     /**
      * @param string $path
-     *
-     * @return static
      */
-    public static function cannotCreateDirectory($path)
+    public static function cannotCreateDirectory($path): static
     {
         return new static(
             "Cannot create template cache directory in '$path'"
@@ -23,10 +21,8 @@ class TemplateCacheException extends RuntimeException
 
     /**
      * @param string $path
-     *
-     * @return static
      */
-    public static function pathNotWriteable($path)
+    public static function pathNotWriteable($path): static
     {
         return new static("Cannot write to compiled template path '$path'");
     }

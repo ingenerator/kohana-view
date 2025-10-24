@@ -11,10 +11,7 @@ use function sprintf;
  */
 class UnspecifiedTemplateNameException extends UnexpectedValueException
 {
-    /**
-     * @return static
-     */
-    public static function forEmptyValue(string $view_class)
+    public static function forEmptyValue(string $view_class): static
     {
         return new static(
             $view_class.'::getTemplateName() must return a template name, empty value returned'
@@ -24,10 +21,8 @@ class UnspecifiedTemplateNameException extends UnexpectedValueException
     /**
      * @param string $view_class
      * @param string $template
-     *
-     * @return static
      */
-    public static function forNonStringValue($view_class, $template)
+    public static function forNonStringValue($view_class, $template): static
     {
         return new static(
             sprintf(

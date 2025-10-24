@@ -9,10 +9,7 @@ use BadMethodCallException;
  */
 class InvalidViewVarAssignmentException extends BadMethodCallException
 {
-    /**
-     * @return static
-     */
-    public static function forReadOnlyVar(string $view_class, string $var_name)
+    public static function forReadOnlyVar(string $view_class, string $var_name): static
     {
         return new static(
             $view_class.' variables are read-only, cannot assign '.$var_name

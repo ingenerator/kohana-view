@@ -155,7 +155,7 @@ class CFSTemplateManagerTest extends TestCase
         parent::setUp();
     }
 
-    protected function newSubject()
+    protected function newSubject(): CFSTemplateManager
     {
         return new CFSTemplateManager($this->compiler, $this->options, $this->cfs_wrapper);
     }

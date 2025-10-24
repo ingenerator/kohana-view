@@ -217,7 +217,7 @@ class TemplateCompilerTest extends TestCase
         $this->assertEquals($expect, $this->newSubject()->compile($source));
     }
 
-    protected function newSubject()
+    protected function newSubject(): TemplateCompiler
     {
         return new TemplateCompiler($this->options);
     }

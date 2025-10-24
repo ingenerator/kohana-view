@@ -176,7 +176,7 @@ class ViewModelIntegrationTest extends TestCase
         parent::tearDown();
     }
 
-    protected function givenDependenciesBootstrapped()
+    protected function givenDependenciesBootstrapped(): Dependency_Container
     {
         $modules = Kohana::modules();
         $modules['dependencies'] = TEST_ROOT_PATH.'/../vendor/ingenerator/kohana-dependencies';

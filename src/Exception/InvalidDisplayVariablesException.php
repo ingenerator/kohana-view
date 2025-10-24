@@ -16,10 +16,8 @@ class InvalidDisplayVariablesException extends InvalidArgumentException
     /**
      * @param string $view_class
      * @param string[] $errors
-     *
-     * @return static
      */
-    public static function passedToDisplay($view_class, $errors)
+    public static function passedToDisplay($view_class, $errors): static
     {
         return new static(
             sprintf(

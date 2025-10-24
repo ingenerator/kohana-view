@@ -11,10 +11,8 @@ class TemplateNotFoundException extends InvalidArgumentException
 {
     /**
      * @param string $path
-     *
-     * @return static
      */
-    public static function forFullPath($path)
+    public static function forFullPath($path): static
     {
         return new static(
             "Failed to include template '$path'"
@@ -23,10 +21,8 @@ class TemplateNotFoundException extends InvalidArgumentException
 
     /**
      * @param string $rel_path
-     *
-     * @return static
      */
-    public static function forSourcePath($rel_path)
+    public static function forSourcePath($rel_path): static
     {
         return new static(
             "Cannot find template source file '$rel_path'"

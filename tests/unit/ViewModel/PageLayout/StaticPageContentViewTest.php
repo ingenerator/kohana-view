@@ -42,7 +42,7 @@ class StaticPageContentViewTest extends TestCase
         $this->newSubject()->getTemplateName();
     }
 
-    protected function newSubject()
+    protected function newSubject(): StaticPageContentView
     {
         return new StaticPageContentView(
             new DummyPageLayoutView()

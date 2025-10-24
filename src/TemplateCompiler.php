@@ -66,7 +66,7 @@ class TemplateCompiler
     /**
      * @param string[] $matches
      */
-    protected function compilePhpShortTag($matches): string
+    protected function compilePhpShortTag(array $matches): string
     {
         $var = trim($matches[1]);
         $terminator = $matches[2];

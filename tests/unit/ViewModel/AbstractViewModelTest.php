@@ -158,12 +158,12 @@ class TestViewModel extends AbstractViewModel
         'some_defined_var' => 'expected value',
     ];
 
-    protected function var_some_dynamic_var()
+    protected function var_some_dynamic_var(): string
     {
         return 'expected dynamic';
     }
 
-    protected function var_lazy_calculated_value()
+    protected function var_lazy_calculated_value(): string
     {
         $this->variables['lazy_calculated_value'] = 'cached';
 

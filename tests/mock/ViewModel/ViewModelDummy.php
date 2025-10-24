@@ -16,10 +16,8 @@ class ViewModelDummy implements ViewModel
 {
     /**
      * Create an instance with any arbitrary class name.
-     *
-     * @param string $class_name
      */
-    public static function make($class_name): self
+    public static function make(string $class_name): self
     {
         if (class_exists($class_name)) {
             $instance = new $class_name();

@@ -74,10 +74,7 @@ class CFSTemplateManager implements TemplateManager
         return $compiled_path;
     }
 
-    /**
-     * @param string $compiled_path
-     */
-    protected function isCompileRequired($compiled_path): bool
+    protected function isCompileRequired(string $compiled_path): bool
     {
         if ($this->recompile_always && ! isset($this->compiled_paths[$compiled_path])) {
             return true;
@@ -98,20 +95,13 @@ class CFSTemplateManager implements TemplateManager
         return file_get_contents($source_file);
     }
 
-    /**
-     * @param string $compiled_path
-     * @param string $compiled
-     */
-    protected function writeFile($compiled_path, $compiled)
+    protected function writeFile(string $compiled_path, string $compiled)
     {
         $this->ensureWriteableDirectory(dirname($compiled_path));
         file_put_contents($compiled_path, $compiled);
     }
 
-    /**
-     * @param string $path
-     */
-    protected function ensureWriteableDirectory($path)
+    protected function ensureWriteableDirectory(string $path)
     {
         try {
             Kohana::ensureDirectory($path, 0o777);

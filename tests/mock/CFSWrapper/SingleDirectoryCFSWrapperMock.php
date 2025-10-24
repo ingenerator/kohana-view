@@ -12,10 +12,7 @@ use function file_exists;
  */
 class SingleDirectoryCFSWrapperMock extends CFSWrapper
 {
-    /**
-     * @param string $root_path
-     */
-    public function __construct(protected $root_path)
+    public function __construct(protected string $root_path)
     {
     }
 

@@ -14,10 +14,9 @@ use function sprintf;
 class InvalidDisplayVariablesException extends InvalidArgumentException
 {
     /**
-     * @param string $view_class
      * @param string[] $errors
      */
-    public static function passedToDisplay($view_class, $errors): static
+    public static function passedToDisplay(string $view_class, array $errors): static
     {
         return new static(
             sprintf(

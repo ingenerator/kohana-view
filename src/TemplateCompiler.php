@@ -46,11 +46,9 @@ class TemplateCompiler
      * Compile a string containing a PHP template, automatically escaping variables that are echoed in PHP short tags,
      * and return the compiled PHP string.
      *
-     * @param string $source
-     *
      * @throws InvalidArgumentException if the template is empty or invalid
      */
-    public function compile($source): ?string
+    public function compile(string $source): ?string
     {
         if ( ! $source) {
             throw InvalidTemplateContentException::forEmptyTemplate();
@@ -97,11 +95,7 @@ class TemplateCompiler
         return $compiled;
     }
 
-    /**
-     * @param string $string
-     * @param string $prefix
-     */
-    protected function startsWith($string, $prefix): bool
+    protected function startsWith(string $string, string $prefix): bool
     {
         return str_starts_with($string, $prefix);
     }

@@ -9,11 +9,7 @@ use BadMethodCallException;
  */
 class UndefinedViewVarException extends BadMethodCallException
 {
-    /**
-     * @param string $view_class
-     * @param string $var_name
-     */
-    public static function forClassAndVar($view_class, $var_name): static
+    public static function forClassAndVar(string $view_class, string $var_name): static
     {
         return new static(
             "$view_class does not define a '$var_name' field"

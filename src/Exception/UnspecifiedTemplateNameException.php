@@ -18,11 +18,7 @@ class UnspecifiedTemplateNameException extends UnexpectedValueException
         );
     }
 
-    /**
-     * @param string $view_class
-     * @param string $template
-     */
-    public static function forNonStringValue($view_class, $template): static
+    public static function forNonStringValue(string $view_class, string $template): static
     {
         return new static(
             sprintf(

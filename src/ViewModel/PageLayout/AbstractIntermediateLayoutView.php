@@ -14,10 +14,7 @@ abstract class AbstractIntermediateLayoutView extends AbstractNestedChildView im
      */
     protected $child_html;
 
-    /**
-     * @param string $html
-     */
-    public function setBodyHtml($html): void
+    public function setBodyHtml(string $html): void
     {
         $this->child_html = $html;
     }

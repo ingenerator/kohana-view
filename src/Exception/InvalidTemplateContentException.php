@@ -9,11 +9,7 @@ use InvalidArgumentException;
  */
 class InvalidTemplateContentException extends InvalidArgumentException
 {
-    /**
-     * @param string $escape_method
-     * @param string $source_fragment
-     */
-    public static function containsImplicitDoubleEscape($escape_method, $source_fragment): static
+    public static function containsImplicitDoubleEscape(string $escape_method, string $source_fragment): static
     {
         return new static(
             "Invalid implicit double-escape in template - remove $escape_method from `$source_fragment` or mark as raw"

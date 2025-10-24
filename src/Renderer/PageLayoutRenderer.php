@@ -74,10 +74,8 @@ class PageLayoutRenderer
     /**
      * Configure whether to always wrap the content in the layout (TRUE), never (FALSE) or automatically for
      * non-AJAX requests (NULL).
-     *
-     * @param bool $use_layout
      */
-    public function setUseLayout($use_layout): void
+    public function setUseLayout(bool $use_layout): void
     {
         $this->use_layout = $use_layout;
     }

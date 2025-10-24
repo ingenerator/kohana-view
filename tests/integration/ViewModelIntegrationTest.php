@@ -196,10 +196,7 @@ class ViewModelIntegrationTest extends TestCase
         return $dependencies->get('kohanaview.template.manager');
     }
 
-    /**
-     * @param string $content
-     */
-    protected function givenFileWithContent(string $relative_path, $content): string
+    protected function givenFileWithContent(string $relative_path, string $content): string
     {
         $full_path = $this->tmp_dir.'/'.$relative_path;
 

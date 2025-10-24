@@ -9,20 +9,14 @@ use RuntimeException;
  */
 class TemplateCacheException extends RuntimeException
 {
-    /**
-     * @param string $path
-     */
-    public static function cannotCreateDirectory($path): static
+    public static function cannotCreateDirectory(string $path): static
     {
         return new static(
             "Cannot create template cache directory in '$path'"
         );
     }
 
-    /**
-     * @param string $path
-     */
-    public static function pathNotWriteable($path): static
+    public static function pathNotWriteable(string $path): static
     {
         return new static("Cannot write to compiled template path '$path'");
     }

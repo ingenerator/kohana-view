@@ -25,18 +25,12 @@ abstract class AbstractPageLayoutView extends AbstractViewModel implements Neste
         'title' => null,
     ];
 
-    /**
-     * @param string $title
-     */
-    public function setTitle($title): void
+    public function setTitle(string $title): void
     {
         $this->variables['title'] = $title;
     }
 
-    /**
-     * @param string $html
-     */
-    public function setBodyHTML($html): void
+    public function setBodyHTML(string $html): void
     {
         $this->variables['body_html'] = $html;
     }

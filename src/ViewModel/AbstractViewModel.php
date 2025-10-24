@@ -69,7 +69,7 @@ abstract class AbstractViewModel implements ViewModel
     /**
      * Get field values.
      */
-    public function __get(string $name)
+    public function __get(string $name): mixed
     {
         if (array_key_exists($name, $this->variables)) {
             return $this->variables[$name];
@@ -87,7 +87,7 @@ abstract class AbstractViewModel implements ViewModel
     /**
      * @throws BadMethodCallException values cannot be assigned except with the display method
      */
-    public function __set(string $name, $value)
+    public function __set(string $name, mixed $value)
     {
         throw InvalidViewVarAssignmentException::forReadOnlyVar(static::class, $name);
     }

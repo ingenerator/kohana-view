@@ -26,10 +26,7 @@ use Request;
  */
 class PageLayoutRenderer
 {
-    /**
-     * @var bool Whether to force (or not force) embedding the content in the layout
-     */
-    protected bool $use_layout;
+    protected ?bool $use_layout = null;
 
     protected Renderer $view_renderer;
 
@@ -64,18 +61,14 @@ class PageLayoutRenderer
 
     protected function shouldUseLayout(): bool
     {
-        if ($this->use_layout !== null) {
-            return $this->use_layout;
-        }
-
-        return ! ($this->current_request && $this->current_request->is_ajax());
+        return $this->use_layout ?? ! ($this->current_request && $this->current_request->is_ajax());
     }
 
     /**
      * Configure whether to always wrap the content in the layout (TRUE), never (FALSE) or automatically for
      * non-AJAX requests (NULL).
      */
-    public function setUseLayout(bool $use_layout): void
+    public function setUseLayout(?bool $use_layout): void
     {
         $this->use_layout = $use_layout;
     }

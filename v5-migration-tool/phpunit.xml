@@ -15,6 +15,8 @@
     <testsuites>
         <testsuite name="e2e">
             <directory>tests/e2e</directory>
+            <exclude>tests/e2e/examples</exclude>
+            <exclude>tests/e2e/build</exclude>
         </testsuite>
     </testsuites>
     <source/>

@@ -54,10 +54,20 @@ class EndToEndWithExampleFilesTest extends TestCase
     private static function initWorkingDirectory(): void
     {
         self::$working_dir = __DIR__.'/build';
-        self::$fs->remove(self::$working_dir);
+        // self::$fs->remove(self::$working_dir);
         foreach (self::providerExampleFiles() as $file) {
-            self::$fs->copy($file['source_path'], $file['working_path']);
+            self::$fs->copy($file['source_path'], $file['working_path'], overwriteNewerFiles: true);
         }
+
+        // The working copy of the migration needs to be able to autoload the kohana-view classes. This is a bit
+        // of a convoluted way to implement this but it works for the moment.
+        self::$fs->copy(
+            self::$examples_dir.'/composer.json',
+            self::$working_dir.'/composer.json',
+            overwriteNewerFiles: true,
+        );
+
+        new Process(['composer', 'install'], self::$working_dir)->mustRun();
     }
 
     private static function runMigrationTool(): void

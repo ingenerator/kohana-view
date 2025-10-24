@@ -8,8 +8,5 @@ namespace Ingenerator\KohanaView;
  */
 interface TemplateSpecifyingViewModel
 {
-    /**
-     * @return string
-     */
-    public function getTemplateName();
+    public function getTemplateName(): string;
 }

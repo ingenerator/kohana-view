@@ -9,8 +9,5 @@ namespace Ingenerator\KohanaView;
  */
 interface Renderer
 {
-    /**
-     * @return string
-     */
-    public function render(ViewModel $view);
+    public function render(ViewModel $view): string;
 }

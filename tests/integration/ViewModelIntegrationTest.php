@@ -191,10 +191,7 @@ class ViewModelIntegrationTest extends TestCase
         return new Dependency_Container($definitions);
     }
 
-    /**
-     * @return CFSTemplateManager
-     */
-    protected function getTemplateManager(Dependency_Container $dependencies)
+    protected function getTemplateManager(Dependency_Container $dependencies): CFSTemplateManager
     {
         return $dependencies->get('kohanaview.template.manager');
     }
@@ -216,10 +213,7 @@ class ViewModelIntegrationTest extends TestCase
         return $full_path;
     }
 
-    /**
-     * @return HTMLRenderer
-     */
-    protected function getHTMLRenderer(Dependency_Container $dependencies)
+    protected function getHTMLRenderer(Dependency_Container $dependencies): HTMLRenderer
     {
         return $dependencies->get('kohanaview.renderer.html');
     }

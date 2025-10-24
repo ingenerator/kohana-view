@@ -13,5 +13,5 @@ interface TemplateManager
      *
      * @return string Path to the compiled template file
      */
-    public function getPath($template_name);
+    public function getPath($template_name): string;
 }

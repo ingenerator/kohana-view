@@ -41,10 +41,7 @@ class HTMLRenderer implements Renderer
         return $output;
     }
 
-    /**
-     * @return string
-     */
-    protected function getTemplatePath(ViewModel $view)
+    protected function getTemplatePath(ViewModel $view): string
     {
         $template_name = $this->template_selector->getTemplateName($view);
         $template = $this->template_manager->getPath($template_name);

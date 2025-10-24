@@ -110,7 +110,7 @@ abstract class AbstractViewModel implements ViewModel
     /**
      * @return string[] of errors
      */
-    protected function validateDisplayVariables(array $variables)
+    protected function validateDisplayVariables(array $variables): array
     {
         $errors = [];
         $provided_variables = array_keys($variables);

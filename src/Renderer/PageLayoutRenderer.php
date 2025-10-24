@@ -41,10 +41,7 @@ class PageLayoutRenderer
         $this->current_request = $current_request;
     }
 
-    /**
-     * @return string
-     */
-    public function render(NestedChildView $content_view)
+    public function render(NestedChildView $content_view): string
     {
         $content = $this->view_renderer->render($content_view);
         if ( ! $this->shouldUseLayout()) {
@@ -54,10 +51,7 @@ class PageLayoutRenderer
         return $this->renderParent($content_view->getParentView(), $content);
     }
 
-    /**
-     * @return string
-     */
-    protected function renderParent(NestedParentView $parent, $content_html)
+    protected function renderParent(NestedParentView $parent, $content_html): string
     {
         $parent->setBodyHTML($content_html);
 
@@ -68,10 +62,7 @@ class PageLayoutRenderer
         return $this->view_renderer->render($parent);
     }
 
-    /**
-     * @return bool
-     */
-    protected function shouldUseLayout()
+    protected function shouldUseLayout(): bool
     {
         if ($this->use_layout !== null) {
             return $this->use_layout;

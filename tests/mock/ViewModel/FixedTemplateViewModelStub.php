@@ -10,10 +10,7 @@ class FixedTemplateViewModelStub extends ViewModelDummy implements TemplateSpeci
     {
     }
 
-    /**
-     * @return string
-     */
-    public function getTemplateName()
+    public function getTemplateName(): string
     {
         return $this->template;
     }

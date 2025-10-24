@@ -28,14 +28,10 @@ class PageLayoutRenderer
 {
     protected ?bool $use_layout = null;
 
-    protected Renderer $view_renderer;
-
-    protected ?Request $current_request;
-
-    public function __construct(Renderer $view_renderer, ?Request $current_request = null)
-    {
-        $this->view_renderer = $view_renderer;
-        $this->current_request = $current_request;
+    public function __construct(
+        protected Renderer $view_renderer,
+        protected ?Request $current_request = null,
+    ) {
     }
 
     public function render(NestedChildView $content_view): string

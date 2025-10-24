@@ -18,14 +18,10 @@ use function ob_start;
  */
 class HTMLRenderer implements Renderer
 {
-    protected TemplateManager $template_manager;
-
-    protected ViewTemplateSelector $template_selector;
-
-    public function __construct(ViewTemplateSelector $template_selector, TemplateManager $template_manager)
-    {
-        $this->template_selector = $template_selector;
-        $this->template_manager = $template_manager;
+    public function __construct(
+        protected ViewTemplateSelector $template_selector,
+        protected TemplateManager $template_manager,
+    ) {
     }
 
     public function render(ViewModel $view): string

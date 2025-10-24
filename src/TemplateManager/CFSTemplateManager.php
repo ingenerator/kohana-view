@@ -33,8 +33,6 @@ class CFSTemplateManager implements TemplateManager
 
     protected array $compiled_paths = [];
 
-    protected TemplateCompiler $compiler;
-
     protected bool $recompile_always;
 
     protected string $template_dir;
@@ -45,10 +43,12 @@ class CFSTemplateManager implements TemplateManager
      * * recompile_always => whether to recompile each template on every execution,
      * * template_dir     => directory (in the cascading filesystem) to search for templates
      */
-    public function __construct(TemplateCompiler $compiler, array $options, ?CFSWrapper $cascading_files = null)
-    {
+    public function __construct(
+        protected TemplateCompiler $compiler,
+        array $options,
+        ?CFSWrapper $cascading_files = null,
+    ) {
         $this->cascading_files = $cascading_files ?: new CFSWrapper();
-        $this->compiler = $compiler;
         $this->cache_dir = rtrim((string) $options['cache_dir'], '/');
         $this->recompile_always = Arr::get($options, 'recompile_always', false);
         $this->template_dir = rtrim(Arr::get($options, 'template_dir', 'views'), '/');

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
 use Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector;
-use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnNeverTypeRector;
 use Rector\TypeDeclaration\Rector\Function_\AddFunctionVoidReturnTypeWhereNoReturnRector;
 
@@ -23,8 +22,6 @@ return RectorConfig::configure()
     ->withPhpSets()
     ->withAttributesSets(all: true)
     ->withSkip([
-        // Temporarily disable while we're doing typehinting to avoid mixing these in
-        ClassPropertyAssignToConstructorPromotionRector::class,
         ClosureToArrowFunctionRector::class => [
             // Needs to be a traditional function in order to restrict the scope
             __DIR__.'/src/Renderer/HTMLRenderer.php',

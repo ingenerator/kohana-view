@@ -51,7 +51,7 @@ abstract class AbstractViewModel implements ViewModel
     /**
      * @var array The actual view data
      */
-    protected $variables = [];
+    protected array $variables = [];
 
     /**
      * @var string[] The names of the valid set of fields that must be passed to the display() method

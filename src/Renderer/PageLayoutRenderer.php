@@ -31,15 +31,9 @@ class PageLayoutRenderer
      */
     protected $use_layout;
 
-    /**
-     * @var Renderer
-     */
-    protected $view_renderer;
+    protected Renderer $view_renderer;
 
-    /**
-     * @var Request
-     */
-    protected $current_request;
+    protected ?Request $current_request;
 
     public function __construct(Renderer $view_renderer, ?Request $current_request = null)
     {

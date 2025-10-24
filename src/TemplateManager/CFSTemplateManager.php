@@ -27,35 +27,23 @@ use function rtrim;
  */
 class CFSTemplateManager implements TemplateManager
 {
-    /**
-     * @var string
-     */
-    protected $cache_dir;
+    protected string $cache_dir;
 
-    /**
-     * @var CFSWrapper
-     */
-    protected $cascading_files;
+    protected CFSWrapper $cascading_files;
 
     /**
      * @var array
      */
     protected $compiled_paths = [];
 
-    /**
-     * @var TemplateCompiler
-     */
-    protected $compiler;
+    protected TemplateCompiler $compiler;
 
     /**
      * @var bool
      */
     protected $recompile_always;
 
-    /**
-     * @var string
-     */
-    protected $template_dir;
+    protected string $template_dir;
 
     /**
      * Valid options:

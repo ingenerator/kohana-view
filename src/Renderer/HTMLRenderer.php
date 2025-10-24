@@ -17,15 +17,9 @@ use function ob_start;
  */
 class HTMLRenderer implements Renderer
 {
-    /**
-     * @var TemplateManager
-     */
-    protected $template_manager;
+    protected TemplateManager $template_manager;
 
-    /**
-     * @var ViewTemplateSelector
-     */
-    protected $template_selector;
+    protected ViewTemplateSelector $template_selector;
 
     public function __construct(ViewTemplateSelector $template_selector, TemplateManager $template_manager)
     {

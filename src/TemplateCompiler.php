@@ -33,10 +33,7 @@ use function trim;
  */
 class TemplateCompiler
 {
-    /**
-     * @var array
-     */
-    protected $options = [
+    protected array $options = [
         'escape_method' => 'HTML::chars',
     ];
 

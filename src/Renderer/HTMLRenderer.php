@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Ingenerator\KohanaView\Renderer;
 
 use Ingenerator\KohanaView\Exception\TemplateNotFoundException;

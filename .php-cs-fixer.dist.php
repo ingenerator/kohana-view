@@ -64,6 +64,5 @@ return new Config()
                 'var',
             ],
         ],
-        'declare_strict_types' => false,
     ])
     ->setFinder($finder);

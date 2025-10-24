@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace test\e2e;
 
 use PHPUnit\Framework\Attributes\DataProvider;

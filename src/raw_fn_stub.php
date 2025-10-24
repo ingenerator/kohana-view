@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This function is never actually called - the template compiler uses it as a marker to render
  * the value directly without escaping it. It is defined here to allow IDE's to cope without marking

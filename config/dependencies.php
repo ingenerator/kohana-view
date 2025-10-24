@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Ingenerator\KohanaView\Renderer\HTMLRenderer;
 use Ingenerator\KohanaView\Renderer\PageLayoutRenderer;
 use Ingenerator\KohanaView\TemplateCompiler;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace test\unit\ViewModel\PageLayout;
 
 use Ingenerator\KohanaView\ViewModel\NestedChildView;

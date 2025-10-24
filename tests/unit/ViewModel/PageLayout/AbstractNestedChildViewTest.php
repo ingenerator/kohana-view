@@ -33,7 +33,7 @@ class AbstractNestedChildViewTest extends TestCase
         $this->newSubject()->page;
     }
 
-    public static function provider_parent_page()
+    public static function provider_parent_page(): array
     {
         return [
             [

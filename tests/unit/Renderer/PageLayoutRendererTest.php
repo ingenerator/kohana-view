@@ -99,7 +99,7 @@ class PageLayoutRendererTest extends TestCase
         );
     }
 
-    public static function provider_render_chain()
+    public static function provider_render_chain(): array
     {
         return [
             [

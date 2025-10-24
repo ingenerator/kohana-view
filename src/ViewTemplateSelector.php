@@ -39,7 +39,7 @@ class ViewTemplateSelector
     {
         $template = $view->getTemplateName();
         $view_class = $view::class;
-        if ( ! $template) {
+        if ($template === '' || $template === '0') {
             throw UnspecifiedTemplateNameException::forEmptyValue($view_class);
         }
 

@@ -6,8 +6,5 @@ use Ingenerator\KohanaView\ViewModel;
 
 interface NestedParentView extends ViewModel
 {
-    /**
-     * @return void
-     */
-    public function setBodyHtml(string $html);
+    public function setBodyHtml(string $html): void;
 }

@@ -39,7 +39,7 @@ class ViewModelDummy implements ViewModel
         return new $class_name();
     }
 
-    public function display(array $variables)
+    public function display(array $variables): void
     {
     }
 }

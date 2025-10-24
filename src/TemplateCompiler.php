@@ -50,7 +50,7 @@ class TemplateCompiler
      */
     public function compile(string $source): ?string
     {
-        if ($source === '' || $source === '0') {
+        if ($source === '') {
             throw InvalidTemplateContentException::forEmptyTemplate();
         }
 

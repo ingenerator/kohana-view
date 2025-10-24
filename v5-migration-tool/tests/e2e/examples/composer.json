@@ -1,0 +1,30 @@
+{
+  "require": {
+    "ingenerator/kohana-view": "*@dev"
+  },
+  "repositories": [
+    {
+      "type": "path",
+      "url": "../../../../",
+      "options": {
+        "symlink": false
+      }
+    },
+    {
+      "type": "composer",
+      "url": "https://php-packages.ingenerator.com"
+    }
+  ],
+  "extra": {
+    "installer-paths": {
+      "vendor/{$vendor}/{$name}": [
+        "type:kohana-module"
+      ]
+    }
+  },
+  "config": {
+    "allow-plugins": {
+      "composer/installers": true
+    }
+  }
+}

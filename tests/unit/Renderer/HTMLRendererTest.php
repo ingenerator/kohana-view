@@ -224,7 +224,7 @@ class TemplateManagerSpy implements TemplateManager
         $this->template_path = $path;
     }
 
-    public function getPath($template_name)
+    public function getPath($template_name): string
     {
         $this->calls[] = $template_name;
 

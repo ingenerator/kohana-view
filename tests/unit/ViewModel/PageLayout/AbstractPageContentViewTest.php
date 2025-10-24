@@ -58,7 +58,7 @@ class AbstractPageContentViewTest extends TestCase
 
 class TestableAbstractPageContentView extends AbstractPageContentView
 {
-    protected $variables = [
+    protected array $variables = [
         'message' => null,
     ];
 }

@@ -7,7 +7,7 @@ use Ingenerator\KohanaView\TemplateSpecifyingViewModel;
 
 class StaticPageContentView extends AbstractPageContentView implements TemplateSpecifyingViewModel
 {
-    protected $variables = [
+    protected array $variables = [
         'page_path' => null,
     ];
 

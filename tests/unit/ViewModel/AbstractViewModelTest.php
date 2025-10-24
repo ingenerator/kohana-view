@@ -150,11 +150,11 @@ class AbstractViewModelTest extends TestCase
  */
 class TestViewModel extends AbstractViewModel
 {
-    protected $default_variables = [
+    protected array $default_variables = [
         'some_defaulted_var' => 'default value',
     ];
 
-    protected $variables = [
+    protected array $variables = [
         'some_defined_var' => 'expected value',
     ];
 

@@ -133,7 +133,7 @@ class ViewModelIntegrationTest extends TestCase
 
                 class CustomView extends \Ingenerator\KohanaView\ViewModel\AbstractViewModel
                 {
-                    protected $variables = [
+                    protected array $variables = [
                         'html_string' => '<p>Stuff&Things</p>'
                     ];
                 }

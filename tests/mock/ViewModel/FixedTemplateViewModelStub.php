@@ -6,7 +6,7 @@ use Ingenerator\KohanaView\TemplateSpecifyingViewModel;
 
 class FixedTemplateViewModelStub extends ViewModelDummy implements TemplateSpecifyingViewModel
 {
-    public function __construct(private $template)
+    public function __construct(private readonly string $template)
     {
     }
 

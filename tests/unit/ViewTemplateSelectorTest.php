@@ -2,7 +2,6 @@
 
 namespace test\unit;
 
-use DateTime;
 use Ingenerator\KohanaView\Exception\UnspecifiedTemplateNameException;
 use Ingenerator\KohanaView\ViewTemplateSelector;
 use PHPUnit\Framework\Attributes\TestWith;
@@ -47,13 +46,7 @@ class ViewTemplateSelectorTest extends TestCase
     public function test_it_throws_if_template_specifying_view_does_not_specify_a_template(): void
     {
         $this->expectException(UnspecifiedTemplateNameException::class);
-        $this->newSubject()->getTemplateName(new FixedTemplateViewModelStub(null));
-    }
-
-    public function test_it_throws_if_template_specifying_view_returns_non_string_template_name(): void
-    {
-        $this->expectException(UnspecifiedTemplateNameException::class);
-        $this->newSubject()->getTemplateName(new FixedTemplateViewModelStub(new DateTime()));
+        $this->newSubject()->getTemplateName(new FixedTemplateViewModelStub(''));
     }
 
     protected function newSubject(): ViewTemplateSelector

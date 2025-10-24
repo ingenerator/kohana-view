@@ -100,10 +100,8 @@ class TemplateCompiler
     /**
      * @param string $string
      * @param string $prefix
-     *
-     * @return bool
      */
-    protected function startsWith($string, $prefix)
+    protected function startsWith($string, $prefix): bool
     {
         return str_starts_with($string, $prefix);
     }

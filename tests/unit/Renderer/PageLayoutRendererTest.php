@@ -23,7 +23,7 @@ class PageLayoutRendererTest extends TestCase
 {
     protected SimpleRendererStub $renderer;
 
-    protected Request $request;
+    protected ?Request $request = null;
 
     public function test_it_is_initialisable(): void
     {

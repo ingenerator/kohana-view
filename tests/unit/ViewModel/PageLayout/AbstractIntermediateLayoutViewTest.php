@@ -2,9 +2,9 @@
 
 namespace test\unit\ViewModel\PageLayout;
 
+use Ingenerator\KohanaView\ViewModel\NestedChildView;
 use Override;
 use test\mock\ViewModel\PageLayout\DummyIntermediateLayoutView;
-use test\mock\ViewModel\PageLayout\DummyNestedChildView;
 
 class AbstractIntermediateLayoutViewTest extends AbstractNestedChildViewTest
 {
@@ -16,7 +16,7 @@ class AbstractIntermediateLayoutViewTest extends AbstractNestedChildViewTest
     }
 
     #[Override]
-    protected function newSubject(): DummyNestedChildView
+    protected function newSubject(): NestedChildView
     {
         return new DummyIntermediateLayoutView($this->parent_view);
     }

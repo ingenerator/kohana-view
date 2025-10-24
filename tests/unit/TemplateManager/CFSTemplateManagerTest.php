@@ -25,20 +25,11 @@ class CFSTemplateManagerTest extends TestCase
 {
     protected $options = [];
 
-    /**
-     * @var SingleDirectoryCFSWrapperMock
-     */
-    protected $cfs_wrapper;
+    protected SingleDirectoryCFSWrapperMock $cfs_wrapper;
 
-    /**
-     * @var SpyingTemplateCompiler
-     */
-    protected $compiler;
+    protected SpyingTemplateCompiler $compiler;
 
-    /**
-     * @var vfsStreamDirectory
-     */
-    protected $vfs_root;
+    protected vfsStreamDirectory $vfs_root;
 
     public function test_it_is_initialisable(): void
     {

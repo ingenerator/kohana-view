@@ -9,10 +9,7 @@ use PHPUnit\Framework\TestCase;
 
 class AbstractPageLayoutViewTest extends TestCase
 {
-    /**
-     * @var ViewModel
-     */
-    protected $body_view;
+    protected ViewModel $body_view;
 
     public function test_it_is_initialisable(): void
     {

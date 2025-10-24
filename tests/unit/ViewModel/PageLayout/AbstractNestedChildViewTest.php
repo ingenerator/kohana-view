@@ -12,10 +12,7 @@ use test\mock\ViewModel\PageLayout\DummyPageLayoutView;
 
 class AbstractNestedChildViewTest extends TestCase
 {
-    /**
-     * @var DummyPageLayoutView
-     */
-    protected $parent_view;
+    protected DummyPageLayoutView $parent_view;
 
     public function test_it_is_initialisable(): void
     {

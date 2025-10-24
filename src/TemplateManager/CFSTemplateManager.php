@@ -31,17 +31,11 @@ class CFSTemplateManager implements TemplateManager
 
     protected CFSWrapper $cascading_files;
 
-    /**
-     * @var array
-     */
-    protected $compiled_paths = [];
+    protected array $compiled_paths = [];
 
     protected TemplateCompiler $compiler;
 
-    /**
-     * @var bool
-     */
-    protected $recompile_always;
+    protected bool $recompile_always;
 
     protected string $template_dir;
 

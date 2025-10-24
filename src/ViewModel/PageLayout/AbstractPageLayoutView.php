@@ -17,10 +17,7 @@ use Ingenerator\KohanaView\ViewModel\NestedParentView;
  */
 abstract class AbstractPageLayoutView extends AbstractViewModel implements NestedParentView
 {
-    /**
-     * @var array
-     */
-    protected $variables = [
+    protected array $variables = [
         'body_html' => null,
         'title' => null,
     ];

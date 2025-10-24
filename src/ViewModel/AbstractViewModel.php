@@ -46,7 +46,7 @@ abstract class AbstractViewModel implements ViewModel
     /**
      * @var array Variables that will be set back to defaults on each display unless a new value is passed
      */
-    protected $default_variables = [];
+    protected array $default_variables = [];
 
     /**
      * @var array The actual view data
@@ -56,7 +56,7 @@ abstract class AbstractViewModel implements ViewModel
     /**
      * @var string[] The names of the valid set of fields that must be passed to the display() method
      */
-    protected $expect_var_names = [];
+    protected array $expect_var_names = [];
 
     public function __construct()
     {

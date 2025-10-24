@@ -26,25 +26,13 @@ use function uniqid;
 
 class HTMLRendererTest extends TestCase
 {
-    /**
-     * @var TemplateManagerSpy
-     */
-    protected $template_manager;
+    protected TemplateManagerSpy $template_manager;
 
-    /**
-     * @var ViewTemplateSelectorSpy
-     */
-    protected $template_selector;
+    protected ViewTemplateSelectorSpy $template_selector;
 
-    /**
-     * @var vfsStreamDirectory
-     */
-    protected $vfs_root;
+    protected vfsStreamDirectory $vfs_root;
 
-    /**
-     * @var int
-     */
-    protected $old_error_reporting;
+    protected int $old_error_reporting;
 
     public function test_it_is_initialisable(): void
     {

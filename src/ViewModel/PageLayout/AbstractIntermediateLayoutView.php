@@ -12,7 +12,7 @@ abstract class AbstractIntermediateLayoutView extends AbstractNestedChildView im
     /**
      * @var string set at rendering time by the PageLayoutRenderer
      */
-    protected $child_html;
+    protected string $child_html;
 
     public function setBodyHtml(string $html): void
     {

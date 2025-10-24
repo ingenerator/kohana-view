@@ -29,7 +29,7 @@ class PageLayoutRenderer
     /**
      * @var bool Whether to force (or not force) embedding the content in the layout
      */
-    protected $use_layout;
+    protected bool $use_layout;
 
     protected Renderer $view_renderer;
 

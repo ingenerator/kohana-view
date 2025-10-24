@@ -21,15 +21,9 @@ use function spl_object_hash;
 
 class PageLayoutRendererTest extends TestCase
 {
-    /**
-     * @var SimpleRendererStub
-     */
-    protected $renderer;
+    protected SimpleRendererStub $renderer;
 
-    /**
-     * @var Request
-     */
-    protected $request;
+    protected Request $request;
 
     public function test_it_is_initialisable(): void
     {

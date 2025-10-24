@@ -43,7 +43,7 @@ class PageLayoutRendererTest extends TestCase
     #[TestWith([['is_ajax' => false]])]
     #[TestWith([null])]
     public function test_it_renders_just_content_for_all_requests_when_use_layout_explicit_false(
-        $request,
+        ?array $request,
     ): void {
         $this->request = $this->stubRequest($request);
 
@@ -59,7 +59,7 @@ class PageLayoutRendererTest extends TestCase
     #[TestWith([['is_ajax' => false]])]
     #[TestWith([null])]
     public function test_it_renders_layout_containing_content_for_all_requests_when_use_layout_explicit_true(
-        $request,
+        ?array $request,
     ): void {
         $this->request = $this->stubRequest($request);
         $subject = $this->newSubject();

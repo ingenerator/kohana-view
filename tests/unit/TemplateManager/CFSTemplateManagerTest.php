@@ -160,10 +160,7 @@ class CFSTemplateManagerTest extends TestCase
         return new CFSTemplateManager($this->compiler, $this->options, $this->cfs_wrapper);
     }
 
-    /**
-     * @param string $compiled_url
-     */
-    protected function assertCompiledToFile($compiled_url)
+    protected function assertCompiledToFile(string $compiled_url)
     {
         $this->assertFileExists($compiled_url, "Compiled file $compiled_url should exist");
         $this->assertSame(SpyingTemplateCompiler::COMPILED_OUTPUT, file_get_contents($compiled_url));

@@ -61,7 +61,7 @@ class ViewModelIntegrationTest extends TestCase
     #[TestWith(['TESTING'])]
     #[TestWith(['STAGING'])]
     #[TestWith(['PRODUCTION'])]
-    public function test_template_compiler_always_compiles_when_no_compiled_template($environment): void
+    public function test_template_compiler_always_compiles_when_no_compiled_template(string $environment): void
     {
         $this->givenFileWithContent('module/views/any_view.php', 'Project source template');
 
@@ -76,7 +76,7 @@ class ViewModelIntegrationTest extends TestCase
     #[TestWith(['TESTING', false])]
     #[TestWith(['STAGING', false])]
     #[TestWith(['PRODUCTION', false])]
-    public function test_template_compiler_recompiles_always_only_in_development($environment, $expect_recompile): void
+    public function test_template_compiler_recompiles_always_only_in_development(string $environment, $expect_recompile): void
     {
         $this->givenFileWithContent('cache/compiled_templates/any_view.php', self::STALE_COMPILED_STRING);
         $this->givenFileWithContent('module/views/any_view.php', 'Project source template');
@@ -200,10 +200,9 @@ class ViewModelIntegrationTest extends TestCase
     }
 
     /**
-     * @param string $relative_path
      * @param string $content
      */
-    protected function givenFileWithContent($relative_path, $content): string
+    protected function givenFileWithContent(string $relative_path, $content): string
     {
         $full_path = $this->tmp_dir.'/'.$relative_path;
 

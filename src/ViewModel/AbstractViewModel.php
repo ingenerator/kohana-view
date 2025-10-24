@@ -68,10 +68,8 @@ abstract class AbstractViewModel implements ViewModel
 
     /**
      * Get field values.
-     *
-     * @param string $name
      */
-    public function __get($name)
+    public function __get(string $name)
     {
         if (array_key_exists($name, $this->variables)) {
             return $this->variables[$name];

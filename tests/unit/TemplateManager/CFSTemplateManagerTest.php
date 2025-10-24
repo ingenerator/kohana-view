@@ -174,7 +174,7 @@ class CFSTemplateManagerTest extends TestCase
         );
     }
 
-    protected function givenFile($path_to_file, $content)
+    protected function givenFile(string $path_to_file, $content)
     {
         $file = vfsStream::url('template/'.$path_to_file);
         $path = dirname($file);

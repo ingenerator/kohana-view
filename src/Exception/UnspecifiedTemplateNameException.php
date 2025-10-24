@@ -12,11 +12,9 @@ use function sprintf;
 class UnspecifiedTemplateNameException extends UnexpectedValueException
 {
     /**
-     * @param string $view_class
-     *
      * @return static
      */
-    public static function forEmptyValue($view_class)
+    public static function forEmptyValue(string $view_class)
     {
         return new static(
             $view_class.'::getTemplateName() must return a template name, empty value returned'

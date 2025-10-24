@@ -213,7 +213,7 @@ class ViewTemplateSelectorSpy extends ViewTemplateSelector
     protected $calls = [];
 
     #[Override]
-    public function getTemplateName(ViewModel $view)
+    public function getTemplateName(ViewModel $view): string
     {
         $this->calls[] = $view;
 

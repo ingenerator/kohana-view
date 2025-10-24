@@ -4,6 +4,7 @@ namespace test\unit\ViewModel\PageLayout;
 
 use Override;
 use test\mock\ViewModel\PageLayout\DummyIntermediateLayoutView;
+use test\mock\ViewModel\PageLayout\DummyNestedChildView;
 
 class AbstractIntermediateLayoutViewTest extends AbstractNestedChildViewTest
 {
@@ -15,7 +16,7 @@ class AbstractIntermediateLayoutViewTest extends AbstractNestedChildViewTest
     }
 
     #[Override]
-    protected function newSubject()
+    protected function newSubject(): DummyNestedChildView
     {
         return new DummyIntermediateLayoutView($this->parent_view);
     }

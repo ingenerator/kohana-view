@@ -16,7 +16,7 @@ class InvalidTemplateContentException extends InvalidArgumentException
         );
     }
 
-    public static function hasLegacyRawEscapePrefix($source_fragment): static
+    public static function hasLegacyRawEscapePrefix(string $source_fragment): static
     {
         return new static(
             "Invalid legacy-style <?=! raw escape prefix in template, please change `$source_fragment` to use `<?=raw()`"

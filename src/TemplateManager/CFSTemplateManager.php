@@ -92,7 +92,7 @@ class CFSTemplateManager implements TemplateManager
         file_put_contents($compiled_path, $compiled);
     }
 
-    protected function ensureWriteableDirectory(string $path)
+    protected function ensureWriteableDirectory(string $path): void
     {
         try {
             Kohana::ensureDirectory($path, 0o777);

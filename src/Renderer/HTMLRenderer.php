@@ -56,7 +56,7 @@ class HTMLRenderer implements Renderer
         return $template;
     }
 
-    protected function includeWithAnonymousScope(ViewModel $view, string $template_path)
+    protected function includeWithAnonymousScope(ViewModel $view, string $template_path): void
     {
         /** @noinspection PhpUnusedParameterInspection */
         /** @noinspection PhpDocSignatureInspection */

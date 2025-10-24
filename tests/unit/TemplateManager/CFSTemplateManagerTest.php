@@ -184,7 +184,7 @@ class SpyingTemplateCompiler extends TemplateCompiler
     }
 
     #[Override]
-    public function compile($source): ?string
+    public function compile($source): string
     {
         $this->compiled[] = $source;
 

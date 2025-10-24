@@ -15,8 +15,7 @@ return new Config()
     ->setParallelConfig(ParallelConfigFactory::detect())
     ->setRiskyAllowed(true)
     ->setRules([
-        // @todo: Bump to php84 migration when we drop 8.2 support
-        '@PHP82Migration' => true,
+        '@PHP84Migration' => true,
         '@PHP82Migration:risky' => true,
         '@PHPUnit10x0Migration:risky' => true,
         // --- Initial set taken from Behat/Behat

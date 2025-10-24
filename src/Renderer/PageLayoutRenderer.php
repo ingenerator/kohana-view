@@ -51,7 +51,7 @@ class PageLayoutRenderer
         return $this->renderParent($content_view->getParentView(), $content);
     }
 
-    protected function renderParent(NestedParentView $parent, $content_html): string
+    protected function renderParent(NestedParentView $parent, string $content_html): string
     {
         $parent->setBodyHTML($content_html);
 

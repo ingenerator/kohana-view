@@ -90,7 +90,7 @@ class TemplateCompilerTest extends TestCase
 ;?>', '<?=HTML::chars($view->anything
 ? \'stuff\'
 : \'\');?>'])]
-    public function test_it_properly_escapes_short_echo_tags_with_ternaries($source, $expect): void
+    public function test_it_properly_escapes_short_echo_tags_with_ternaries(string $source, $expect): void
     {
         $this->assertSame($expect, $this->newSubject()->compile($source));
     }
@@ -99,7 +99,7 @@ class TemplateCompilerTest extends TestCase
     #[TestWith(['<?=raw($foo); //comment?>', '<?php echo($foo); //comment?>'])]
     #[TestWith(['<?=//$foo?>', "<?='';//\$foo;?>"])]
     #[TestWith(['<?=//$foo;?>', "<?='';//\$foo;?>"])]
-    public function test_it_properly_escapes_short_echo_tags_with_comments($source, $expect): void
+    public function test_it_properly_escapes_short_echo_tags_with_comments(string $source, $expect): void
     {
         $this->assertSame($expect, $this->newSubject()->compile($source));
     }
@@ -109,7 +109,7 @@ class TemplateCompilerTest extends TestCase
     #[TestWith(['<?= raw($foo);?>', '<?php echo($foo);?>'])]
     #[TestWith(['<?= raw(HTML::chars($foo));?>', '<?php echo(HTML::chars($foo));?>'])]
     #[TestWith(['<?=raw(do(lots(of(nested(things()))))) ;?>', '<?php echo(do(lots(of(nested(things())))));?>'])]
-    public function test_it_does_not_escape_short_echo_tags_when_marked_as_raw($source, $expect): void
+    public function test_it_does_not_escape_short_echo_tags_when_marked_as_raw(string $source, $expect): void
     {
         $this->assertSame($expect, $this->newSubject()->compile($source));
     }

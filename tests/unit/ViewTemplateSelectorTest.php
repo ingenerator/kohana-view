@@ -28,7 +28,7 @@ class ViewTemplateSelectorTest extends TestCase
     #[TestWith(['Some\Namespaced\View', 'some/namespaced/view'])]
     #[TestWith(['Some_Underscore_DefaultView', 'some/underscore/default'])]
     #[TestWith(['Some_Underscore_DefaultViewModel', 'some/underscore/default'])]
-    public function test_by_default_it_selects_template_from_view_class_name($class_name, $expect_template): void
+    public function test_by_default_it_selects_template_from_view_class_name(string $class_name, $expect_template): void
     {
         $this->assertSame(
             $expect_template,

@@ -23,10 +23,7 @@ use function strtolower;
  */
 class ViewTemplateSelector
 {
-    /**
-     * @return string
-     */
-    public function getTemplateName(ViewModel $view)
+    public function getTemplateName(ViewModel $view): string
     {
         if ($view instanceof TemplateSpecifyingViewModel) {
             return $this->validateSpecifiedTemplateName($view);

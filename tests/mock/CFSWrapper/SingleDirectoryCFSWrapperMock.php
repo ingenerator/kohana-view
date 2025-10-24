@@ -20,7 +20,7 @@ class SingleDirectoryCFSWrapperMock extends CFSWrapper
     }
 
     #[Override]
-    public function find_file($dir, $file)
+    public function find_file($dir, $file): string|false
     {
         $path = $this->root_path.'/'.$dir.'/'.$file.EXT;
         if (file_exists($path)) {

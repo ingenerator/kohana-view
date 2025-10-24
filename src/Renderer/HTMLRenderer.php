@@ -27,7 +27,7 @@ class HTMLRenderer implements Renderer
         $this->template_manager = $template_manager;
     }
 
-    public function render(ViewModel $view)
+    public function render(ViewModel $view): string|false
     {
         $template_path = $this->getTemplatePath($view);
 

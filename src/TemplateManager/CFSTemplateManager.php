@@ -77,10 +77,7 @@ class CFSTemplateManager implements TemplateManager
         return ! file_exists($compiled_path);
     }
 
-    /**
-     * @return string
-     */
-    protected function requireSourceFileContent(string $template_name): string|false
+    protected function requireSourceFileContent(string $template_name): string
     {
         if ( ! $source_file = $this->cascading_files->find_file($this->template_dir, $template_name)) {
             throw TemplateNotFoundException::forSourcePath($this->template_dir.'/'.$template_name);

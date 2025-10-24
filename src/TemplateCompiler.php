@@ -48,11 +48,9 @@ class TemplateCompiler
      *
      * @param string $source
      *
-     * @return string
-     *
      * @throws InvalidArgumentException if the template is empty or invalid
      */
-    public function compile($source)
+    public function compile($source): ?string
     {
         if ( ! $source) {
             throw InvalidTemplateContentException::forEmptyTemplate();

@@ -151,7 +151,7 @@ class CFSTemplateManagerTest extends TestCase
         return new CFSTemplateManager($this->compiler, $this->options, $this->cfs_wrapper);
     }
 
-    protected function assertCompiledToFile(string $compiled_url)
+    protected function assertCompiledToFile(string $compiled_url): void
     {
         $this->assertFileExists($compiled_url, "Compiled file $compiled_url should exist");
         $this->assertSame(SpyingTemplateCompiler::COMPILED_OUTPUT, file_get_contents($compiled_url));
@@ -162,7 +162,7 @@ class CFSTemplateManagerTest extends TestCase
         );
     }
 
-    protected function givenFile(string $path_to_file, $content)
+    protected function givenFile(string $path_to_file, $content): void
     {
         $file = vfsStream::url('template/'.$path_to_file);
         $path = dirname($file);

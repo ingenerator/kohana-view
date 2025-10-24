@@ -86,7 +86,7 @@ class CFSTemplateManager implements TemplateManager
         return file_get_contents($source_file);
     }
 
-    protected function writeFile(string $compiled_path, string $compiled)
+    protected function writeFile(string $compiled_path, string $compiled): void
     {
         $this->ensureWriteableDirectory(dirname($compiled_path));
         file_put_contents($compiled_path, $compiled);

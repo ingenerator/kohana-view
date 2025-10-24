@@ -64,8 +64,6 @@ return new Config()
                 'var',
             ],
         ],
-        // -- Disabled until we go to 5.x
-        'void_return' => false,
         'declare_strict_types' => false,
     ])
     ->setFinder($finder);

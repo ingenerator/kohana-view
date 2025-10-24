@@ -87,7 +87,7 @@ abstract class AbstractViewModel implements ViewModel
     /**
      * @throws BadMethodCallException values cannot be assigned except with the display method
      */
-    public function __set(string $name, mixed $value)
+    public function __set(string $name, mixed $value): void
     {
         throw InvalidViewVarAssignmentException::forReadOnlyVar(static::class, $name);
     }

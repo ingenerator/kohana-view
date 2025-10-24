@@ -184,7 +184,7 @@ class HTMLRendererTest extends TestCase
         );
     }
 
-    protected function givenTemplate($content)
+    protected function givenTemplate($content): void
     {
         $filename = uniqid('test-template').'.php';
         $file = new vfsStreamFile($filename);

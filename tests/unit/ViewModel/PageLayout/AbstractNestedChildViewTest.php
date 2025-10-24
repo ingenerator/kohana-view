@@ -52,7 +52,7 @@ class AbstractNestedChildViewTest extends TestCase
     }
 
     #[DataProvider('provider_parent_page')]
-    public function test_it_can_provide_ultimate_parent_page_up_the_chain($parent, $expect_page): void
+    public function test_it_can_provide_ultimate_parent_page_up_the_chain(DummyPageLayoutView|DummyIntermediateLayoutView $parent, DummyPageLayoutView $expect_page): void
     {
         $this->parent_view = $parent;
         $this->assertSame($expect_page, $this->newSubject()->getUltimatePageView());

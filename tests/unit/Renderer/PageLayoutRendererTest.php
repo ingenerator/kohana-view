@@ -121,8 +121,8 @@ class PageLayoutRendererTest extends TestCase
 
     #[DataProvider('provider_render_chain')]
     public function test_it_renders_full_chain_if_with_layout_or_only_first_child_if_not(
-        $use_layout,
-        $expect,
+        bool $use_layout,
+        string $expect,
     ): void {
         $page = new DummyPageLayoutView();
         $sidebar_template = new DummyIntermediateLayoutView($page);

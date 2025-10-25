@@ -27,8 +27,8 @@ final class MigrateDisplayVariablesToNativePropertiesRector extends AbstractRect
         private readonly ReflectionResolver $reflectionResolver,
         private readonly PhpDocInfoFactory $phpDocInfoFactory,
         private readonly PhpDocDynamicPropertyManager $dynamicPropertyManager,
-        private readonly NewViewPropertyInserter $propertyInserter,
         private readonly ViewDisplayPropertyFactory $propertyFactory,
+        private readonly ViewModelClassUpdater $viewModelUpdater,
     ) {
     }
 
@@ -91,32 +91,25 @@ final class MigrateDisplayVariablesToNativePropertiesRector extends AbstractRect
 
         $classPhpDoc = $this->phpDocInfoFactory->createFromNode($node);
         $phpDocPropertyDeclarations = $this->dynamicPropertyManager->findDynamicPropertiesFromPhpdoc($classPhpDoc);
+
         $phpDocToRemove = [];
         $newProperties = [];
-
         foreach ($propNames as $propertyName) {
-            $propertyTag = $phpDocPropertyDeclarations[$propertyName] ?? null;
-            if ($propertyTag) {
-                $phpDocToRemove[] = $propertyTag;
-            }
-
+            $phpDocToRemove[] = $propertyTag = $phpDocPropertyDeclarations[$propertyName] ?? null;
             $newProperties[] = $this->propertyFactory->createDisplayProperty(
                 $propertyName,
                 $node,
-                $propertyTag
+                $propertyTag,
             );
         }
 
-        $this->propertyInserter->insertNewProperties($node, $newProperties);
-        if ($phpDocToRemove !== []) {
-            $this->dynamicPropertyManager->removePropertyTags($classPhpDoc, ...$phpDocToRemove);
-        }
-
-        foreach ($node->stmts as $index => $stmt) {
-            if ($stmt === $variablesProp) {
-                unset($node->stmts[$index]);
-            }
-        }
+        $this->viewModelUpdater->updateClass(
+            $node,
+            $classPhpDoc,
+            insertProperties: $newProperties,
+            removePhpDoc: $phpDocToRemove,
+            removeStatements: [$variablesProp],
+        );
 
         return $node;
     }

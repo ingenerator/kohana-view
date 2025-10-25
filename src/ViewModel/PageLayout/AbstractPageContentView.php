@@ -13,11 +13,13 @@ use Ingenerator\KohanaView\ViewModel\NestedParentView;
  *
  * This also allows the page content view to have access to the containing page - for example
  * to set the title or otherwise interact with the <head> and <meta> parts of the page.
- *
- * @property-read NestedParentView $page
  */
 abstract class AbstractPageContentView extends AbstractNestedChildView
 {
+    public NestedParentView $page {
+        get => $this->var_page();
+    }
+
     public function var_page(): NestedParentView
     {
         return $this->getUltimatePageView();

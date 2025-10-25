@@ -35,11 +35,24 @@ class AbstractViewModelTest extends TestCase
         $this->assertEquals('expected dynamic', $this->newSubject()->some_dynamic_var);
     }
 
-    public function test_it_uses_defined_variables_in_preference_to_defined_methods(): void
+    public function test_it_can_cache_dynamic_property_reads(): void
     {
-        $subject = $this->newSubject();
-        $this->assertEquals('calculated', $subject->lazy_calculated_value);
-        $this->assertEquals('cached', $subject->lazy_calculated_value);
+        $subject = new class extends AbstractViewModel {
+            private int $execution_count = 0;
+            public ?string $calculated_var {
+                get => $this->getCached(__PROPERTY__, $this->calculateVar(...));
+            }
+
+            private function calculateVar(): string
+            {
+                return 'execution-'.++$this->execution_count;
+            }
+        };
+
+        $this->assertSame('execution-1', $subject->calculated_var, 'Should calculate the first time');
+        $this->assertSame('execution-1', $subject->calculated_var, 'Reuses cached variable');
+        $subject->display([]);
+        $this->assertSame('execution-2', $subject->calculated_var, 'Cache resets after call to display()');
     }
 
     public function test_it_throws_if_attempting_to_read_undefined_property(): void
@@ -128,17 +141,6 @@ class AbstractViewModelTest extends TestCase
         );
     }
 
-    public function test_its_display_method_does_not_require_dynamically_set_variables(): void
-    {
-        $subject = $this->newSubject();
-        /** @noinspection PhpUnusedLocalVariableInspection */
-        $ok = $subject->lazy_calculated_value;
-        $subject->display(['some_defined_var' => 'ok']);
-
-        // We got this far successfully, provide assertion to keep PHPUnit happy.
-        $this->assertTrue(true);
-    }
-
     protected function newSubject(): TestViewModel
     {
         return new TestViewModel();
@@ -146,15 +148,18 @@ class AbstractViewModelTest extends TestCase
 }
 
 /**
- * @property      string some_defined_var      // also really @property-read, but suppress the IDE warning
- * @property-read string some_dynamic_var
- * @property-read string lazy_calculated_value
+ * @property string $some_defined_var // also really @property-read, but suppress the IDE warning
  */
 class TestViewModel extends AbstractViewModel
 {
     protected array $default_variables = [
         'some_defaulted_var' => 'default value',
     ];
+    public string $some_dynamic_var {
+        get => $this->var_some_dynamic_var();
+    }
+
+    private int $number_times_calculated = 0;
 
     protected array $variables = [
         'some_defined_var' => 'expected value',
@@ -163,12 +168,5 @@ class TestViewModel extends AbstractViewModel
     protected function var_some_dynamic_var(): string
     {
         return 'expected dynamic';
-    }
-
-    protected function var_lazy_calculated_value(): string
-    {
-        $this->variables['lazy_calculated_value'] = 'cached';
-
-        return 'calculated';
     }
 }

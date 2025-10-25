@@ -4,11 +4,17 @@ declare(strict_types=1);
 
 namespace Ingenerator\KohanaViewV5MigrationTool\Rector;
 
+use PhpParser\BuilderFactory;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayDimFetch;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Rector\AbstractRector;
 use RuntimeException;
@@ -26,6 +32,7 @@ final class MigrateDisplayVariablesToNativePropertiesRector extends AbstractRect
         private readonly PhpDocDynamicPropertyManager $dynamicPropertyManager,
         private readonly ViewDisplayPropertyFactory $propertyFactory,
         private readonly ViewModelClassUpdater $viewModelUpdater,
+        private readonly BuilderFactory $builderFactory,
     ) {
     }
 
@@ -73,15 +80,49 @@ final class MigrateDisplayVariablesToNativePropertiesRector extends AbstractRect
             return null;
         }
 
-        $variablesProp = $node->getProperty('variables');
-        $propNames = $this->findDisplayPropertiesFromVariablesDefinition($variablesProp, $node);
+        $classPhpDoc = $this->phpDocInfoFactory->createFromNode($node);
 
-        if ($propNames === []) {
-            // Nothing to migrate
-            return null;
+        $variablesProp = $node->getProperty('variables');
+
+        // 1. Generate properties for elements in the default value of the $variables property
+        $definedVariables = $this->findDisplayPropertiesFromVariablesDefinition($variablesProp, $node);
+        if ($definedVariables !== []) {
+            $this->defineNativeProperties($node, $classPhpDoc, $definedVariables);
         }
 
-        $classPhpDoc = $this->phpDocInfoFactory->createFromNode($node);
+        // 2. Convert read/write in the $variables property to direct property access
+        $directlyAccessedPropNames = $this->updateVariableReadWriteToOwnProperties($node);
+
+        // 3. Generate any missing properties
+        $undefinedVariables = $this->findUndefinedPropertyNames($node, $directlyAccessedPropNames);
+        if ($undefinedVariables !== []) {
+            $this->defineNativeProperties($node, $classPhpDoc, $undefinedVariables);
+        }
+
+        // 4. Remove $variables if it exists
+        if ($variablesProp instanceof Property) {
+            $this->viewModelUpdater->updateClass(
+                $node,
+                $classPhpDoc,
+                removeStatements: [$variablesProp],
+            );
+        }
+
+        if (
+            $variablesProp instanceof Property
+            || $definedVariables !== []
+            || $directlyAccessedPropNames !== []
+            || $undefinedVariables !== []
+        ) {
+            return $node;
+        }
+
+        // Nothing changed
+        return null;
+    }
+
+    private function defineNativeProperties(Class_ $class, PhpDocInfo $classPhpDoc, array $propNames): void
+    {
         $phpDocPropertyDeclarations = $this->dynamicPropertyManager->findDynamicPropertiesFromPhpdoc($classPhpDoc);
 
         $phpDocToRemove = [];
@@ -90,20 +131,17 @@ final class MigrateDisplayVariablesToNativePropertiesRector extends AbstractRect
             $phpDocToRemove[] = $propertyTag = $phpDocPropertyDeclarations[$propertyName] ?? null;
             $newProperties[] = $this->propertyFactory->createDisplayProperty(
                 $propertyName,
-                $node,
+                $class,
                 $propertyTag,
             );
         }
 
         $this->viewModelUpdater->updateClass(
-            $node,
+            $class,
             $classPhpDoc,
             insertProperties: $newProperties,
             removePhpDoc: $phpDocToRemove,
-            removeStatements: [$variablesProp],
         );
-
-        return $node;
     }
 
     private function findDisplayPropertiesFromVariablesDefinition(?Property $variablesProp, Class_ $node): array
@@ -130,5 +168,53 @@ final class MigrateDisplayVariablesToNativePropertiesRector extends AbstractRect
         }
 
         return $names;
+    }
+
+    /**
+     * @return list<string>
+     */
+    private function updateVariableReadWriteToOwnProperties(Class_ $class): array
+    {
+        $foundPropertyNames = [];
+        $this->traverseNodesWithCallable(
+            $class->stmts,
+            function (Node $subNode) use (&$foundPropertyNames): ?Node {
+                if (
+                    $subNode instanceof ArrayDimFetch
+                    && $subNode->var instanceof PropertyFetch
+                    && $subNode->var->var instanceof Variable
+                    && $subNode->var->name instanceof Identifier
+                    && $subNode->dim instanceof String_
+                    && $subNode->var->var->name === 'this'
+                    && $subNode->var->name->name === 'variables'
+                ) {
+                    $propertyName = $subNode->dim->value;
+                    $foundPropertyNames[] = $propertyName;
+
+                    return $this->builderFactory->propertyFetch($this->builderFactory->var('this'), $propertyName);
+                }
+
+                return null;
+            },
+        );
+
+        return array_unique($foundPropertyNames);
+    }
+
+    /**
+     * @param list<string> $directlyAccessedPropNames
+     *
+     * @return list<string>
+     */
+    private function findUndefinedPropertyNames(Class_ $class, array $directlyAccessedPropNames): array
+    {
+        $knownNames = [];
+        foreach ($class->getProperties() as $property) {
+            foreach ($property->props as $prop) {
+                $knownNames[] = $prop->name;
+            }
+        }
+
+        return array_diff($directlyAccessedPropNames, $knownNames);
     }
 }

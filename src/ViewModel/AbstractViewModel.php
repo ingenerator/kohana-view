@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Ingenerator\KohanaView\ViewModel;
 
 use BadMethodCallException;
+use Closure;
 use Ingenerator\KohanaView\Exception\InvalidDisplayVariablesException;
 use Ingenerator\KohanaView\Exception\InvalidViewVarAssignmentException;
 use Ingenerator\KohanaView\Exception\UndefinedViewVarException;
@@ -45,6 +46,8 @@ use function method_exists;
  */
 abstract class AbstractViewModel implements ViewModel
 {
+    private array $cache = [];
+
     /**
      * @var array Variables that will be set back to defaults on each display unless a new value is passed
      */
@@ -76,14 +79,7 @@ abstract class AbstractViewModel implements ViewModel
         if (array_key_exists($name, $this->variables)) {
             return $this->variables[$name];
         }
-        if (method_exists($this, 'var_'.$name)) {
-            $method = 'var_'.$name;
-
-            return $this->$method();
-        }
         throw UndefinedViewVarException::forClassAndVar(static::class, $name);
-
-        return null;
     }
 
     /**
@@ -99,6 +95,8 @@ abstract class AbstractViewModel implements ViewModel
      */
     public function display(array $variables): void
     {
+        // Clear any cached computed properties
+        $this->cache = [];
         // Reinstate default variables to ensure they are in expected state when using view in a loop
         $variables = array_merge($this->default_variables, $variables);
 
@@ -129,5 +127,14 @@ abstract class AbstractViewModel implements ViewModel
         }
 
         return $errors;
+    }
+
+    protected function getCached(string $key, Closure $getter): mixed
+    {
+        if ( ! array_key_exists($key, $this->cache)) {
+            $this->cache[$key] = $getter();
+        }
+
+        return $this->cache[$key];
     }
 }

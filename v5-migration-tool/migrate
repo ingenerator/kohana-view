@@ -8,5 +8,4 @@ DIR="$(dirname "$ABS_SCRIPT_PATH")"
 
 $DIR/vendor/bin/rector \
   --config "$DIR/rector.php" \
-  --clear-cache \
-  --no-diffs
+  --clear-cache

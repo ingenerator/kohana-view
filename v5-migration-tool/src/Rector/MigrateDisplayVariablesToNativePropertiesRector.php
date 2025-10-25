@@ -4,16 +4,13 @@ declare(strict_types=1);
 
 namespace Ingenerator\KohanaViewV5MigrationTool\Rector;
 
-use Ingenerator\KohanaView\ViewModel\AbstractViewModel;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
-use PHPStan\Reflection\ClassReflection;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Rector\AbstractRector;
-use Rector\Reflection\ReflectionResolver;
 use RuntimeException;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -24,7 +21,7 @@ use function count;
 final class MigrateDisplayVariablesToNativePropertiesRector extends AbstractRector
 {
     public function __construct(
-        private readonly ReflectionResolver $reflectionResolver,
+        private readonly AbstractViewModelClassFilter $classFilter,
         private readonly PhpDocInfoFactory $phpDocInfoFactory,
         private readonly PhpDocDynamicPropertyManager $dynamicPropertyManager,
         private readonly ViewDisplayPropertyFactory $propertyFactory,
@@ -70,13 +67,8 @@ final class MigrateDisplayVariablesToNativePropertiesRector extends AbstractRect
     public function refactor(Node $node): ?Node
     {
         assert($node instanceof Class_);
-        $classReflection = $this->reflectionResolver->resolveClassReflection($node);
 
-        if ( ! $classReflection instanceof ClassReflection) {
-            return null;
-        }
-
-        if ( ! $classReflection->is(AbstractViewModel::class)) {
+        if ( ! $this->classFilter->isAbstractViewModelClass($node)) {
             // Not an AbstractViewModel
             return null;
         }

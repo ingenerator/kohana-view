@@ -8,6 +8,7 @@ use Ingenerator\KohanaView\ViewModel\PageContentView;
 use Ingenerator\KohanaView\ViewModel\PageLayoutView;
 use Ingenerator\KohanaViewV5MigrationTool\Rector\MigrateComputedPropertiesToAsymmetricVisibilityRector;
 use Ingenerator\KohanaViewV5MigrationTool\Rector\MigrateComputedPropertiesToPropertyHooksRector;
+use Ingenerator\KohanaViewV5MigrationTool\Rector\MigrateDisplayVariablesToNativePropertiesRector;
 use Rector\Config\RectorConfig;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 
@@ -32,4 +33,5 @@ return RectorConfig::configure()
     ->withRules([
         MigrateComputedPropertiesToAsymmetricVisibilityRector::class,
         MigrateComputedPropertiesToPropertyHooksRector::class,
+        MigrateDisplayVariablesToNativePropertiesRector::class,
     ]);

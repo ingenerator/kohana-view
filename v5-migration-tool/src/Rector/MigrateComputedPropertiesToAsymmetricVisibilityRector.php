@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Ingenerator\KohanaViewV5MigrationTool\Rector;
 
-use Ingenerator\KohanaView\ViewModel\AbstractViewModel;
 use PhpParser\Comment\Doc;
 use PhpParser\Modifiers;
 use PhpParser\Node;
@@ -13,10 +12,8 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Return_;
-use PHPStan\Reflection\ClassReflection;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Rector\AbstractRector;
-use Rector\Reflection\ReflectionResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -26,7 +23,7 @@ use function count;
 final class MigrateComputedPropertiesToAsymmetricVisibilityRector extends AbstractRector
 {
     public function __construct(
-        private readonly ReflectionResolver $reflectionResolver,
+        private readonly AbstractViewModelClassFilter $classFilter,
         private readonly PhpDocInfoFactory $phpDocInfoFactory,
         private readonly PhpDocDynamicPropertyManager $dynamicPropertyManager,
         private readonly ViewModelClassUpdater $viewClassUpdater,
@@ -70,13 +67,7 @@ final class MigrateComputedPropertiesToAsymmetricVisibilityRector extends Abstra
     public function refactor(Node $node): ?Node
     {
         assert($node instanceof Class_);
-        $classReflection = $this->reflectionResolver->resolveClassReflection($node);
-
-        if ( ! $classReflection instanceof ClassReflection) {
-            return null;
-        }
-
-        if ( ! $classReflection->is(AbstractViewModel::class)) {
+        if ( ! $this->classFilter->isAbstractViewModelClass($node)) {
             // Not an AbstractViewModel
             return null;
         }

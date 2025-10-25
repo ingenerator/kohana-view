@@ -4,18 +4,17 @@ declare(strict_types=1);
 
 namespace Ingenerator\KohanaView\ViewModel;
 
-use BadMethodCallException;
 use Closure;
+use Error;
 use Ingenerator\KohanaView\Exception\InvalidDisplayVariablesException;
-use Ingenerator\KohanaView\Exception\InvalidViewVarAssignmentException;
-use Ingenerator\KohanaView\Exception\UndefinedViewVarException;
 use Ingenerator\KohanaView\ViewModel;
+use Ingenerator\KohanaView\ViewModelProperty;
+use ReflectionClass;
+use ReflectionProperty;
 
 use function array_diff;
 use function array_key_exists;
 use function array_keys;
-use function array_merge;
-use function method_exists;
 
 /**
  * The AbstractViewModel can be used as a base for all ViewModels within the system. It supports providing values
@@ -49,45 +48,13 @@ abstract class AbstractViewModel implements ViewModel
     private array $cache = [];
 
     /**
-     * @var array Variables that will be set back to defaults on each display unless a new value is passed
+     * @var list<string>
      */
-    protected array $default_variables = [];
-
-    /**
-     * @var array The actual view data
-     */
-    protected array $variables = [];
-
-    /**
-     * @var string[] The names of the valid set of fields that must be passed to the display() method
-     */
-    protected array $expect_var_names = [];
+    private array $expected_display_variables;
 
     public function __construct()
     {
-        $this->variables = array_merge($this->default_variables, $this->variables);
-
-        // Assign the expect_var_names to ensure that we don't accidentally start requiring compiled fields
-        $this->expect_var_names = array_keys($this->variables);
-    }
-
-    /**
-     * Get field values.
-     */
-    public function __get(string $name): mixed
-    {
-        if (array_key_exists($name, $this->variables)) {
-            return $this->variables[$name];
-        }
-        throw UndefinedViewVarException::forClassAndVar(static::class, $name);
-    }
-
-    /**
-     * @throws BadMethodCallException values cannot be assigned except with the display method
-     */
-    public function __set(string $name, mixed $value): void
-    {
-        throw InvalidViewVarAssignmentException::forReadOnlyVar(static::class, $name);
+        // @todo remove the constructor when we have a rector to remove the parent::__construct call
     }
 
     /**
@@ -95,16 +62,21 @@ abstract class AbstractViewModel implements ViewModel
      */
     public function display(array $variables): void
     {
-        // Clear any cached computed properties
-        $this->cache = [];
-        // Reinstate default variables to ensure they are in expected state when using view in a loop
-        $variables = array_merge($this->default_variables, $variables);
-
         if ($errors = $this->validateDisplayVariables($variables)) {
             throw InvalidDisplayVariablesException::passedToDisplay(static::class, $errors);
         }
+        // Clear any cached computed properties
+        $this->cache = [];
+        try {
+            foreach ($variables as $key => $value) {
+                $this->$key = $value;
+            }
+        } catch (Error $e) {
+            throw new InvalidDisplayVariablesException($e->getMessage(), $e->getCode(), $e);
+        }
 
-        $this->variables = $variables;
+        // @todo:Reinstate default variables to ensure they are in expected state when using view in a loop
+        // $variables = \array_merge($this->default_variables, $variables);
     }
 
     /**
@@ -112,21 +84,46 @@ abstract class AbstractViewModel implements ViewModel
      */
     protected function validateDisplayVariables(array $variables): array
     {
+        $this->expected_display_variables ??= $this->listExpectedDisplayVariables();
+
         $errors = [];
         $provided_variables = array_keys($variables);
-        foreach (array_diff($provided_variables, $this->expect_var_names) as $unexpected_var) {
-            if (method_exists($this, 'var_'.$unexpected_var)) {
-                $errors[] = "'$unexpected_var' conflicts with ::var_$unexpected_var()";
-            } else {
-                $errors[] = "'$unexpected_var' is not expected";
-            }
+        if ($unexpected = array_diff($provided_variables, $this->expected_display_variables)) {
+            $errors[] = 'Unexpected vars: '.json_encode(array_values($unexpected));
         }
 
-        foreach (array_diff($this->expect_var_names, $provided_variables) as $missing_var) {
-            $errors[] = "'$missing_var' is missing";
+        if ($missing = array_diff($this->expected_display_variables, $provided_variables)) {
+            $errors[] = 'Missing vars: '.json_encode(array_values($missing));
         }
 
         return $errors;
+    }
+
+    private function listExpectedDisplayVariables(): array
+    {
+        // @todo: Support optional caching of this metadata
+        $refl = new ReflectionClass(static::class);
+
+        $expected = array_filter(
+            $refl->getProperties(),
+            function (ReflectionProperty $property): bool {
+                // If there is an explicit attribute on the property that always forces the treatment
+                $attr = ($property->getAttributes(ViewModelProperty::class)[0] ?? null)?->newInstance();
+                if ($attr instanceof ViewModelProperty) {
+                    return $attr->is_displayable;
+                }
+
+                // Without an attribute, guess based on the property definition. Displayable properties are:
+                // - public (at least for get)
+                // - not a dependency that was injected as a constructor promoted property
+                // - not virtual (e.g. with a get hook and no actual backing property).
+                return $property->isPublic()
+                    && ! $property->isPromoted()
+                    && ! $property->isVirtual();
+            },
+        );
+
+        return array_map(fn (ReflectionProperty $p): string => $p->getName(), array_values($expected));
     }
 
     protected function getCached(string $key, Closure $getter): mixed

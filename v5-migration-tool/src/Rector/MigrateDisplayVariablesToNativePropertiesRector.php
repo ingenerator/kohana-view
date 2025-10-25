@@ -5,13 +5,11 @@ declare(strict_types=1);
 namespace Ingenerator\KohanaViewV5MigrationTool\Rector;
 
 use Ingenerator\KohanaView\ViewModel\AbstractViewModel;
-use PhpParser\BuilderFactory;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PropertyTagValueNode;
 use PHPStan\Reflection\ClassReflection;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Rector\AbstractRector;
@@ -29,9 +27,8 @@ final class MigrateDisplayVariablesToNativePropertiesRector extends AbstractRect
         private readonly ReflectionResolver $reflectionResolver,
         private readonly PhpDocInfoFactory $phpDocInfoFactory,
         private readonly PhpDocDynamicPropertyManager $dynamicPropertyManager,
-        private readonly BuilderFactory $builderFactory,
         private readonly NewViewPropertyInserter $propertyInserter,
-        private readonly StrictTypeFromPropertyTagFactory $propertyTypeFactory,
+        private readonly ViewDisplayPropertyFactory $propertyFactory,
     ) {
     }
 
@@ -103,7 +100,11 @@ final class MigrateDisplayVariablesToNativePropertiesRector extends AbstractRect
                 $phpDocToRemove[] = $propertyTag;
             }
 
-            $newProperties[] = $this->createNativeProperty($propertyTag, $propertyName, $node);
+            $newProperties[] = $this->propertyFactory->createDisplayProperty(
+                $propertyName,
+                $node,
+                $propertyTag
+            );
         }
 
         $this->propertyInserter->insertNewProperties($node, $newProperties);
@@ -144,31 +145,5 @@ final class MigrateDisplayVariablesToNativePropertiesRector extends AbstractRect
         }
 
         return $names;
-    }
-
-    private function createNativeProperty(
-        ?PropertyTagValueNode $propertyTag,
-        string $propertyName,
-        Class_ $class,
-    ): Property|Node {
-        $prop = $this->builderFactory->property($propertyName)
-            ->makePublic()
-            ->makeProtectedSet()
-            ->setType($this->identifyPropertyType($propertyTag, $class));
-
-        if ($propertyTag?->description) {
-            $prop->setDocComment("/**\n * ".$propertyTag->description."\n */");
-        }
-
-        return $prop->getNode();
-    }
-
-    private function identifyPropertyType(?PropertyTagValueNode $propertyTag, Class_ $class): mixed
-    {
-        if ($propertyTag instanceof PropertyTagValueNode) {
-            return $this->propertyTypeFactory->findStrictType($propertyTag, $class);
-        }
-
-        return 'mixed';
     }
 }

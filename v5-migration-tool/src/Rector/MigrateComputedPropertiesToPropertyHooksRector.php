@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Ingenerator\KohanaViewV5MigrationTool\Rector;
 
 use Ingenerator\KohanaView\ViewModel\AbstractViewModel;
-use PhpParser\BuilderFactory;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -22,11 +21,10 @@ final class MigrateComputedPropertiesToPropertyHooksRector extends AbstractRecto
 {
     public function __construct(
         private readonly ReflectionResolver $reflectionResolver,
-        private readonly BuilderFactory $builderFactory,
         private readonly PhpDocInfoFactory $phpDocInfoFactory,
-        private readonly NewViewPropertyInserter $propertyInserter,
         private readonly PhpDocDynamicPropertyManager $dynamicPropertyManager,
         private readonly ViewDisplayPropertyFactory $viewPropertyFactory,
+        private readonly ViewModelClassUpdater $viewModelUpdater,
     ) {
     }
 
@@ -89,13 +87,8 @@ final class MigrateComputedPropertiesToPropertyHooksRector extends AbstractRecto
 
         $newProperties = [];
         $phpDocToRemove = [];
-
         foreach ($candidateMethods as $propertyName => $varMethod) {
-            $propertyTag = $phpDocPropertyDeclarations[$propertyName] ?? null;
-            if ($propertyTag) {
-                $phpDocToRemove[] = $propertyTag;
-            }
-
+            $phpDocToRemove[] = $propertyTag = $phpDocPropertyDeclarations[$propertyName] ?? null;
             $newProperties[] = $this->viewPropertyFactory->createComputedProperty(
                 $propertyName,
                 $node,
@@ -104,10 +97,12 @@ final class MigrateComputedPropertiesToPropertyHooksRector extends AbstractRecto
             );
         }
 
-        $this->propertyInserter->insertNewProperties($node, $newProperties);
-        if ($phpDocToRemove !== []) {
-            $this->dynamicPropertyManager->removePropertyTags($classPhpDoc, ...$phpDocToRemove);
-        }
+        $this->viewModelUpdater->updateClass(
+            $node,
+            $classPhpDoc,
+            insertProperties: $newProperties,
+            removePhpDoc: $phpDocToRemove,
+        );
 
         return $node;
     }

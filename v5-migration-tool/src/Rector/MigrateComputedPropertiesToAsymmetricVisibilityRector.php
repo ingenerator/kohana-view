@@ -22,7 +22,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 use function assert;
 use function count;
-use function in_array;
 
 final class MigrateComputedPropertiesToAsymmetricVisibilityRector extends AbstractRector
 {
@@ -30,6 +29,7 @@ final class MigrateComputedPropertiesToAsymmetricVisibilityRector extends Abstra
         private readonly ReflectionResolver $reflectionResolver,
         private readonly PhpDocInfoFactory $phpDocInfoFactory,
         private readonly PhpDocDynamicPropertyManager $dynamicPropertyManager,
+        private readonly ViewModelClassUpdater $viewClassUpdater,
     ) {
     }
 
@@ -92,7 +92,6 @@ final class MigrateComputedPropertiesToAsymmetricVisibilityRector extends Abstra
 
         $phpDocToRemove = [];
         $methodsToRemove = [];
-
         foreach ($candidateMethods as $propertyName => $varMethod) {
             if ( ! $this->isSimplePropertyReturnMethod($varMethod, $propertyName)) {
                 continue;
@@ -101,10 +100,7 @@ final class MigrateComputedPropertiesToAsymmetricVisibilityRector extends Abstra
             $propertyNode = $node->getProperty($propertyName);
             assert($propertyNode instanceof Property);
 
-            $propertyTag = $phpDocPropertyDeclarations[$propertyName] ?? null;
-            if ($propertyTag) {
-                $phpDocToRemove[] = $propertyTag;
-            }
+            $phpDocToRemove[] = $propertyTag = $phpDocPropertyDeclarations[$propertyName] ?? null;
 
             $this->makePropertyPublicProtectedSet($propertyNode);
 
@@ -115,17 +111,12 @@ final class MigrateComputedPropertiesToAsymmetricVisibilityRector extends Abstra
             $methodsToRemove[] = $varMethod;
         }
 
-        if ($phpDocToRemove !== []) {
-            $this->dynamicPropertyManager->removePropertyTags($classPhpDoc, ...$phpDocToRemove);
-        }
-
-        if ($methodsToRemove !== []) {
-            foreach ($node->stmts as $index => $stmt) {
-                if (in_array($stmt, $methodsToRemove, true)) {
-                    unset($node->stmts[$index]);
-                }
-            }
-        }
+        $this->viewClassUpdater->updateClass(
+            $node,
+            $classPhpDoc,
+            removePhpDoc: $phpDocToRemove,
+            removeStatements: $methodsToRemove,
+        );
 
         return $node;
     }

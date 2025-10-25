@@ -9,11 +9,11 @@ use Ingenerator\KohanaView\TemplateSpecifyingViewModel;
 
 class StaticPageContentView extends AbstractPageContentView implements TemplateSpecifyingViewModel
 {
-    public protected(set) mixed $page_path;
+    public protected(set) string $page_path;
 
     public function getTemplateName(): string
     {
-        if ( ! $this->page_path) {
+        if (($this->page_path ?? '') === '') {
             throw UnassignedViewVarException::forVariable(static::class, 'page_path', 'name/of/view');
         }
 

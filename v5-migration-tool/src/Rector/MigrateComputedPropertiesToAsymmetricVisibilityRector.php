@@ -1,0 +1,199 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Ingenerator\KohanaViewV5MigrationTool\Rector;
+
+use Ingenerator\KohanaView\ViewModel\AbstractViewModel;
+use PhpParser\Comment\Doc;
+use PhpParser\Modifiers;
+use PhpParser\Node;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\Return_;
+use PHPStan\Reflection\ClassReflection;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\Rector\AbstractRector;
+use Rector\Reflection\ReflectionResolver;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
+use function assert;
+use function count;
+use function in_array;
+
+final class MigrateComputedPropertiesToAsymmetricVisibilityRector extends AbstractRector
+{
+    public function __construct(
+        private readonly ReflectionResolver $reflectionResolver,
+        private readonly PhpDocInfoFactory $phpDocInfoFactory,
+        private readonly PhpDocDynamicPropertyManager $dynamicPropertyManager,
+    ) {
+    }
+
+    public function getRuleDefinition(): RuleDefinition
+    {
+        return new RuleDefinition(
+            'Converts view properties from simple var_xxx getters to asymmetric visibility',
+            [
+                new CodeSample(
+                    <<<'CODE_SAMPLE'
+                        class SomeView extends AbstractViewModel
+                        {
+                            protected string $value;
+                            
+                            protected function var_value() 
+                            {
+                                return $this->value;
+                            }
+                        }
+                        CODE_SAMPLE,
+                    <<<'CODE_SAMPLE'
+                        class SomeView extends AbstractViewModel
+                        {
+                            protected(set) string $value;
+                            
+                        }
+                        CODE_SAMPLE,
+                ),
+            ],
+        );
+    }
+
+    public function getNodeTypes(): array
+    {
+        return [Class_::class];
+    }
+
+    public function refactor(Node $node): ?Node
+    {
+        assert($node instanceof Class_);
+        $classReflection = $this->reflectionResolver->resolveClassReflection($node);
+
+        if ( ! $classReflection instanceof ClassReflection) {
+            return null;
+        }
+
+        if ( ! $classReflection->is(AbstractViewModel::class)) {
+            // Not an AbstractViewModel
+            return null;
+        }
+
+        $candidateMethods = $this->findCandidateMethods($node);
+        if ($candidateMethods === []) {
+            // No suitable methods in this view
+            return null;
+        }
+
+        $classPhpDoc = $this->phpDocInfoFactory->createFromNode($node);
+        $phpDocPropertyDeclarations = $this->dynamicPropertyManager->findDynamicPropertiesFromPhpdoc($classPhpDoc);
+
+        $phpDocToRemove = [];
+        $methodsToRemove = [];
+
+        foreach ($candidateMethods as $propertyName => $varMethod) {
+            if ( ! $this->isSimplePropertyReturnMethod($varMethod, $propertyName)) {
+                continue;
+            }
+
+            $propertyNode = $node->getProperty($propertyName);
+            assert($propertyNode instanceof Property);
+
+            $propertyTag = $phpDocPropertyDeclarations[$propertyName] ?? null;
+            if ($propertyTag) {
+                $phpDocToRemove[] = $propertyTag;
+            }
+
+            $this->makePropertyPublicProtectedSet($propertyNode);
+
+            if ( ! $propertyNode->getDocComment() instanceof Doc && $propertyTag?->description !== '') {
+                $propertyNode->setDocComment(new Doc("/**\n * ".$propertyTag->description."\n */"));
+            }
+
+            $methodsToRemove[] = $varMethod;
+        }
+
+        if ($phpDocToRemove !== []) {
+            $this->dynamicPropertyManager->removePropertyTags($classPhpDoc, ...$phpDocToRemove);
+        }
+
+        if ($methodsToRemove !== []) {
+            foreach ($node->stmts as $index => $stmt) {
+                if (in_array($stmt, $methodsToRemove, true)) {
+                    unset($node->stmts[$index]);
+                }
+            }
+        }
+
+        return $node;
+    }
+
+    private function findCandidateMethods(Class_ $class): array
+    {
+        $varMethods = array_filter(
+            $class->getMethods(),
+            fn (ClassMethod $m): bool => str_starts_with($m->name->toString(), 'var_'),
+        );
+        $candidateMethods = [];
+        foreach ($varMethods as $varMethod) {
+            $propertyName = preg_replace('/^var_/', '', $varMethod->name->toString());
+            $existingProp = $class->getProperty($propertyName);
+            if ( ! $existingProp instanceof Property) {
+                // Don't have a property yet with this name, so this is more than asymmetric visibility
+                continue;
+            }
+
+            if ($existingProp->hooks !== []) {
+                // Property has hooks, so it's not something we can deal with
+                continue;
+            }
+            if ($existingProp->isProtectedSet()) {
+                // It's already been looked at
+                continue;
+            }
+            if ($existingProp->isPrivateSet()) {
+                // It's already been looked at
+                continue;
+            }
+
+            $candidateMethods[$propertyName] = $varMethod;
+        }
+
+        return $candidateMethods;
+    }
+
+    private function isSimplePropertyReturnMethod(ClassMethod $varMethod, string $propertyName): bool
+    {
+        if (count($varMethod->stmts) !== 1) {
+            // It's a more complex method
+            return false;
+        }
+
+        $statement = $varMethod->stmts[0];
+        if ( ! $statement instanceof Return_) {
+            // It's doing something other than returning a value
+            return false;
+        }
+
+        return $statement->expr instanceof PropertyFetch
+            && $statement->expr->var->name === 'this'
+            && $statement->expr->name->name === $propertyName;
+    }
+
+    private function makePropertyPublicProtectedSet(Property $propertyNode): void
+    {
+        $propertyNode->flags = (
+            $propertyNode->flags
+            // Turn off existing protected & private visibility flags
+            & ~Modifiers::PROTECTED
+            & ~Modifiers::PRIVATE
+            & ~Modifiers::PRIVATE_SET
+        )
+            // Make it protected set (needs to be protected so the base view class can access it for display)
+            | Modifiers::PROTECTED_SET
+            // And make it public
+            | Modifiers::PUBLIC;
+    }
+}

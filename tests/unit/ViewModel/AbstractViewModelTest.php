@@ -4,37 +4,16 @@ declare(strict_types=1);
 
 namespace test\unit\ViewModel;
 
+use DateTimeImmutable;
 use Ingenerator\KohanaView\Exception\InvalidDisplayVariablesException;
-use Ingenerator\KohanaView\Exception\InvalidViewVarAssignmentException;
-use Ingenerator\KohanaView\Exception\UndefinedViewVarException;
-use Ingenerator\KohanaView\ViewModel;
 use Ingenerator\KohanaView\ViewModel\AbstractViewModel;
+use Ingenerator\KohanaView\ViewModelProperty;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
 
 class AbstractViewModelTest extends TestCase
 {
-    public function test_it_is_initialisable(): void
-    {
-        $subject = $this->newSubject();
-        $this->assertInstanceOf(AbstractViewModel::class, $subject);
-        $this->assertInstanceOf(ViewModel::class, $subject);
-    }
-
-    public function test_it_provides_magic_read_access_to_defined_variables(): void
-    {
-        $this->assertEquals('expected value', $this->newSubject()->some_defined_var);
-    }
-
-    public function test_it_provides_magic_read_access_to_defined_default_variables(): void
-    {
-        $this->assertEquals('default value', $this->newSubject()->some_defaulted_var);
-    }
-
-    public function test_it_provides_magic_read_access_to_protected_var_methods(): void
-    {
-        $this->assertEquals('expected dynamic', $this->newSubject()->some_dynamic_var);
-    }
-
     public function test_it_can_cache_dynamic_property_reads(): void
     {
         $subject = new class extends AbstractViewModel {
@@ -55,90 +34,101 @@ class AbstractViewModelTest extends TestCase
         $this->assertSame('execution-2', $subject->calculated_var, 'Cache resets after call to display()');
     }
 
-    public function test_it_throws_if_attempting_to_read_undefined_property(): void
+    #[TestWith(['whatever'])]
+    #[TestWith([null])]
+    public function test_its_display_method_populates_known_properties(?string $value): void
     {
-        $this->expectException(UndefinedViewVarException::class);
-        $this->expectExceptionMessage("TestViewModel does not define a 'some_undefined_var' field");
-        /* @noinspection PhpUndefinedFieldInspection */
-        $this->newSubject()->some_undefined_var;
+        $subject = new class extends AbstractViewModel {
+            public protected(set) ?string $some_defined_var = null;
+        };
+
+        $subject->display([
+            'some_defined_var' => $value,
+        ]);
+        $this->assertSame($value, $subject->some_defined_var);
     }
 
-    public function test_it_throws_if_attempting_to_set_any_undefined_externally(): void
+    public static function provider_unexpected_display_values(): iterable
     {
-        $this->expectException(InvalidViewVarAssignmentException::class);
-        $this->expectExceptionMessage('TestViewModel variables are read-only, cannot assign some_defined_var');
-        $this->newSubject()->some_defined_var = 'anything';
+        $valid_display = [
+            'some_defined_var' => 'whatever',
+            'computed_real' => 'i am lowercase',
+            'tagged_private' => 'mine',
+        ];
+
+        return [
+            'cannot display unknown variable' => [
+                [...$valid_display, 'random_unknown_var' => 'is invalid'],
+                'Unexpected vars: ["random_unknown_var"]',
+            ],
+            'cannot display public readonly prop' => [
+                [...$valid_display, 'some_promoted_var' => 'is invalid'],
+                'Unexpected vars: ["some_promoted_var"]',
+            ],
+            'cannot display non-display property' => [
+                [...$valid_display, 'non_displayable_prop' => 'cannot be displayed'],
+                'Unexpected vars: ["non_displayable_prop"]',
+            ],
+            'cannot display computed property' => [
+                [...$valid_display, 'computed_virtual' => 'cannot set directly'],
+                'Unexpected vars: ["computed_virtual"]',
+            ],
+            'cannot display private property' => [
+                [...$valid_display, 'some_private' => 'cannot set'],
+                'Unexpected vars: ["some_private"]',
+            ],
+            'must provide variables for public props' => [
+                ['computed_real' => 'lower'],
+                'Missing vars: ["some_defined_var","tagged_private"]',
+            ],
+            'must provide variables for real props even with getters' => [
+                ['some_defined_var' => 'any'],
+                'Missing vars: ["tagged_private","computed_real"]',
+            ],
+            'must provide correct type' => [
+                [...$valid_display, 'some_defined_var' => new DateTimeImmutable()],
+                'Cannot assign DateTimeImmutable to property',
+            ],
+        ];
     }
 
-    public function test_its_display_method_defines_variables(): void
+    #[DataProvider('provider_unexpected_display_values')]
+    public function test_its_display_method_throws_on_unexpected_or_missing_values(array $display, string $expect_msg): void
     {
-        $subject = $this->newSubject();
-        $subject->display(
-            [
-                'some_defined_var' => 'whatever',
-            ]
-        );
-        $this->assertSame('whatever', $subject->some_defined_var);
-    }
+        $subject = new class('foo') extends AbstractViewModel {
+            // By default a public-readable property is expected / allowed in display
+            public protected(set) ?string $some_defined_var = null;
 
-    public function test_its_display_method_can_define_null_variables(): void
-    {
-        $subject = $this->newSubject();
-        $subject->display(['some_defined_var' => null]);
-        $this->assertNull($subject->some_defined_var);
-    }
+            // Can override default behaviour with the ViewModelProperty attribute
+            #[ViewModelProperty(is_displayable: false)]
+            public protected(set) string $non_displayable_prop;
 
-    public function test_its_display_method_throws_on_unexpected_values(): void
-    {
+            #[ViewModelProperty(is_displayable: true)]
+            private readonly string $tagged_private;
+
+            // Cannot ->display() a non-public prop unless it is tagged
+            private readonly string $some_private;
+
+            // Cannot ->display() a computed prop without a backing value
+            public string $computed_virtual {
+                get => 'anything';
+            }
+
+            // Can ->display() a computed prop if it has a backing value
+            public string $computed_real {
+                get => ucfirst($this->computed_real);
+            }
+
+            public function __construct(
+                // Cannot ->display() constructor props
+                public readonly string $some_promoted_var,
+            ) {
+            }
+        };
+
         $this->expectException(InvalidDisplayVariablesException::class);
-        $this->expectExceptionMessage("'random_var' is not expected");
-        $this->newSubject()->display(['some_defined_var' => 'new', 'random_var' => 'anything']);
-    }
-
-    public function test_its_display_method_throws_on_missing_values(): void
-    {
-        $this->expectException(InvalidDisplayVariablesException::class);
-        $this->expectExceptionMessage("'some_defined_var' is missing");
-        $this->newSubject()->display([]);
-    }
-
-    public function test_its_display_method_can_override_default_values(): void
-    {
-        $subject = $this->newSubject();
-        $subject->display(
-            [
-                'some_defined_var' => 'required',
-                'some_defaulted_var' => 'custom',
-            ]
-        );
-        $this->assertSame('custom', $subject->some_defaulted_var);
-    }
-
-    public function test_its_display_method_reinitialises_default_values_if_not_present(): void
-    {
-        $subject = $this->newSubject();
-        $subject->display(
-            [
-                'some_defined_var' => 'required',
-                'some_defaulted_var' => 'custom',
-            ]
-        );
-
-        $subject->display(['some_defined_var' => 'custom2']);
-        $this->assertSame('custom2', $subject->some_defined_var);
-        $this->assertSame('default value', $subject->some_defaulted_var);
-    }
-
-    public function test_its_display_method_throws_if_variables_conflict_with_variable_methods(): void
-    {
-        $this->expectException(InvalidDisplayVariablesException::class);
-        $this->expectExceptionMessage("'some_dynamic_var' conflicts with ::var_some_dynamic_var()");
-        $this->newSubject()->display(
-            [
-                'some_defined_var' => 'ok',
-                'some_dynamic_var' => 'problemo',
-            ]
-        );
+        $this->expectExceptionMessage($expect_msg);
+        $subject->display($display);
     }
 
     protected function newSubject(): TestViewModel
@@ -147,9 +137,6 @@ class AbstractViewModelTest extends TestCase
     }
 }
 
-/**
- * @property string $some_defined_var // also really @property-read, but suppress the IDE warning
- */
 class TestViewModel extends AbstractViewModel
 {
     protected array $default_variables = [
@@ -161,9 +148,10 @@ class TestViewModel extends AbstractViewModel
 
     private int $number_times_calculated = 0;
 
-    protected array $variables = [
-        'some_defined_var' => 'expected value',
-    ];
+    /**
+     * // also really @property-read, but suppress the IDE warning.
+     */
+    public protected(set) string $some_defined_var;
 
     protected function var_some_dynamic_var(): string
     {

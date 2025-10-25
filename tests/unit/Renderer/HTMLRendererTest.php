@@ -241,7 +241,5 @@ class TemplateManagerSpy implements TemplateManager
 
 class NumberViewModel extends AbstractViewModel
 {
-    protected array $variables = [
-        'number' => 0,
-    ];
+    public protected(set) mixed $number;
 }

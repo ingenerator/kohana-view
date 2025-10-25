@@ -25,8 +25,11 @@ final readonly class PhpDocDynamicPropertyManager
     /**
      * @return array<string, PropertyTagValueNode>
      */
-    public function findDynamicPropertiesFromPhpdoc(PhpDocInfo $classPhpdoc): array
+    public function findDynamicPropertiesFromPhpdoc(?PhpDocInfo $classPhpdoc): array
     {
+        if ( ! $classPhpdoc instanceof PhpDocInfo) {
+            return [];
+        }
         assert($classPhpdoc->getNode() instanceof Class_);
         $className = $classPhpdoc->getNode()->name->toString();
 

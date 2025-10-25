@@ -7,18 +7,9 @@ namespace Ingenerator\KohanaViewV5MigrationTool\Rector;
 use Ingenerator\KohanaView\ViewModel\AbstractViewModel;
 use PhpParser\BuilderFactory;
 use PhpParser\Node;
-use PhpParser\Node\Expr\ArrayDimFetch;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\PropertyHook;
-use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
-use PhpParser\Node\VariadicPlaceholder;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PropertyTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Rector\AbstractRector;
 use Rector\Reflection\ReflectionResolver;
@@ -35,7 +26,7 @@ final class MigrateComputedPropertiesToPropertyHooksRector extends AbstractRecto
         private readonly PhpDocInfoFactory $phpDocInfoFactory,
         private readonly NewViewPropertyInserter $propertyInserter,
         private readonly PhpDocDynamicPropertyManager $dynamicPropertyManager,
-        private readonly StrictTypeFromPropertyTagFactory $propertyTypeFactory,
+        private readonly ViewDisplayPropertyFactory $viewPropertyFactory,
     ) {
     }
 
@@ -104,7 +95,13 @@ final class MigrateComputedPropertiesToPropertyHooksRector extends AbstractRecto
             if ($propertyTag) {
                 $phpDocToRemove[] = $propertyTag;
             }
-            $newProperties[] = $this->createNativeProperty($varMethod, $propertyTag, $propertyName);
+
+            $newProperties[] = $this->viewPropertyFactory->createComputedProperty(
+                $propertyName,
+                $node,
+                $propertyTag,
+                $varMethod
+            );
         }
 
         $this->propertyInserter->insertNewProperties($node, $newProperties);
@@ -133,89 +130,5 @@ final class MigrateComputedPropertiesToPropertyHooksRector extends AbstractRecto
         }
 
         return $candidateMethods;
-    }
-
-    private function createNativeProperty(
-        ClassMethod $varMethod,
-        ?PropertyTagValueNode $propertyTag,
-        string $propertyName,
-    ): Property|Node {
-        $isCached = $this->refactorCachedMethodImplementation($varMethod, $propertyName);
-
-        $prop = $this->builderFactory->property($propertyName)
-            ->makePublic()
-            ->addHook(new PropertyHook('get', $this->createGetHookBody($isCached, $propertyName, $varMethod)))
-            ->setType($this->identifyPropertyType($varMethod, $propertyTag));
-
-        if ($propertyTag?->description) {
-            $prop->setDocComment("/**\n * ".$propertyTag->description."\n */");
-        }
-
-        return $prop->getNode();
-    }
-
-    private function identifyPropertyType(ClassMethod $varMethod, ?PropertyTagValueNode $propertyTag): mixed
-    {
-        if ($varMethod->returnType instanceof Node) {
-            $type = $varMethod->returnType;
-        } elseif ($propertyTag instanceof PropertyTagValueNode) {
-            $type = $this->propertyTypeFactory->findStrictType($propertyTag, $varMethod);
-        } else {
-            $type = 'mixed';
-        }
-
-        return $type;
-    }
-
-    private function refactorCachedMethodImplementation(ClassMethod $varMethod, string $propertyName): bool
-    {
-        $isCached = false;
-        $this->traverseNodesWithCallable(
-            $varMethod->stmts,
-            function (Node $subNode) use ($propertyName, &$isCached): ?Variable {
-                if ($subNode instanceof ArrayDimFetch && ($subNode->var instanceof PropertyFetch && $subNode->var->var instanceof Variable && $subNode->var->name instanceof Identifier && $subNode->dim instanceof String_ && $subNode->var->var->name === 'this' && $subNode->var->name->name === 'variables' && $subNode->dim->value === $propertyName)) {
-                    // We can't reliably tell whether the method actually needs a variable (or if it could e.g.
-                    // be refactored to an immediate return) but it's anyway simpler for the syntax to replace the
-                    // property reference with a local variable which can always be refactored out later.
-                    $isCached = true;
-
-                    return new Variable('__cached_result__');
-                }
-
-                // It's some other array access, so ignore it
-                return null;
-            },
-        );
-
-        return $isCached;
-    }
-
-    private function createGetHookBody(bool $isCached, string $propertyName, ClassMethod $varMethod): MethodCall
-    {
-        if ($isCached) {
-            // We need to build syntax like
-            // get => $this->getCached('my_property', $this->var_my_property(...));
-            return $this->builderFactory->methodCall(
-                $this->builderFactory->var('this'),
-                'getCached',
-                [
-                    $this->builderFactory->constFetch('__PROPERTY__'),
-                    // BuilderFactory currently doesn't support taking a VariadicPlaceholder as an arg
-                    // So we have to create the object manually
-                    new MethodCall(
-                        $this->builderFactory->var('this'),
-                        $varMethod->name,
-                        [new VariadicPlaceholder()],
-                    ),
-                ],
-            );
-        }
-
-        // Much simpler, it's just a proxy to call the method every time
-        // get => $this->var_my_property(...);
-        return $this->builderFactory->methodCall(
-            $this->builderFactory->var('this'),
-            $varMethod->name,
-        );
     }
 }

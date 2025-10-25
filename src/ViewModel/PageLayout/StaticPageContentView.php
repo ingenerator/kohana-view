@@ -13,10 +13,10 @@ class StaticPageContentView extends AbstractPageContentView implements TemplateS
 
     public function getTemplateName(): string
     {
-        if ( ! $this->variables['page_path']) {
+        if ( ! $this->page_path) {
             throw UnassignedViewVarException::forVariable(static::class, 'page_path', 'name/of/view');
         }
 
-        return $this->variables['page_path'];
+        return $this->page_path;
     }
 }

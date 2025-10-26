@@ -10,7 +10,6 @@ use Ingenerator\KohanaView\Exception\InvalidDisplayVariablesException;
 use Ingenerator\KohanaView\ViewModel;
 use Ingenerator\KohanaView\ViewModelProperty;
 use ReflectionClass;
-use ReflectionProperty;
 
 use function array_diff;
 use function array_key_exists;
@@ -48,9 +47,9 @@ abstract class AbstractViewModel implements ViewModel
     private array $cache = [];
 
     /**
-     * @var list<string>
+     * @var array{expected_vars: list<string>, defaults: array{string, mixed}}
      */
-    private array $expected_display_variables;
+    private array $display_var_schema;
 
     public function __construct()
     {
@@ -62,6 +61,11 @@ abstract class AbstractViewModel implements ViewModel
      */
     public function display(array $variables): void
     {
+        $this->display_var_schema ??= $this->parseViewVarSchema();
+
+        // Merge in defaults for any optional properties before validating
+        $variables = [...$this->display_var_schema['defaults'], ...$variables];
+
         if ($errors = $this->validateDisplayVariables($variables)) {
             throw InvalidDisplayVariablesException::passedToDisplay(static::class, $errors);
         }
@@ -74,9 +78,6 @@ abstract class AbstractViewModel implements ViewModel
         } catch (Error $e) {
             throw new InvalidDisplayVariablesException($e->getMessage(), $e->getCode(), $e);
         }
-
-        // @todo:Reinstate default variables to ensure they are in expected state when using view in a loop
-        // $variables = \array_merge($this->default_variables, $variables);
     }
 
     /**
@@ -84,46 +85,58 @@ abstract class AbstractViewModel implements ViewModel
      */
     protected function validateDisplayVariables(array $variables): array
     {
-        $this->expected_display_variables ??= $this->listExpectedDisplayVariables();
-
+        // @todo remove / rename this method, and migrate an `#[Override]` onto the child classes to force review / remove
+        $this->display_var_schema ??= $this->parseViewVarSchema();
         $errors = [];
         $provided_variables = array_keys($variables);
-        if ($unexpected = array_diff($provided_variables, $this->expected_display_variables)) {
+        if ($unexpected = array_diff($provided_variables, $this->display_var_schema['expected_vars'])) {
             $errors[] = 'Unexpected vars: '.json_encode(array_values($unexpected));
         }
 
-        if ($missing = array_diff($this->expected_display_variables, $provided_variables)) {
+        if ($missing = array_diff($this->display_var_schema['expected_vars'], $provided_variables)) {
             $errors[] = 'Missing vars: '.json_encode(array_values($missing));
         }
 
         return $errors;
     }
 
-    private function listExpectedDisplayVariables(): array
+    private function parseViewVarSchema(): array
     {
         // @todo: Support optional caching of this metadata
         $refl = new ReflectionClass(static::class);
 
-        $expected = array_filter(
-            $refl->getProperties(),
-            function (ReflectionProperty $property): bool {
-                // If there is an explicit attribute on the property that always forces the treatment
-                $attr = ($property->getAttributes(ViewModelProperty::class)[0] ?? null)?->newInstance();
-                if ($attr instanceof ViewModelProperty) {
-                    return $attr->is_displayable;
-                }
+        $schema = [
+            'expected_vars' => [],
+            'defaults' => [],
+        ];
 
-                // Without an attribute, guess based on the property definition. Displayable properties are:
-                // - public (at least for get)
-                // - not a dependency that was injected as a constructor promoted property
-                // - not virtual (e.g. with a get hook and no actual backing property).
-                return $property->isPublic()
+        foreach ($refl->getProperties() as $property) {
+            // If there is an explicit attribute on the property that always forces the treatment
+            $attr = ($property->getAttributes(ViewModelProperty::class)[0] ?? null)?->newInstance();
+
+            // Without an attribute, guess based on the property definition. Displayable properties are:
+            // - public (at least for get)
+            // - not a dependency that was injected as a constructor promoted property
+            // - not virtual (e.g. with a get hook and no actual backing property).
+            if ( ! $attr instanceof ViewModelProperty) {
+                $attr = new ViewModelProperty(
+                    is_displayable: $property->isPublic()
                     && ! $property->isPromoted()
-                    && ! $property->isVirtual();
-            },
-        );
+                    && ! $property->isVirtual()
+                );
+            }
 
-        return array_map(fn (ReflectionProperty $p): string => $p->getName(), array_values($expected));
+            if ($attr->is_displayable) {
+                $schema['expected_vars'][] = $property->getName();
+            }
+
+            if ($attr->is_optional && $property->hasDefaultValue()) {
+                $schema['defaults'][$property->getName()] = $property->getDefaultValue();
+            }
+            // @todo: Should we throw if they say it's optional but it has no default?
+        }
+
+        return $schema;
     }
 
     protected function getCached(string $key, Closure $getter): mixed

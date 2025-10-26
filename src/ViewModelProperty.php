@@ -11,6 +11,10 @@ final readonly class ViewModelProperty
 {
     public function __construct(
         public bool $is_displayable,
+        /**
+         * Indicates that the property is not required when calling ->display().
+         */
+        public bool $is_optional = false,
     ) {
     }
 }

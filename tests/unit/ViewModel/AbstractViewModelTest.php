@@ -9,7 +9,6 @@ use Ingenerator\KohanaView\Exception\InvalidDisplayVariablesException;
 use Ingenerator\KohanaView\ViewModel\AbstractViewModel;
 use Ingenerator\KohanaView\ViewModelProperty;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
 
 class AbstractViewModelTest extends TestCase
@@ -34,18 +33,67 @@ class AbstractViewModelTest extends TestCase
         $this->assertSame('execution-2', $subject->calculated_var, 'Cache resets after call to display()');
     }
 
-    #[TestWith(['whatever'])]
-    #[TestWith([null])]
-    public function test_its_display_method_populates_known_properties(?string $value): void
+    public static function provider_populate_known_props(): iterable
+    {
+        return [
+            'can set normal value - default uses class default' => [
+                ['some_defined_var' => 'whatever'],
+                ['some_defined_var' => 'whatever', 'some_defaulted_var' => 'default value'],
+            ],
+            'can set null value - default uses class default' => [
+                // To prove that we don't treat the null as "missing"
+                ['some_defined_var' => null],
+                ['some_defined_var' => null, 'some_defaulted_var' => 'default value'],
+            ],
+            'can also override default' => [
+                ['some_defined_var' => 'me', 'some_defaulted_var' => 95],
+                ['some_defined_var' => 'me', 'some_defaulted_var' => 95],
+            ],
+        ];
+    }
+
+    #[DataProvider('provider_populate_known_props')]
+    public function test_its_display_method_populates_known_properties(array $display_what, array $expect): void
     {
         $subject = new class extends AbstractViewModel {
             public protected(set) ?string $some_defined_var = null;
+            #[ViewModelProperty(is_displayable: true, is_optional: true)]
+            public protected(set) mixed $some_defaulted_var = 'default value';
         };
 
-        $subject->display([
-            'some_defined_var' => $value,
-        ]);
-        $this->assertSame($value, $subject->some_defined_var);
+        $subject->display($display_what);
+        $this->assertSame(
+            $expect,
+            [
+                'some_defined_var' => $subject->some_defined_var,
+                'some_defaulted_var' => $subject->some_defaulted_var,
+            ],
+        );
+    }
+
+    public function test_optional_properties_are_reset_to_default_on_each_display(): void
+    {
+        $subject = new class extends AbstractViewModel {
+            public protected(set) ?string $a = null;
+            #[ViewModelProperty(is_displayable: true, is_optional: false)]
+            public protected(set) ?string $b = null;
+            #[ViewModelProperty(is_displayable: true, is_optional: true)]
+            public protected(set) bool $c = false;
+        };
+
+        // Explicitly set the value first time
+        $subject->display(['a' => '1', 'b' => '2', 'c' => true]);
+        $this->assertSame(
+            ['a' => '1', 'b' => '2', 'c' => true],
+            ['a' => $subject->a, 'b' => $subject->b, 'c' => $subject->c],
+        );
+
+        // And the next display() call sets it back to default
+        $subject->display(['a' => '3', 'b' => '4']);
+        $this->assertSame(
+            ['a' => '3', 'b' => '4', 'c' => false],
+            ['a' => $subject->a, 'b' => $subject->b, 'c' => $subject->c],
+        );
     }
 
     public static function provider_unexpected_display_values(): iterable
@@ -139,14 +187,13 @@ class AbstractViewModelTest extends TestCase
 
 class TestViewModel extends AbstractViewModel
 {
-    protected array $default_variables = [
-        'some_defaulted_var' => 'default value',
-    ];
     public string $some_dynamic_var {
         get => $this->var_some_dynamic_var();
     }
 
     private int $number_times_calculated = 0;
+    #[ViewModelProperty(is_displayable: true, is_optional: true)]
+    public protected(set) mixed $some_defaulted_var = 'default value';
 
     /**
      * // also really @property-read, but suppress the IDE warning.

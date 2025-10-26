@@ -21,6 +21,7 @@ use RuntimeException;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
+use function array_key_exists;
 use function assert;
 use function count;
 
@@ -82,46 +83,57 @@ final class MigrateDisplayVariablesToNativePropertiesRector extends AbstractRect
 
         $classPhpDoc = $this->phpDocInfoFactory->createFromNode($node);
 
-        $variablesProp = $node->getProperty('variables');
+        $hasChanged = false;
 
         // 1. Generate properties for elements in the default value of the $variables property
-        $definedVariables = $this->findDisplayPropertiesFromVariablesDefinition($variablesProp, $node);
-        if ($definedVariables !== []) {
-            $this->defineNativeProperties($node, $classPhpDoc, $definedVariables);
+        $variablesProp = $node->getProperty('variables');
+        $hasChanged = $this->definePropertiesForElementsOfVariablesArray(
+            $variablesProp,
+            $node,
+            $classPhpDoc,
+            withDefaultValues: false,
+        ) || $hasChanged;
+
+        // 2. Generate properties for elements (with defaults) in the $default_variables property
+        $defaultVariablesProp = $node->getProperty('default_variables');
+        $hasChanged = $this->definePropertiesForElementsOfVariablesArray(
+            $defaultVariablesProp,
+            $node,
+            $classPhpDoc,
+            withDefaultValues: true,
+        ) || $hasChanged;
+
+        // 3. Convert read/write in the $variables property to direct property access
+        $directlyAccessedPropNames = $this->updateVariableReadWriteToOwnProperties($node);
+        if ($directlyAccessedPropNames !== []) {
+            $hasChanged = true;
         }
 
-        // 2. Convert read/write in the $variables property to direct property access
-        $directlyAccessedPropNames = $this->updateVariableReadWriteToOwnProperties($node);
-
-        // 3. Generate any missing properties
+        // 4. Generate any missing properties
         $undefinedVariables = $this->findUndefinedPropertyNames($node, $directlyAccessedPropNames);
         if ($undefinedVariables !== []) {
             $this->defineNativeProperties($node, $classPhpDoc, $undefinedVariables);
+            $hasChanged = true;
         }
 
-        // 4. Remove $variables if it exists
-        if ($variablesProp instanceof Property) {
+        // 5. Remove $variables if it exists
+        if ($variablesProp instanceof Property || $defaultVariablesProp instanceof Property) {
             $this->viewModelUpdater->updateClass(
                 $node,
                 $classPhpDoc,
-                removeStatements: [$variablesProp],
+                removeStatements: array_filter([$variablesProp, $defaultVariablesProp]),
             );
+            $hasChanged = true;
         }
 
-        if (
-            $variablesProp instanceof Property
-            || $definedVariables !== []
-            || $directlyAccessedPropNames !== []
-            || $undefinedVariables !== []
-        ) {
+        if ($hasChanged) {
             return $node;
         }
 
-        // Nothing changed
         return null;
     }
 
-    private function defineNativeProperties(Class_ $class, PhpDocInfo $classPhpDoc, array $propNames): void
+    private function defineNativeProperties(Class_ $class, ?PhpDocInfo $classPhpDoc, array $propNames, array $defaultValues = []): void
     {
         $phpDocPropertyDeclarations = $this->dynamicPropertyManager->findDynamicPropertiesFromPhpdoc($classPhpDoc);
 
@@ -133,6 +145,8 @@ final class MigrateDisplayVariablesToNativePropertiesRector extends AbstractRect
                 $propertyName,
                 $class,
                 $propertyTag,
+                hasDefaultValue: array_key_exists($propertyName, $defaultValues),
+                defaultValue: $defaultValues[$propertyName] ?? null,
             );
         }
 
@@ -157,17 +171,29 @@ final class MigrateDisplayVariablesToNativePropertiesRector extends AbstractRect
             throw new RuntimeException('Expected '.$node->name->toString().'::variables to default to an array');
         }
 
-        $names = [];
+        $propertyValues = [];
         foreach ($default->items as $item) {
             if ( ! $item->key instanceof String_) {
                 throw new RuntimeException(
                     'Expected everything in '.$node->name->toString().'::variables to have string keys',
                 );
             }
-            $names[] = $item->key->value;
+            $propertyValues[$item->key->value] = $item->value;
         }
 
-        return $names;
+        return $propertyValues;
+    }
+
+    private function definePropertiesForElementsOfVariablesArray(?Property $variablesProp, Class_ $node, ?PhpDocInfo $classPhpDoc, bool $withDefaultValues): bool
+    {
+        $definedVariables = $this->findDisplayPropertiesFromVariablesDefinition($variablesProp, $node);
+        if ($definedVariables === []) {
+            return false;
+        }
+
+        $this->defineNativeProperties($node, $classPhpDoc, array_keys($definedVariables), $withDefaultValues ? $definedVariables : []);
+
+        return true;
     }
 
     /**

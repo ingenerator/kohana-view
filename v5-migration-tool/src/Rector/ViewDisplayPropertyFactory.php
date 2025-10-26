@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Ingenerator\KohanaViewV5MigrationTool\Rector;
 
+use Ingenerator\KohanaView\ViewModelProperty;
 use PhpParser\Builder\Property as PropertyBuilder;
 use PhpParser\BuilderFactory;
 use PhpParser\Node;
@@ -12,6 +13,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\PropertyHook;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
@@ -31,11 +33,25 @@ class ViewDisplayPropertyFactory
     ) {
     }
 
-    public function createDisplayProperty(string $propertyName, Class_ $class, ?PropertyTagValueNode $docBlockPropertyTag): Property
-    {
-        return $this->buildInitialProperty($propertyName, $docBlockPropertyTag, $class)
-            ->makeProtectedSet()
-            ->getNode();
+    public function createDisplayProperty(
+        string $propertyName,
+        Class_ $class,
+        ?PropertyTagValueNode $docBlockPropertyTag,
+        bool $hasDefaultValue,
+        ?Node $defaultValue = null,
+    ): Property {
+        $builder = $this
+            ->buildInitialProperty($propertyName, $docBlockPropertyTag, $class)
+            ->makeProtectedSet();
+
+        if ($hasDefaultValue) {
+            $builder->setDefault($defaultValue);
+            $builder->addAttribute(
+                $this->builderFactory->attribute(new FullyQualified(ViewModelProperty::class), ['is_displayable' => true, 'is_optional' => true])
+            );
+        }
+
+        return $builder->getNode();
     }
 
     public function createComputedProperty(string $propertyName, Class_ $class, ?PropertyTagValueNode $docBlockPropertyTag, ClassMethod $getterMethod): Property

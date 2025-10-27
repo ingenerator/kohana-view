@@ -7,6 +7,7 @@ namespace Ingenerator\KohanaViewV5MigrationTool\Rector;
 use Ingenerator\KohanaView\ViewModelProperty;
 use PhpParser\Builder\Property as PropertyBuilder;
 use PhpParser\BuilderFactory;
+use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\MethodCall;
@@ -20,8 +21,13 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\VariadicPlaceholder;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PropertyTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
 use Rector\CodeQuality\NodeFactory\TypedPropertyFactory as RectorTypedPropertyFactory;
+use Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 
 class ViewDisplayPropertyFactory
@@ -30,6 +36,9 @@ class ViewDisplayPropertyFactory
         private readonly RectorTypedPropertyFactory $rectorFactory,
         private readonly SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         private readonly BuilderFactory $builderFactory,
+        private readonly PhpDocInfoFactory $phpDocInfoFactory,
+        private readonly PhpDocInfoPrinter $phpDocPrinter,
+        private readonly VarTagRemover $varTagRemover,
     ) {
     }
 
@@ -47,11 +56,14 @@ class ViewDisplayPropertyFactory
         if ($hasDefaultValue) {
             $builder->setDefault($defaultValue);
             $builder->addAttribute(
-                $this->builderFactory->attribute(new FullyQualified(ViewModelProperty::class), ['is_displayable' => true, 'is_optional' => true])
+                $this->builderFactory->attribute(
+                    new FullyQualified(ViewModelProperty::class),
+                    ['is_displayable' => true, 'is_optional' => true],
+                ),
             );
         }
 
-        return $builder->getNode();
+        return $this->addPhpDocToPropertyIfRequired($builder->getNode(), $docBlockPropertyTag);
     }
 
     public function createComputedProperty(string $propertyName, Class_ $class, ?PropertyTagValueNode $docBlockPropertyTag, ClassMethod $getterMethod): Property
@@ -75,7 +87,7 @@ class ViewDisplayPropertyFactory
             $builder->setType($getterMethod->returnType);
         }
 
-        return $builder->getNode();
+        return $this->addPhpDocToPropertyIfRequired($builder->getNode(), $docBlockPropertyTag);
     }
 
     private function refactorCachedMethodImplementation(ClassMethod $varMethod, string $propertyName): bool
@@ -156,10 +168,43 @@ class ViewDisplayPropertyFactory
             ->setType($type)
             ->makePublic();
 
-        if ($docBlockPropertyTag?->description) {
-            $builder->setDocComment("/**\n * ".$docBlockPropertyTag->description."\n */");
+        return $builder;
+    }
+
+    private function addPhpDocToPropertyIfRequired(Property $node, ?PropertyTagValueNode $docBlockPropertyTag): Property
+    {
+        if ( ! $docBlockPropertyTag instanceof PropertyTagValueNode) {
+            return $node;
         }
 
-        return $builder;
+        $phpdoc = $this->phpDocInfoFactory->createEmpty($node);
+
+        // First, add the description and type from the existing @property tag
+        if ($docBlockPropertyTag->description !== '') {
+            // Add the description as a separate line - often the type information in the @var tag will be redundant
+            // so we don't want the presence of a description to force that to be kept as an @var.
+            $phpdoc->addPhpDocTagNode(new PhpDocTextNode($docBlockPropertyTag->description));
+            $phpdoc->addPhpDocTagNode(new PhpDocTextNode(''));
+        }
+
+        if ($docBlockPropertyTag?->type) {
+            $phpdoc->addTagValueNode(new VarTagValueNode($docBlockPropertyTag?->type, '', ''));
+        }
+
+        // Then remove @var tags with redundant type information
+        $this->varTagRemover->removeVarTagIfUseless($phpdoc, $node);
+
+        // Then remove any pointless trailing newline
+        $phpdocNode = $phpdoc->getPhpDocNode();
+        $lastNode = array_last($phpdocNode->children);
+        if ($lastNode instanceof PhpDocTextNode && $lastNode->text === '') {
+            array_pop($phpdocNode->children);
+        }
+
+        if ($phpdocNode->children !== []) {
+            $node->setDocComment(new Doc($this->phpDocPrinter->printNew($phpdoc)));
+        }
+
+        return $node;
     }
 }

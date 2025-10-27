@@ -158,9 +158,11 @@ class ViewDisplayPropertyFactory
             // It might be nullable if the phpdoc says so, but their `isNullable` param here really means
             // "force it to be nullable"
             $type = $this->rectorFactory->createPropertyTypeNode($docBlockPropertyTag, $class, isNullable: false);
-        } else {
-            $type = 'mixed';
         }
+
+        // Coalesce anything unknown (which will include complex phpdoc types e.g. array-shape, phpstan templates, etc)
+        // to `mixed` so that we have something.
+        $type ??= 'mixed';
 
         $builder = $this
             ->builderFactory

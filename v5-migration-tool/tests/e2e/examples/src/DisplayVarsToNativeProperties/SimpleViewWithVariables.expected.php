@@ -12,4 +12,10 @@ class SimpleViewWithVariables extends AbstractViewModel
      */
     public protected(set) int $other;
     public protected(set) mixed $unknown;
+    /**
+     * With typed info
+     *
+     * @var \My\Application[]
+     */
+    public protected(set) array $applications;
 }

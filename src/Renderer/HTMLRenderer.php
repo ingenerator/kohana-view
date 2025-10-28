@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Ingenerator\KohanaView\Renderer;
 
 use Ingenerator\KohanaView\Exception\TemplateNotFoundException;
@@ -7,6 +9,7 @@ use Ingenerator\KohanaView\Renderer;
 use Ingenerator\KohanaView\TemplateManager;
 use Ingenerator\KohanaView\ViewModel;
 use Ingenerator\KohanaView\ViewTemplateSelector;
+use RuntimeException;
 
 use function ob_get_clean;
 use function ob_start;
@@ -17,23 +20,13 @@ use function ob_start;
  */
 class HTMLRenderer implements Renderer
 {
-    /**
-     * @var TemplateManager
-     */
-    protected $template_manager;
-
-    /**
-     * @var ViewTemplateSelector
-     */
-    protected $template_selector;
-
-    public function __construct(ViewTemplateSelector $template_selector, TemplateManager $template_manager)
-    {
-        $this->template_selector = $template_selector;
-        $this->template_manager = $template_manager;
+    public function __construct(
+        protected ViewTemplateSelector $template_selector,
+        protected TemplateManager $template_manager,
+    ) {
     }
 
-    public function render(ViewModel $view)
+    public function render(ViewModel $view): string
     {
         $template_path = $this->getTemplatePath($view);
 
@@ -44,13 +37,16 @@ class HTMLRenderer implements Renderer
             $output = ob_get_clean();
         }
 
+        if ($output === false) {
+            // Has code within the view cleared out our output buffering? Whatever, we no longer have access
+            // to the expected content.
+            throw new RuntimeException('Could not render view: output buffering is not active');
+        }
+
         return $output;
     }
 
-    /**
-     * @return string
-     */
-    protected function getTemplatePath(ViewModel $view)
+    protected function getTemplatePath(ViewModel $view): string
     {
         $template_name = $this->template_selector->getTemplateName($view);
         $template = $this->template_manager->getPath($template_name);
@@ -58,10 +54,7 @@ class HTMLRenderer implements Renderer
         return $template;
     }
 
-    /**
-     * @param string $template_path
-     */
-    protected function includeWithAnonymousScope(ViewModel $view, $template_path)
+    protected function includeWithAnonymousScope(ViewModel $view, string $template_path): void
     {
         /** @noinspection PhpUnusedParameterInspection */
         /** @noinspection PhpDocSignatureInspection */

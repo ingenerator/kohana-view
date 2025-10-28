@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Ingenerator\KohanaView;
 
 use Ingenerator\KohanaView\Exception\InvalidTemplateContentException;
@@ -33,10 +35,7 @@ use function trim;
  */
 class TemplateCompiler
 {
-    /**
-     * @var array
-     */
-    protected $options = [
+    protected array $options = [
         'escape_method' => 'HTML::chars',
     ];
 
@@ -49,15 +48,11 @@ class TemplateCompiler
      * Compile a string containing a PHP template, automatically escaping variables that are echoed in PHP short tags,
      * and return the compiled PHP string.
      *
-     * @param string $source
-     *
-     * @return string
-     *
      * @throws InvalidArgumentException if the template is empty or invalid
      */
-    public function compile($source)
+    public function compile(string $source): string
     {
-        if ( ! $source) {
+        if ($source === '') {
             throw InvalidTemplateContentException::forEmptyTemplate();
         }
 
@@ -70,10 +65,8 @@ class TemplateCompiler
 
     /**
      * @param string[] $matches
-     *
-     * @return string
      */
-    protected function compilePhpShortTag($matches)
+    protected function compilePhpShortTag(array $matches): string
     {
         $var = trim($matches[1]);
         $terminator = $matches[2];
@@ -104,13 +97,7 @@ class TemplateCompiler
         return $compiled;
     }
 
-    /**
-     * @param string $string
-     * @param string $prefix
-     *
-     * @return bool
-     */
-    protected function startsWith($string, $prefix)
+    protected function startsWith(string $string, string $prefix): bool
     {
         return str_starts_with($string, $prefix);
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Ingenerator\KohanaView\Exception;
 
 use BadMethodCallException;
@@ -9,13 +11,7 @@ use BadMethodCallException;
  */
 class InvalidViewVarAssignmentException extends BadMethodCallException
 {
-    /**
-     * @param string $view_class
-     * @param string $var_name
-     *
-     * @return static
-     */
-    public static function forReadOnlyVar($view_class, $var_name)
+    public static function forReadOnlyVar(string $view_class, string $var_name): static
     {
         return new static(
             $view_class.' variables are read-only, cannot assign '.$var_name

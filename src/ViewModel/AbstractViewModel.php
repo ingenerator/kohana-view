@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Ingenerator\KohanaView\ViewModel;
 
 use BadMethodCallException;
@@ -46,17 +48,17 @@ abstract class AbstractViewModel implements ViewModel
     /**
      * @var array Variables that will be set back to defaults on each display unless a new value is passed
      */
-    protected $default_variables = [];
+    protected array $default_variables = [];
 
     /**
      * @var array The actual view data
      */
-    protected $variables = [];
+    protected array $variables = [];
 
     /**
      * @var string[] The names of the valid set of fields that must be passed to the display() method
      */
-    protected $expect_var_names = [];
+    protected array $expect_var_names = [];
 
     public function __construct()
     {
@@ -68,10 +70,8 @@ abstract class AbstractViewModel implements ViewModel
 
     /**
      * Get field values.
-     *
-     * @param string $name
      */
-    public function __get($name)
+    public function __get(string $name): mixed
     {
         if (array_key_exists($name, $this->variables)) {
             return $this->variables[$name];
@@ -87,11 +87,9 @@ abstract class AbstractViewModel implements ViewModel
     }
 
     /**
-     * @param string $name
-     *
      * @throws BadMethodCallException values cannot be assigned except with the display method
      */
-    public function __set($name, $value)
+    public function __set(string $name, mixed $value): void
     {
         throw InvalidViewVarAssignmentException::forReadOnlyVar(static::class, $name);
     }
@@ -99,7 +97,7 @@ abstract class AbstractViewModel implements ViewModel
     /**
      * Set the data to be rendered in the view - note this does not actually render the view.
      */
-    public function display(array $variables)
+    public function display(array $variables): void
     {
         // Reinstate default variables to ensure they are in expected state when using view in a loop
         $variables = array_merge($this->default_variables, $variables);
@@ -114,7 +112,7 @@ abstract class AbstractViewModel implements ViewModel
     /**
      * @return string[] of errors
      */
-    protected function validateDisplayVariables(array $variables)
+    protected function validateDisplayVariables(array $variables): array
     {
         $errors = [];
         $provided_variables = array_keys($variables);

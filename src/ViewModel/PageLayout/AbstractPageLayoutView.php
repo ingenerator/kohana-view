@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Ingenerator\KohanaView\ViewModel\PageLayout;
 
 use Ingenerator\KohanaView\ViewModel\AbstractViewModel;
@@ -17,35 +19,22 @@ use Ingenerator\KohanaView\ViewModel\NestedParentView;
  */
 abstract class AbstractPageLayoutView extends AbstractViewModel implements NestedParentView
 {
-    /**
-     * @var array
-     */
-    protected $variables = [
+    protected array $variables = [
         'body_html' => null,
         'title' => null,
     ];
 
-    /**
-     * @param string $title
-     *
-     * @return void
-     */
-    public function setTitle($title)
+    public function setTitle(string $title): void
     {
         $this->variables['title'] = $title;
     }
 
-    /**
-     * @param string $html
-     *
-     * @return void
-     */
-    public function setBodyHTML($html)
+    public function setBodyHTML(string $html): void
     {
         $this->variables['body_html'] = $html;
     }
 
-    public function setChildHtml($html)
+    public function setChildHtml($html): void
     {
         $this->variables['body_html'] = $html;
     }

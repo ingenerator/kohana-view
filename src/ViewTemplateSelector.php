@@ -1,11 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Ingenerator\KohanaView;
 
 use Ingenerator\KohanaView\Exception\UnspecifiedTemplateNameException;
 use UnexpectedValueException;
 
-use function is_string;
 use function preg_replace;
 use function strtolower;
 
@@ -23,10 +24,7 @@ use function strtolower;
  */
 class ViewTemplateSelector
 {
-    /**
-     * @return string
-     */
-    public function getTemplateName(ViewModel $view)
+    public function getTemplateName(ViewModel $view): string
     {
         if ($view instanceof TemplateSpecifyingViewModel) {
             return $this->validateSpecifiedTemplateName($view);
@@ -36,29 +34,20 @@ class ViewTemplateSelector
     }
 
     /**
-     * @return string
-     *
      * @throws UnexpectedValueException if no template is provided
      */
-    protected function validateSpecifiedTemplateName(TemplateSpecifyingViewModel $view)
+    protected function validateSpecifiedTemplateName(TemplateSpecifyingViewModel $view): string
     {
         $template = $view->getTemplateName();
         $view_class = $view::class;
-        if ( ! $template) {
+        if ($template === '') {
             throw UnspecifiedTemplateNameException::forEmptyValue($view_class);
-        }
-
-        if ( ! is_string($template)) {
-            throw UnspecifiedTemplateNameException::forNonStringValue($view_class, $template);
         }
 
         return $template;
     }
 
-    /**
-     * @return string
-     */
-    protected function calculateTemplateFromClassName(ViewModel $view)
+    protected function calculateTemplateFromClassName(ViewModel $view): string
     {
         $template = $view::class;
         $template = preg_replace('/\\\\|_/', '/', $template);

@@ -1,13 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace test\unit\ViewModel\PageLayout;
 
+use Ingenerator\KohanaView\ViewModel\NestedChildView;
 use Override;
 use test\mock\ViewModel\PageLayout\DummyIntermediateLayoutView;
 
 class AbstractIntermediateLayoutViewTest extends AbstractNestedChildViewTest
 {
-    public function test_it_exposes_injected_body_html_as_child_html()
+    public function test_it_exposes_injected_body_html_as_child_html(): void
     {
         $subject = $this->newSubject();
         $subject->setBodyHtml('<p>I am the middle bit of your page</p>');
@@ -15,7 +18,7 @@ class AbstractIntermediateLayoutViewTest extends AbstractNestedChildViewTest
     }
 
     #[Override]
-    protected function newSubject()
+    protected function newSubject(): NestedChildView
     {
         return new DummyIntermediateLayoutView($this->parent_view);
     }

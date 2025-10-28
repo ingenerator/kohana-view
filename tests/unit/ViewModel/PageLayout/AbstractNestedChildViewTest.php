@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace test\unit\ViewModel\PageLayout;
 
 use BadMethodCallException;
 use Ingenerator\KohanaView\ViewModel\NestedChildView;
+use Ingenerator\KohanaView\ViewModel\NestedParentView;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use test\mock\ViewModel\PageLayout\DummyIntermediateLayoutView;
@@ -12,28 +15,25 @@ use test\mock\ViewModel\PageLayout\DummyPageLayoutView;
 
 class AbstractNestedChildViewTest extends TestCase
 {
-    /**
-     * @var DummyPageLayoutView
-     */
-    protected $parent_view;
+    protected NestedParentView $parent_view;
 
-    public function test_it_is_initialisable()
+    public function test_it_is_initialisable(): void
     {
         $this->assertInstanceOf(NestedChildView::class, $this->newSubject());
     }
 
-    public function test_it_exposes_parent_view_on_new_interface()
+    public function test_it_exposes_parent_view_on_new_interface(): void
     {
         $this->assertSame($this->parent_view, $this->newSubject()->getParentView());
     }
 
-    public function test_it_throws_on_attempt_to_access_page_on_old_interface()
+    public function test_it_throws_on_attempt_to_access_page_on_old_interface(): void
     {
         $this->expectException(BadMethodCallException::class);
         $this->newSubject()->page;
     }
 
-    public static function provider_parent_page()
+    public static function provider_parent_page(): array
     {
         return [
             [
@@ -52,7 +52,7 @@ class AbstractNestedChildViewTest extends TestCase
     }
 
     #[DataProvider('provider_parent_page')]
-    public function test_it_can_provide_ultimate_parent_page_up_the_chain($parent, $expect_page)
+    public function test_it_can_provide_ultimate_parent_page_up_the_chain(DummyPageLayoutView|DummyIntermediateLayoutView $parent, DummyPageLayoutView $expect_page): void
     {
         $this->parent_view = $parent;
         $this->assertSame($expect_page, $this->newSubject()->getUltimatePageView());
@@ -64,7 +64,7 @@ class AbstractNestedChildViewTest extends TestCase
         $this->parent_view = new DummyPageLayoutView();
     }
 
-    protected function newSubject()
+    protected function newSubject(): NestedChildView
     {
         return new DummyNestedChildView($this->parent_view);
     }

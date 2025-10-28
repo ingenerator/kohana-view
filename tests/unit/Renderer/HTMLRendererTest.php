@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace test\unit\Renderer;
 
 use ErrorException;
@@ -26,47 +28,35 @@ use function uniqid;
 
 class HTMLRendererTest extends TestCase
 {
-    /**
-     * @var TemplateManagerSpy
-     */
-    protected $template_manager;
+    protected TemplateManagerSpy $template_manager;
 
-    /**
-     * @var ViewTemplateSelectorSpy
-     */
-    protected $template_selector;
+    protected ViewTemplateSelectorSpy $template_selector;
 
-    /**
-     * @var vfsStreamDirectory
-     */
-    protected $vfs_root;
+    protected vfsStreamDirectory $vfs_root;
 
-    /**
-     * @var int
-     */
-    protected $old_error_reporting;
+    protected int $old_error_reporting;
 
-    public function test_it_is_initialisable()
+    public function test_it_is_initialisable(): void
     {
         $subject = $this->newSubject();
         $this->assertInstanceOf(HTMLRenderer::class, $subject);
         $this->assertInstanceOf(Renderer::class, $subject);
     }
 
-    public function test_it_selects_template_for_view()
+    public function test_it_selects_template_for_view(): void
     {
         $view = new ViewModelDummy();
         $this->newSubject()->render($view);
         $this->template_selector->assertCalledOnceWith($view);
     }
 
-    public function test_it_locates_required_template()
+    public function test_it_locates_required_template(): void
     {
         $this->newSubject()->render(new ViewModelDummy());
         $this->template_manager->assertCalledOnceWith(ViewTemplateSelectorSpy::FIXED_TEMPLATE_NAME);
     }
 
-    public function test_it_returns_template_output_string()
+    public function test_it_returns_template_output_string(): void
     {
         $this->givenTemplate('Any <?="string";?>');
         $this->assertSame(
@@ -75,7 +65,7 @@ class HTMLRendererTest extends TestCase
         );
     }
 
-    public function test_it_provides_view_as_variable_in_template_scope()
+    public function test_it_provides_view_as_variable_in_template_scope(): void
     {
         $this->givenTemplate('View:<?=spl_object_hash($view);?>');
         $view = new ViewModelDummy();
@@ -85,7 +75,7 @@ class HTMLRendererTest extends TestCase
         );
     }
 
-    public function test_it_provides_renderer_as_variable_in_template_scope()
+    public function test_it_provides_renderer_as_variable_in_template_scope(): void
     {
         $this->givenTemplate('Renderer:<?=spl_object_hash($renderer);?>');
         $subject = $this->newSubject();
@@ -95,7 +85,7 @@ class HTMLRendererTest extends TestCase
         );
     }
 
-    public function test_it_does_not_provide_access_to_this_in_template_scope()
+    public function test_it_does_not_provide_access_to_this_in_template_scope(): void
     {
         $this->givenTemplate(
             '<?=isset($this) ? \'Unexpected $this: \'.get_class($this).\':\'.spl_object_hash($this) : \'OK, no $this\';?>'
@@ -106,7 +96,7 @@ class HTMLRendererTest extends TestCase
         );
     }
 
-    public function test_it_does_not_provide_access_to_any_unexpected_variables_in_template_scope()
+    public function test_it_does_not_provide_access_to_any_unexpected_variables_in_template_scope(): void
     {
         $this->givenTemplate(
             '<?=implode("\n", array_keys(get_defined_vars()));?>'
@@ -123,7 +113,7 @@ class HTMLRendererTest extends TestCase
         $this->markTestIncomplete('Appears to be impossible to remove superglobals from template scope');
     }
 
-    public function test_it_suppresses_template_output_and_clears_buffer_on_exception_during_render()
+    public function test_it_suppresses_template_output_and_clears_buffer_on_exception_during_render(): void
     {
         $ob_level_before = ob_get_level();
         $this->expectOutputRegex('/^$/');
@@ -137,7 +127,7 @@ class HTMLRendererTest extends TestCase
         $this->assertSame($ob_level_before, ob_get_level(), 'Expect any internal output buffers to be cleared');
     }
 
-    public function test_it_can_render_same_template_multiple_times_with_same_or_different_views()
+    public function test_it_can_render_same_template_multiple_times_with_same_or_different_views(): void
     {
         $this->givenTemplate('Number<?=$view->number;?>');
         $view_1 = new NumberViewModel();
@@ -154,7 +144,7 @@ class HTMLRendererTest extends TestCase
         $this->assertSame(['Number1', 'Number2', 'Number3'], $output);
     }
 
-    public function test_it_generates_error_if_template_is_not_found()
+    public function test_it_generates_error_if_template_is_not_found(): void
     {
         $this->template_manager->setTemplatePath(vfsStream::url('/path/to/undefined/file'));
 
@@ -164,7 +154,7 @@ class HTMLRendererTest extends TestCase
         $this->newSubject()->render(new ViewModelDummy());
     }
 
-    public function test_it_throws_if_inclusion_fails_even_with_error_reporting_off()
+    public function test_it_throws_if_inclusion_fails_even_with_error_reporting_off(): void
     {
         error_reporting(0);
         $this->template_manager->setTemplatePath(vfsStream::url('/path/to/undefined/file'));
@@ -188,7 +178,7 @@ class HTMLRendererTest extends TestCase
         error_reporting($this->old_error_reporting);
     }
 
-    protected function newSubject()
+    protected function newSubject(): HTMLRenderer
     {
         return new HTMLRenderer(
             $this->template_selector,
@@ -196,7 +186,7 @@ class HTMLRendererTest extends TestCase
         );
     }
 
-    protected function givenTemplate($content)
+    protected function givenTemplate($content): void
     {
         $filename = uniqid('test-template').'.php';
         $file = new vfsStreamFile($filename);
@@ -213,14 +203,14 @@ class ViewTemplateSelectorSpy extends ViewTemplateSelector
     protected $calls = [];
 
     #[Override]
-    public function getTemplateName(ViewModel $view)
+    public function getTemplateName(ViewModel $view): string
     {
         $this->calls[] = $view;
 
         return static::FIXED_TEMPLATE_NAME;
     }
 
-    public function assertCalledOnceWith(ViewModel $view)
+    public function assertCalledOnceWith(ViewModel $view): void
     {
         Assert::assertSame([$view], $this->calls);
     }
@@ -231,19 +221,19 @@ class TemplateManagerSpy implements TemplateManager
     protected $calls = [];
     protected $template_path;
 
-    public function setTemplatePath($path)
+    public function setTemplatePath($path): void
     {
         $this->template_path = $path;
     }
 
-    public function getPath($template_name)
+    public function getPath($template_name): string
     {
         $this->calls[] = $template_name;
 
         return $this->template_path;
     }
 
-    public function assertCalledOnceWith($template_name)
+    public function assertCalledOnceWith($template_name): void
     {
         Assert::assertSame([$template_name], $this->calls);
     }
@@ -251,7 +241,7 @@ class TemplateManagerSpy implements TemplateManager
 
 class NumberViewModel extends AbstractViewModel
 {
-    protected $variables = [
+    protected array $variables = [
         'number' => 0,
     ];
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace test\unit;
 
 use Ingenerator\KohanaView\Exception\InvalidTemplateContentException;
@@ -11,7 +13,7 @@ class TemplateCompilerTest extends TestCase
 {
     protected $options = [];
 
-    public function test_it_is_initialisable()
+    public function test_it_is_initialisable(): void
     {
         $this->assertInstanceOf(
             TemplateCompiler::class,
@@ -19,13 +21,13 @@ class TemplateCompilerTest extends TestCase
         );
     }
 
-    public function test_it_throws_if_template_empty()
+    public function test_it_throws_if_template_empty(): void
     {
         $this->expectException(InvalidTemplateContentException::class);
         $this->newSubject()->compile('');
     }
 
-    public function test_it_returns_html_unmodified()
+    public function test_it_returns_html_unmodified(): void
     {
         $html = '<html><head><title></title></head><body><h1>some code</h1></body>';
         $this->assertSame(
@@ -34,7 +36,7 @@ class TemplateCompilerTest extends TestCase
         );
     }
 
-    public function test_it_does_not_modify_php_comments()
+    public function test_it_does_not_modify_php_comments(): void
     {
         $source = <<<PHP
                         <?php
@@ -54,7 +56,7 @@ class TemplateCompilerTest extends TestCase
         );
     }
 
-    public function test_it_does_not_modify_code_in_full_php_tags()
+    public function test_it_does_not_modify_code_in_full_php_tags(): void
     {
         $source = <<<'PHP'
                         <html>
@@ -74,7 +76,7 @@ class TemplateCompilerTest extends TestCase
     #[TestWith(['<?=$view->someMethod();?>', '<?=HTML::chars($view->someMethod());?>'])]
     #[TestWith(['<?=$any_var;?>', '<?=HTML::chars($any_var);?>'])]
     #[TestWith(['<?=$any_var?>', '<?=HTML::chars($any_var);?>'])]
-    public function test_it_automatically_escapes_short_echo_tags_by_default($source, $expect)
+    public function test_it_automatically_escapes_short_echo_tags_by_default($source, $expect): void
     {
         $source = "<p>$source</p>";
         $this->assertSame(
@@ -90,7 +92,7 @@ class TemplateCompilerTest extends TestCase
 ;?>', '<?=HTML::chars($view->anything
 ? \'stuff\'
 : \'\');?>'])]
-    public function test_it_properly_escapes_short_echo_tags_with_ternaries($source, $expect)
+    public function test_it_properly_escapes_short_echo_tags_with_ternaries(string $source, $expect): void
     {
         $this->assertSame($expect, $this->newSubject()->compile($source));
     }
@@ -99,7 +101,7 @@ class TemplateCompilerTest extends TestCase
     #[TestWith(['<?=raw($foo); //comment?>', '<?php echo($foo); //comment?>'])]
     #[TestWith(['<?=//$foo?>', "<?='';//\$foo;?>"])]
     #[TestWith(['<?=//$foo;?>', "<?='';//\$foo;?>"])]
-    public function test_it_properly_escapes_short_echo_tags_with_comments($source, $expect)
+    public function test_it_properly_escapes_short_echo_tags_with_comments(string $source, $expect): void
     {
         $this->assertSame($expect, $this->newSubject()->compile($source));
     }
@@ -109,30 +111,30 @@ class TemplateCompilerTest extends TestCase
     #[TestWith(['<?= raw($foo);?>', '<?php echo($foo);?>'])]
     #[TestWith(['<?= raw(HTML::chars($foo));?>', '<?php echo(HTML::chars($foo));?>'])]
     #[TestWith(['<?=raw(do(lots(of(nested(things()))))) ;?>', '<?php echo(do(lots(of(nested(things())))));?>'])]
-    public function test_it_does_not_escape_short_echo_tags_when_marked_as_raw($source, $expect)
+    public function test_it_does_not_escape_short_echo_tags_when_marked_as_raw(string $source, $expect): void
     {
         $this->assertSame($expect, $this->newSubject()->compile($source));
     }
 
-    public function test_it_throws_if_template_already_escapes_value_in_short_tags()
+    public function test_it_throws_if_template_already_escapes_value_in_short_tags(): void
     {
         $this->expectException(InvalidTemplateContentException::class);
         $this->newSubject()->compile('<?=HTML::chars($double_escape_whoops);?>');
     }
 
-    public function test_it_throws_if_template_uses_old_style_raw_exclamation_mark_prefix()
+    public function test_it_throws_if_template_uses_old_style_raw_exclamation_mark_prefix(): void
     {
         $this->expectException(InvalidTemplateContentException::class);
         $this->newSubject()->compile('<?=!$var;?>');
     }
 
-    public function test_it_throws_if_template_uses_old_style_native_php_echo()
+    public function test_it_throws_if_template_uses_old_style_native_php_echo(): void
     {
         $this->expectException(InvalidTemplateContentException::class);
         $this->newSubject()->compile('<p><?php echo $raw_content;?></p>');
     }
 
-    public function test_its_escape_method_is_configurable()
+    public function test_its_escape_method_is_configurable(): void
     {
         $this->options['escape_method'] = 'MyEscape::thing';
         $this->assertSame(
@@ -143,7 +145,7 @@ class TemplateCompilerTest extends TestCase
         );
     }
 
-    public function test_it_compiles_complex_template()
+    public function test_it_compiles_complex_template(): void
     {
         $source = <<<'PHP'
             <?php
@@ -176,7 +178,7 @@ class TemplateCompilerTest extends TestCase
         $this->assertEquals($expected, $this->newSubject()->compile($source));
     }
 
-    public function test_it_compiles_complex_template_with_multiline_raw_call()
+    public function test_it_compiles_complex_template_with_multiline_raw_call(): void
     {
         $source = <<<'PHP'
             <?php
@@ -217,7 +219,7 @@ class TemplateCompilerTest extends TestCase
         $this->assertEquals($expect, $this->newSubject()->compile($source));
     }
 
-    protected function newSubject()
+    protected function newSubject(): TemplateCompiler
     {
         return new TemplateCompiler($this->options);
     }

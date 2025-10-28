@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace test\unit\Renderer;
 
 use Ingenerator\KohanaView\Renderer;
@@ -21,17 +23,11 @@ use function spl_object_hash;
 
 class PageLayoutRendererTest extends TestCase
 {
-    /**
-     * @var SimpleRendererStub
-     */
-    protected $renderer;
+    protected SimpleRendererStub $renderer;
 
-    /**
-     * @var Request
-     */
-    protected $request;
+    protected ?Request $request = null;
 
-    public function test_it_is_initialisable()
+    public function test_it_is_initialisable(): void
     {
         $this->assertInstanceOf(
             PageLayoutRenderer::class,
@@ -43,8 +39,8 @@ class PageLayoutRendererTest extends TestCase
     #[TestWith([['is_ajax' => false]])]
     #[TestWith([null])]
     public function test_it_renders_just_content_for_all_requests_when_use_layout_explicit_false(
-        $request,
-    ) {
+        ?array $request,
+    ): void {
         $this->request = $this->stubRequest($request);
 
         $subject = $this->newSubject();
@@ -59,8 +55,8 @@ class PageLayoutRendererTest extends TestCase
     #[TestWith([['is_ajax' => false]])]
     #[TestWith([null])]
     public function test_it_renders_layout_containing_content_for_all_requests_when_use_layout_explicit_true(
-        $request,
-    ) {
+        ?array $request,
+    ): void {
         $this->request = $this->stubRequest($request);
         $subject = $this->newSubject();
         $subject->setUseLayout(true);
@@ -70,7 +66,7 @@ class PageLayoutRendererTest extends TestCase
         $this->assertSame("<Layout#B>\n<Content#A/>\n</Layout#B>", $subject->render($content));
     }
 
-    public function test_by_default_it_renders_layout_containing_content_when_no_request()
+    public function test_by_default_it_renders_layout_containing_content_when_no_request(): void
     {
         $this->request = null;
         $content = new DummyPageContentView($layout = new DummyPageLayoutView());
@@ -79,7 +75,7 @@ class PageLayoutRendererTest extends TestCase
         $this->assertSame("<Layout#B>\n<Content#A/>\n</Layout#B>", $subject->render($content));
     }
 
-    public function test_by_default_it_renders_layout_containing_content_when_request_not_ajax()
+    public function test_by_default_it_renders_layout_containing_content_when_request_not_ajax(): void
     {
         $this->request = $this->stubRequest(['is_ajax' => false]);
         $content = new DummyPageContentView($layout = new DummyPageLayoutView());
@@ -88,7 +84,7 @@ class PageLayoutRendererTest extends TestCase
         $this->assertSame("<Layout#B>\n<Content#A/>\n</Layout#B>", $subject->render($content));
     }
 
-    public function test_by_default_it_renders_just_content_when_request_is_ajax()
+    public function test_by_default_it_renders_just_content_when_request_is_ajax(): void
     {
         $this->request = $this->stubRequest(['is_ajax' => true]);
         $content = new DummyPageContentView($layout = new DummyPageLayoutView());
@@ -99,7 +95,7 @@ class PageLayoutRendererTest extends TestCase
         );
     }
 
-    public static function provider_render_chain()
+    public static function provider_render_chain(): array
     {
         return [
             [
@@ -121,9 +117,9 @@ class PageLayoutRendererTest extends TestCase
 
     #[DataProvider('provider_render_chain')]
     public function test_it_renders_full_chain_if_with_layout_or_only_first_child_if_not(
-        $use_layout,
-        $expect,
-    ) {
+        bool $use_layout,
+        string $expect,
+    ): void {
         $page = new DummyPageLayoutView();
         $sidebar_template = new DummyIntermediateLayoutView($page);
         $second_template = new DummyIntermediateLayoutView($sidebar_template);
@@ -142,7 +138,7 @@ class PageLayoutRendererTest extends TestCase
         $this->renderer = new SimpleRendererStub();
     }
 
-    protected function newSubject()
+    protected function newSubject(): PageLayoutRenderer
     {
         return new PageLayoutRenderer(
             $this->renderer,
@@ -174,7 +170,7 @@ class SimpleRendererStub implements Renderer
 {
     protected $expected_views = [];
 
-    public function registerViews($views)
+    public function registerViews($views): void
     {
         foreach ($views as $key => $view) {
             $hash = spl_object_hash($view);
@@ -182,10 +178,7 @@ class SimpleRendererStub implements Renderer
         }
     }
 
-    /**
-     * @return string
-     */
-    public function render(ViewModel $view)
+    public function render(ViewModel $view): string
     {
         $hash = spl_object_hash($view);
         Assert::assertArrayHasKey(

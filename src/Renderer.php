@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Ingenerator\KohanaView;
 
 /**
@@ -9,8 +11,5 @@ namespace Ingenerator\KohanaView;
  */
 interface Renderer
 {
-    /**
-     * @return string
-     */
-    public function render(ViewModel $view);
+    public function render(ViewModel $view): string;
 }

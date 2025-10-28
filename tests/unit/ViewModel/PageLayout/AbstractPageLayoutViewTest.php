@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace test\unit\ViewModel\PageLayout;
 
 use Ingenerator\KohanaView\ViewModel;
@@ -9,12 +11,9 @@ use PHPUnit\Framework\TestCase;
 
 class AbstractPageLayoutViewTest extends TestCase
 {
-    /**
-     * @var ViewModel
-     */
-    protected $body_view;
+    protected ViewModel $body_view;
 
-    public function test_it_is_initialisable()
+    public function test_it_is_initialisable(): void
     {
         $subject = $this->newSubject();
         $this->assertInstanceOf(
@@ -31,21 +30,21 @@ class AbstractPageLayoutViewTest extends TestCase
         );
     }
 
-    public function test_it_has_body_html_variable_with_setter_access()
+    public function test_it_has_body_html_variable_with_setter_access(): void
     {
         $subject = $this->newSubject();
         $subject->setBodyHTML('Any HTML');
         $this->assertSame('Any HTML', $subject->body_html);
     }
 
-    public function test_it_has_page_title_variable_with_setter_access()
+    public function test_it_has_page_title_variable_with_setter_access(): void
     {
         $subject = $this->newSubject();
         $subject->setTitle('Page title goes here');
         $this->assertSame('Page title goes here', $subject->title);
     }
 
-    public function test_it_supports_assigning_all_variables_with_display()
+    public function test_it_supports_assigning_all_variables_with_display(): void
     {
         $subject = $this->newSubject();
         $subject->display(['body_html' => 'Here is the content', 'title' => 'And the title']);
@@ -53,7 +52,7 @@ class AbstractPageLayoutViewTest extends TestCase
         $this->assertSame('And the title', $subject->title);
     }
 
-    protected function newSubject()
+    protected function newSubject(): TestablePageLayoutView
     {
         return new TestablePageLayoutView();
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Ingenerator\KohanaView;
 
 /**
@@ -13,5 +15,5 @@ interface TemplateManager
      *
      * @return string Path to the compiled template file
      */
-    public function getPath($template_name);
+    public function getPath(string $template_name): string;
 }

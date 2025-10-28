@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace test\mock\CFSWrapper;
 
 use Ingenerator\KohanaView\TemplateManager\CFSWrapper;
@@ -12,15 +14,12 @@ use function file_exists;
  */
 class SingleDirectoryCFSWrapperMock extends CFSWrapper
 {
-    /**
-     * @param string $root_path
-     */
-    public function __construct(protected $root_path)
+    public function __construct(protected string $root_path)
     {
     }
 
     #[Override]
-    public function find_file($dir, $file)
+    public function find_file($dir, $file): string|false
     {
         $path = $this->root_path.'/'.$dir.'/'.$file.EXT;
         if (file_exists($path)) {

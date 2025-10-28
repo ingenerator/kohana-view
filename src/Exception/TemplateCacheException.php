@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Ingenerator\KohanaView\Exception;
 
 use RuntimeException;
@@ -9,24 +11,14 @@ use RuntimeException;
  */
 class TemplateCacheException extends RuntimeException
 {
-    /**
-     * @param string $path
-     *
-     * @return static
-     */
-    public static function cannotCreateDirectory($path)
+    public static function cannotCreateDirectory(string $path): static
     {
         return new static(
             "Cannot create template cache directory in '$path'"
         );
     }
 
-    /**
-     * @param string $path
-     *
-     * @return static
-     */
-    public static function pathNotWriteable($path)
+    public static function pathNotWriteable(string $path): static
     {
         return new static("Cannot write to compiled template path '$path'");
     }

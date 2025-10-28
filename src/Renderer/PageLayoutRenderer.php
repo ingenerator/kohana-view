@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Ingenerator\KohanaView\Renderer;
 
 use Ingenerator\KohanaView\Renderer;
@@ -26,31 +28,15 @@ use Request;
  */
 class PageLayoutRenderer
 {
-    /**
-     * @var bool Whether to force (or not force) embedding the content in the layout
-     */
-    protected $use_layout;
+    protected ?bool $use_layout = null;
 
-    /**
-     * @var Renderer
-     */
-    protected $view_renderer;
-
-    /**
-     * @var Request
-     */
-    protected $current_request;
-
-    public function __construct(Renderer $view_renderer, ?Request $current_request = null)
-    {
-        $this->view_renderer = $view_renderer;
-        $this->current_request = $current_request;
+    public function __construct(
+        protected Renderer $view_renderer,
+        protected ?Request $current_request = null,
+    ) {
     }
 
-    /**
-     * @return string
-     */
-    public function render(NestedChildView $content_view)
+    public function render(NestedChildView $content_view): string
     {
         $content = $this->view_renderer->render($content_view);
         if ( ! $this->shouldUseLayout()) {
@@ -60,10 +46,7 @@ class PageLayoutRenderer
         return $this->renderParent($content_view->getParentView(), $content);
     }
 
-    /**
-     * @return string
-     */
-    protected function renderParent(NestedParentView $parent, $content_html)
+    protected function renderParent(NestedParentView $parent, string $content_html): string
     {
         $parent->setBodyHTML($content_html);
 
@@ -74,27 +57,16 @@ class PageLayoutRenderer
         return $this->view_renderer->render($parent);
     }
 
-    /**
-     * @return bool
-     */
-    protected function shouldUseLayout()
+    protected function shouldUseLayout(): bool
     {
-        if ($this->use_layout !== null) {
-            return $this->use_layout;
-        }
-
-        return ! ($this->current_request && $this->current_request->is_ajax());
+        return $this->use_layout ?? ! ($this->current_request && $this->current_request->is_ajax());
     }
 
     /**
      * Configure whether to always wrap the content in the layout (TRUE), never (FALSE) or automatically for
      * non-AJAX requests (NULL).
-     *
-     * @param bool $use_layout
-     *
-     * @return void
      */
-    public function setUseLayout($use_layout)
+    public function setUseLayout(?bool $use_layout): void
     {
         $this->use_layout = $use_layout;
     }

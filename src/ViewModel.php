@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Ingenerator\KohanaView;
 
 /**
@@ -8,8 +10,5 @@ namespace Ingenerator\KohanaView;
  */
 interface ViewModel
 {
-    /**
-     * @return void
-     */
-    public function display(array $variables);
+    public function display(array $variables): void;
 }

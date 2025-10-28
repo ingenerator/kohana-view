@@ -1,19 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace test\mock\ViewModel;
 
 use Ingenerator\KohanaView\TemplateSpecifyingViewModel;
 
 class FixedTemplateViewModelStub extends ViewModelDummy implements TemplateSpecifyingViewModel
 {
-    public function __construct(private $template)
+    public function __construct(private readonly string $template)
     {
     }
 
-    /**
-     * @return string
-     */
-    public function getTemplateName()
+    public function getTemplateName(): string
     {
         return $this->template;
     }

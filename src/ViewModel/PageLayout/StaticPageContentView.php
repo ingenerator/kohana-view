@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Ingenerator\KohanaView\ViewModel\PageLayout;
 
 use Ingenerator\KohanaView\Exception\UnassignedViewVarException;
@@ -7,11 +9,11 @@ use Ingenerator\KohanaView\TemplateSpecifyingViewModel;
 
 class StaticPageContentView extends AbstractPageContentView implements TemplateSpecifyingViewModel
 {
-    protected $variables = [
+    protected array $variables = [
         'page_path' => null,
     ];
 
-    public function getTemplateName()
+    public function getTemplateName(): string
     {
         if ( ! $this->variables['page_path']) {
             throw UnassignedViewVarException::forVariable(static::class, 'page_path', 'name/of/view');

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Ingenerator\KohanaView\Exception;
 
 use InvalidArgumentException;
@@ -14,12 +16,9 @@ use function sprintf;
 class InvalidDisplayVariablesException extends InvalidArgumentException
 {
     /**
-     * @param string $view_class
      * @param string[] $errors
-     *
-     * @return static
      */
-    public static function passedToDisplay($view_class, $errors)
+    public static function passedToDisplay(string $view_class, array $errors): static
     {
         return new static(
             sprintf(

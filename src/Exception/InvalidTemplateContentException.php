@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Ingenerator\KohanaView\Exception;
 
 use InvalidArgumentException;
@@ -9,34 +11,28 @@ use InvalidArgumentException;
  */
 class InvalidTemplateContentException extends InvalidArgumentException
 {
-    /**
-     * @param string $escape_method
-     * @param string $source_fragment
-     *
-     * @return static
-     */
-    public static function containsImplicitDoubleEscape($escape_method, $source_fragment)
+    public static function containsImplicitDoubleEscape(string $escape_method, string $source_fragment): static
     {
         return new static(
             "Invalid implicit double-escape in template - remove $escape_method from `$source_fragment` or mark as raw"
         );
     }
 
-    public static function hasLegacyRawEscapePrefix($source_fragment)
+    public static function hasLegacyRawEscapePrefix(string $source_fragment): static
     {
         return new static(
             "Invalid legacy-style <?=! raw escape prefix in template, please change `$source_fragment` to use `<?=raw()`"
         );
     }
 
-    public static function hasLegacyPhpEcho()
+    public static function hasLegacyPhpEcho(): static
     {
         return new static(
             'Invalid legacy-style use of `<?php echo` to avoid automatic escaping : use `<?=raw()` instead'
         );
     }
 
-    public static function forEmptyTemplate()
+    public static function forEmptyTemplate(): static
     {
         return new static('Cannot compile empty template');
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace test\unit\ViewModel;
 
 use Ingenerator\KohanaView\Exception\InvalidDisplayVariablesException;
@@ -11,36 +13,36 @@ use PHPUnit\Framework\TestCase;
 
 class AbstractViewModelTest extends TestCase
 {
-    public function test_it_is_initialisable()
+    public function test_it_is_initialisable(): void
     {
         $subject = $this->newSubject();
         $this->assertInstanceOf(AbstractViewModel::class, $subject);
         $this->assertInstanceOf(ViewModel::class, $subject);
     }
 
-    public function test_it_provides_magic_read_access_to_defined_variables()
+    public function test_it_provides_magic_read_access_to_defined_variables(): void
     {
         $this->assertEquals('expected value', $this->newSubject()->some_defined_var);
     }
 
-    public function test_it_provides_magic_read_access_to_defined_default_variables()
+    public function test_it_provides_magic_read_access_to_defined_default_variables(): void
     {
         $this->assertEquals('default value', $this->newSubject()->some_defaulted_var);
     }
 
-    public function test_it_provides_magic_read_access_to_protected_var_methods()
+    public function test_it_provides_magic_read_access_to_protected_var_methods(): void
     {
         $this->assertEquals('expected dynamic', $this->newSubject()->some_dynamic_var);
     }
 
-    public function test_it_uses_defined_variables_in_preference_to_defined_methods()
+    public function test_it_uses_defined_variables_in_preference_to_defined_methods(): void
     {
         $subject = $this->newSubject();
         $this->assertEquals('calculated', $subject->lazy_calculated_value);
         $this->assertEquals('cached', $subject->lazy_calculated_value);
     }
 
-    public function test_it_throws_if_attempting_to_read_undefined_property()
+    public function test_it_throws_if_attempting_to_read_undefined_property(): void
     {
         $this->expectException(UndefinedViewVarException::class);
         $this->expectExceptionMessage("TestViewModel does not define a 'some_undefined_var' field");
@@ -48,14 +50,14 @@ class AbstractViewModelTest extends TestCase
         $this->newSubject()->some_undefined_var;
     }
 
-    public function test_it_throws_if_attempting_to_set_any_undefined_externally()
+    public function test_it_throws_if_attempting_to_set_any_undefined_externally(): void
     {
         $this->expectException(InvalidViewVarAssignmentException::class);
         $this->expectExceptionMessage('TestViewModel variables are read-only, cannot assign some_defined_var');
         $this->newSubject()->some_defined_var = 'anything';
     }
 
-    public function test_its_display_method_defines_variables()
+    public function test_its_display_method_defines_variables(): void
     {
         $subject = $this->newSubject();
         $subject->display(
@@ -66,28 +68,28 @@ class AbstractViewModelTest extends TestCase
         $this->assertSame('whatever', $subject->some_defined_var);
     }
 
-    public function test_its_display_method_can_define_null_variables()
+    public function test_its_display_method_can_define_null_variables(): void
     {
         $subject = $this->newSubject();
         $subject->display(['some_defined_var' => null]);
         $this->assertNull($subject->some_defined_var);
     }
 
-    public function test_its_display_method_throws_on_unexpected_values()
+    public function test_its_display_method_throws_on_unexpected_values(): void
     {
         $this->expectException(InvalidDisplayVariablesException::class);
         $this->expectExceptionMessage("'random_var' is not expected");
         $this->newSubject()->display(['some_defined_var' => 'new', 'random_var' => 'anything']);
     }
 
-    public function test_its_display_method_throws_on_missing_values()
+    public function test_its_display_method_throws_on_missing_values(): void
     {
         $this->expectException(InvalidDisplayVariablesException::class);
         $this->expectExceptionMessage("'some_defined_var' is missing");
         $this->newSubject()->display([]);
     }
 
-    public function test_its_display_method_can_override_default_values()
+    public function test_its_display_method_can_override_default_values(): void
     {
         $subject = $this->newSubject();
         $subject->display(
@@ -99,7 +101,7 @@ class AbstractViewModelTest extends TestCase
         $this->assertSame('custom', $subject->some_defaulted_var);
     }
 
-    public function test_its_display_method_reinitialises_default_values_if_not_present()
+    public function test_its_display_method_reinitialises_default_values_if_not_present(): void
     {
         $subject = $this->newSubject();
         $subject->display(
@@ -114,7 +116,7 @@ class AbstractViewModelTest extends TestCase
         $this->assertSame('default value', $subject->some_defaulted_var);
     }
 
-    public function test_its_display_method_throws_if_variables_conflict_with_variable_methods()
+    public function test_its_display_method_throws_if_variables_conflict_with_variable_methods(): void
     {
         $this->expectException(InvalidDisplayVariablesException::class);
         $this->expectExceptionMessage("'some_dynamic_var' conflicts with ::var_some_dynamic_var()");
@@ -126,7 +128,7 @@ class AbstractViewModelTest extends TestCase
         );
     }
 
-    public function test_its_display_method_does_not_require_dynamically_set_variables()
+    public function test_its_display_method_does_not_require_dynamically_set_variables(): void
     {
         $subject = $this->newSubject();
         /** @noinspection PhpUnusedLocalVariableInspection */
@@ -137,7 +139,7 @@ class AbstractViewModelTest extends TestCase
         $this->assertTrue(true);
     }
 
-    protected function newSubject()
+    protected function newSubject(): TestViewModel
     {
         return new TestViewModel();
     }
@@ -150,20 +152,20 @@ class AbstractViewModelTest extends TestCase
  */
 class TestViewModel extends AbstractViewModel
 {
-    protected $default_variables = [
+    protected array $default_variables = [
         'some_defaulted_var' => 'default value',
     ];
 
-    protected $variables = [
+    protected array $variables = [
         'some_defined_var' => 'expected value',
     ];
 
-    protected function var_some_dynamic_var()
+    protected function var_some_dynamic_var(): string
     {
         return 'expected dynamic';
     }
 
-    protected function var_lazy_calculated_value()
+    protected function var_lazy_calculated_value(): string
     {
         $this->variables['lazy_calculated_value'] = 'cached';
 

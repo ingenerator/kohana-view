@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace test\integration;
 
 use Dependency_Container;
@@ -35,7 +37,7 @@ class ViewModelIntegrationTest extends TestCase
 
     protected $tmp_dir;
 
-    public function test_dependency_container_provides_shared_html_renderer()
+    public function test_dependency_container_provides_shared_html_renderer(): void
     {
         $dependencies = $this->givenDependenciesBootstrapped();
         $renderer = $dependencies->get('kohanaview.renderer.html');
@@ -48,7 +50,7 @@ class ViewModelIntegrationTest extends TestCase
         $this->markTestIncomplete('Cannot put the page layout renderer in the container without defining request');
     }
 
-    public function test_template_manager_cache_dir_defaults_to_inside_kohana_cache_dir()
+    public function test_template_manager_cache_dir_defaults_to_inside_kohana_cache_dir(): void
     {
         $this->givenFileWithContent('module/views/integration/test_view.php', 'Project source template');
         $dependencies = $this->givenDependenciesBootstrapped();
@@ -61,7 +63,7 @@ class ViewModelIntegrationTest extends TestCase
     #[TestWith(['TESTING'])]
     #[TestWith(['STAGING'])]
     #[TestWith(['PRODUCTION'])]
-    public function test_template_compiler_always_compiles_when_no_compiled_template($environment)
+    public function test_template_compiler_always_compiles_when_no_compiled_template(string $environment): void
     {
         $this->givenFileWithContent('module/views/any_view.php', 'Project source template');
 
@@ -76,7 +78,7 @@ class ViewModelIntegrationTest extends TestCase
     #[TestWith(['TESTING', false])]
     #[TestWith(['STAGING', false])]
     #[TestWith(['PRODUCTION', false])]
-    public function test_template_compiler_recompiles_always_only_in_development($environment, $expect_recompile)
+    public function test_template_compiler_recompiles_always_only_in_development(string $environment, $expect_recompile): void
     {
         $this->givenFileWithContent('cache/compiled_templates/any_view.php', self::STALE_COMPILED_STRING);
         $this->givenFileWithContent('module/views/any_view.php', 'Project source template');
@@ -94,7 +96,7 @@ class ViewModelIntegrationTest extends TestCase
         }
     }
 
-    public function test_it_renders_expected_view_for_view_model()
+    public function test_it_renders_expected_view_for_view_model(): void
     {
         $this->givenFileWithContent(
             'module/classes/View/Test/SomeModel.php',
@@ -123,7 +125,7 @@ class ViewModelIntegrationTest extends TestCase
         );
     }
 
-    public function test_it_automatically_escapes_view_variables()
+    public function test_it_automatically_escapes_view_variables(): void
     {
         $this->givenFileWithContent(
             'module/classes/View/Test/CustomView.php',
@@ -133,7 +135,7 @@ class ViewModelIntegrationTest extends TestCase
 
                 class CustomView extends \Ingenerator\KohanaView\ViewModel\AbstractViewModel
                 {
-                    protected $variables = [
+                    protected array $variables = [
                         'html_string' => '<p>Stuff&Things</p>'
                     ];
                 }
@@ -176,7 +178,7 @@ class ViewModelIntegrationTest extends TestCase
         parent::tearDown();
     }
 
-    protected function givenDependenciesBootstrapped()
+    protected function givenDependenciesBootstrapped(): Dependency_Container
     {
         $modules = Kohana::modules();
         $modules['dependencies'] = TEST_ROOT_PATH.'/../vendor/ingenerator/kohana-dependencies';
@@ -191,21 +193,12 @@ class ViewModelIntegrationTest extends TestCase
         return new Dependency_Container($definitions);
     }
 
-    /**
-     * @return CFSTemplateManager
-     */
-    protected function getTemplateManager(Dependency_Container $dependencies)
+    protected function getTemplateManager(Dependency_Container $dependencies): CFSTemplateManager
     {
         return $dependencies->get('kohanaview.template.manager');
     }
 
-    /**
-     * @param string $relative_path
-     * @param string $content
-     *
-     * @return string
-     */
-    protected function givenFileWithContent($relative_path, $content)
+    protected function givenFileWithContent(string $relative_path, string $content): string
     {
         $full_path = $this->tmp_dir.'/'.$relative_path;
 
@@ -219,10 +212,7 @@ class ViewModelIntegrationTest extends TestCase
         return $full_path;
     }
 
-    /**
-     * @return HTMLRenderer
-     */
-    protected function getHTMLRenderer(Dependency_Container $dependencies)
+    protected function getHTMLRenderer(Dependency_Container $dependencies): HTMLRenderer
     {
         return $dependencies->get('kohanaview.renderer.html');
     }

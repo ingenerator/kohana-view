@@ -46,11 +46,6 @@ abstract class AbstractViewModel implements ViewModel
 {
     private array $cache = [];
 
-    /**
-     * @var array{expected_vars: list<string>, defaults: array{string, mixed}}
-     */
-    private array $display_var_schema;
-
     public function __construct()
     {
         // @todo remove the constructor when we have a rector to remove the parent::__construct call
@@ -76,19 +71,19 @@ abstract class AbstractViewModel implements ViewModel
 
     private function mergeDefaultsAndValidateVariables(array $variables): array
     {
-        $this->display_var_schema ??= $this->parseViewVarSchema();
+        $schema = $this->parseViewVarSchema();
 
         // Merge in defaults for any optional properties before validating
-        $variables = [...$this->display_var_schema['defaults'], ...$variables];
+        $variables = [...$schema['defaults'], ...$variables];
 
         // Then validate they provided all / only properties that are expected
         $errors = [];
         $provided_variables = array_keys($variables);
-        if ($unexpected = array_diff($provided_variables, $this->display_var_schema['expected_vars'])) {
+        if ($unexpected = array_diff($provided_variables, $schema['expected_vars'])) {
             $errors[] = 'Unexpected vars: '.json_encode(array_values($unexpected));
         }
 
-        if ($missing = array_diff($this->display_var_schema['expected_vars'], $provided_variables)) {
+        if ($missing = array_diff($schema['expected_vars'], $provided_variables)) {
             $errors[] = 'Missing vars: '.json_encode(array_values($missing));
         }
 
@@ -99,6 +94,9 @@ abstract class AbstractViewModel implements ViewModel
         return $variables;
     }
 
+    /**
+     * @return array{expected_vars: list<string>, defaults: array{string, mixed}}
+     */
     private function parseViewVarSchema(): array
     {
         // @todo: Support optional caching of this metadata

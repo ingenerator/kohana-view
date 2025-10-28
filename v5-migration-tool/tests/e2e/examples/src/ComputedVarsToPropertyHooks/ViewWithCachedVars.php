@@ -20,11 +20,22 @@ class ViewWithCachedVars extends AbstractViewModel
 
     protected function var_looping_var()
     {
-        foreach ([1,2,3] as $i) {
+        foreach ([1, 2, 3] as $i) {
             $this->variables['looping_var'][] = 'a new row -'.$i;
         }
 
         return $this->variables['looping_var'];
+    }
+
+    protected function var_mapping_var()
+    {
+        $this->variables['mapping_var'] = array_map($this->formatRow(...), $this->looping_var);
+        return $this->variables['mapping_var'];
+    }
+
+    private function formatRow(int $row): array
+    {
+        return ['index' => $row];
     }
 
 }

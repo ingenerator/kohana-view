@@ -29,7 +29,31 @@ class SomeViewWithSimpleDynamicVars extends AbstractViewModel
 
     protected function var_with_description()
     {
-        return [1,2];
+        return [1, 2];
+    }
+
+    protected function var_with_multiple_statements() {
+        $rows = [];
+        foreach ($this->repo->listAllUsers() as $user) {
+            $rows[] = $this->formatRow($user);
+        }
+        return $rows;
+    }
+
+    protected function var_mapped_rows(): array
+    {
+        return array_map(
+            $this->formatRow(...),
+            $this->repo->listAllUsers(),
+        );
+    }
+
+    private function formatRow(User $user): array
+    {
+        return [
+            'name' => $user->getName(),
+            'email' => $user->getEmail(),
+        ];
     }
 
 }

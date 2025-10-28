@@ -9,38 +9,43 @@ class SomeViewWithSimpleDynamicVars extends AbstractViewModel
 {
 
     public mixed $untyped {
-        get => $this->var_untyped();
+        get => 'untyped';
     }
     public array $with_typed_getter {
-        get => $this->var_with_typed_getter();
+        get => ['one' => 'a', 'two' => 'b'];
     }
     public DateTimeImmutable $with_property_read_tag {
-        get => $this->var_with_property_read_tag();
+        get => new DateTimeImmutable();
     }
     /**
      * The description of stuff
      */
     public array $with_description {
-        get => $this->var_with_description();
+        get => [1, 2];
     }
-    protected function var_untyped()
-    {
-        return 'untyped';
+    public mixed $with_multiple_statements {
+        get => $this->var_with_multiple_statements();
+    }
+    public array $mapped_rows {
+        get => array_map(
+            $this->formatRow(...),
+            $this->repo->listAllUsers(),
+        );
+    }
+    protected function var_with_multiple_statements() {
+        $rows = [];
+        foreach ($this->repo->listAllUsers() as $user) {
+            $rows[] = $this->formatRow($user);
+        }
+        return $rows;
     }
 
-    protected function var_with_typed_getter(): array
+    private function formatRow(User $user): array
     {
-        return ['one' => 'a', 'two' => 'b'];
-    }
-
-    protected function var_with_property_read_tag()
-    {
-        return new DateTimeImmutable();
-    }
-
-    protected function var_with_description()
-    {
-        return [1,2];
+        return [
+            'name' => $user->getName(),
+            'email' => $user->getEmail(),
+        ];
     }
 
 }

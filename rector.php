@@ -16,7 +16,7 @@ return RectorConfig::configure()
     ])
     ->withSkip([
         __DIR__.'/v5-migration-tool/tests/e2e',
-        __DIR__.'/v5-migration-tool/vendor'
+        __DIR__.'/v5-migration-tool/vendor',
     ])
     ->withRootFiles()
     ->withPreparedSets(

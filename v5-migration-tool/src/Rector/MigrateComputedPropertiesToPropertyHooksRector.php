@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Ingenerator\KohanaViewV5MigrationTool\Rector;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
@@ -14,6 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 use function assert;
+use function in_array;
 
 final class MigrateComputedPropertiesToPropertyHooksRector extends AbstractRector
 {
@@ -81,6 +83,7 @@ final class MigrateComputedPropertiesToPropertyHooksRector extends AbstractRecto
         $classPhpDoc = $this->phpDocInfoFactory->createFromNode($node);
         $phpDocPropertyDeclarations = $this->dynamicPropertyManager->findDynamicPropertiesFromPhpdoc($classPhpDoc);
 
+        // First, identify the properties to add and phpdoc to remove
         $newProperties = [];
         $phpDocToRemove = [];
         foreach ($candidateMethods as $propertyName => $varMethod) {
@@ -89,7 +92,7 @@ final class MigrateComputedPropertiesToPropertyHooksRector extends AbstractRecto
                 $propertyName,
                 $node,
                 $propertyTag,
-                $varMethod
+                $varMethod,
             );
         }
 
@@ -99,6 +102,11 @@ final class MigrateComputedPropertiesToPropertyHooksRector extends AbstractRecto
             insertProperties: $newProperties,
             removePhpDoc: $phpDocToRemove,
         );
+
+        // Once all hooks have been optimised into one-liners where possible, we can check for any var_ methods that
+        // are no longer required (not public, not called from inside this class, and begin var_)
+        $methodsToRemove = $this->findRedundantVarMethods($node);
+        $this->viewModelUpdater->updateClass($node, $classPhpDoc, removeStatements: $methodsToRemove);
 
         return $node;
     }
@@ -121,5 +129,35 @@ final class MigrateComputedPropertiesToPropertyHooksRector extends AbstractRecto
         }
 
         return $candidateMethods;
+    }
+
+    private function findVarMethodsCalledInClass(Class_ $classNode): array
+    {
+        $varMethodsCalled = [];
+        $this->traverseNodesWithCallable(
+            $classNode->stmts,
+            function (Node $subnode) use (&$varMethodsCalled): void {
+                if (
+                    $subnode instanceof MethodCall
+                    && str_starts_with($subnode->name->toString(), 'var_')
+                ) {
+                    $varMethodsCalled[] = $subnode->name->toString();
+                }
+            },
+        );
+
+        return array_unique($varMethodsCalled);
+    }
+
+    private function findRedundantVarMethods(Class_ $classNode): array
+    {
+        $varMethodsCalled = $this->findVarMethodsCalledInClass($classNode);
+
+        return array_filter(
+            $classNode->getMethods(),
+            fn (ClassMethod $classMethod): bool => str_starts_with($classMethod->name->toString(), 'var_')
+                && ! in_array($classMethod->name->toString(), $varMethodsCalled, true)
+                && ! $classMethod->isPublic(),
+        );
     }
 }

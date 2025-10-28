@@ -9,7 +9,9 @@ use PhpParser\Builder\Property as PropertyBuilder;
 use PhpParser\BuilderFactory;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
+use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
@@ -20,6 +22,7 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\VariadicPlaceholder;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PropertyTagValueNode;
@@ -30,6 +33,8 @@ use Rector\CodeQuality\NodeFactory\TypedPropertyFactory as RectorTypedPropertyFa
 use Rector\CodeQuality\Rector\FunctionLike\SimplifyUselessVariableRector;
 use Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
+
+use function count;
 
 class ViewDisplayPropertyFactory
 {
@@ -130,6 +135,22 @@ class ViewDisplayPropertyFactory
 
     private function createCachedGetHookBody(ClassMethod $varMethod): MethodCall
     {
+        $simpleReturnExpr = $this->findSingleReturnExpression($varMethod);
+        if ($simpleReturnExpr instanceof Expr) {
+            // The var_method has a single statement, we can just inline that into the getter
+            // get => $this->getCached(__PROPERTY__, fn () => new Thing)
+            $actualGetter = new ArrowFunction(['expr' => $simpleReturnExpr]);
+        } else {
+            // We need to keep the var_ method and use it as a callable.
+            // BuilderFactory currently doesn't support taking a VariadicPlaceholder as an arg
+            // So we have to create the object manually
+            $actualGetter = new MethodCall(
+                $this->builderFactory->var('this'),
+                $varMethod->name,
+                [new VariadicPlaceholder()],
+            );
+        }
+
         // We need to build syntax like
         // get => $this->getCached('my_property', $this->var_my_property(...));
         return $this->builderFactory->methodCall(
@@ -137,20 +158,35 @@ class ViewDisplayPropertyFactory
             'getCached',
             [
                 $this->builderFactory->constFetch('__PROPERTY__'),
-                // BuilderFactory currently doesn't support taking a VariadicPlaceholder as an arg
-                // So we have to create the object manually
-                new MethodCall(
-                    $this->builderFactory->var('this'),
-                    $varMethod->name,
-                    [new VariadicPlaceholder()],
-                ),
+                $actualGetter,
             ],
         );
     }
 
-    private function createNonCachedGetHookBody(ClassMethod $varMethod): MethodCall
+    private function findSingleReturnExpression(ClassMethod $method): false|Expr
     {
-        // Much simpler, it's just a proxy to call the method every time
+        if (count($method->stmts) !== 1) {
+            return false;
+        }
+
+        $stmt = array_first($method->stmts);
+        if ($stmt instanceof Return_) {
+            return $stmt->expr;
+        }
+
+        return false;
+    }
+
+    private function createNonCachedGetHookBody(ClassMethod $varMethod): Expr
+    {
+        $simpleReturnExpr = $this->findSingleReturnExpression($varMethod);
+        if ($simpleReturnExpr instanceof Expr) {
+            // The var_method has a single statement, we can just inline that into the getter
+            // get => new Whatever('foo');
+            return $simpleReturnExpr;
+        }
+
+        // There are multiple statements, leave it as a getter call for now
         // get => $this->var_my_property(...);
         return $this->builderFactory->methodCall(
             $this->builderFactory->var('this'),
@@ -186,7 +222,6 @@ class ViewDisplayPropertyFactory
         }
 
         $phpdoc = $this->phpDocInfoFactory->createEmpty($node);
-
         // First, add the description and type from the existing @property tag
         if ($docBlockPropertyTag->description !== '') {
             // Add the description as a separate line - often the type information in the @var tag will be redundant

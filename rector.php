@@ -14,8 +14,10 @@ return RectorConfig::configure()
         __DIR__.'/v5-migration-tool',
         __DIR__.'/tests',
     ])
-    ->withSkipPath(__DIR__.'/v5-migration-tool/tests/e2e')
-    ->withSkipPath(__DIR__.'/v5-migration-tool/vendor')
+    ->withSkip([
+        __DIR__.'/v5-migration-tool/tests/e2e',
+        __DIR__.'/v5-migration-tool/vendor'
+    ])
     ->withRootFiles()
     ->withPreparedSets(
         codeQuality: true,

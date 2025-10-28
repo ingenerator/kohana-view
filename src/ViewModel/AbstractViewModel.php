@@ -77,15 +77,11 @@ abstract class AbstractViewModel implements ViewModel
         $variables = [...$schema['defaults'], ...$variables];
 
         // Then validate they provided all / only properties that are expected
-        $errors = [];
         $provided_variables = array_keys($variables);
-        if ($unexpected = array_diff($provided_variables, $schema['expected_vars'])) {
-            $errors[] = 'Unexpected vars: '.json_encode(array_values($unexpected));
-        }
-
-        if ($missing = array_diff($schema['expected_vars'], $provided_variables)) {
-            $errors[] = 'Missing vars: '.json_encode(array_values($missing));
-        }
+        $errors = array_filter([
+            'unexpected' => array_values(array_diff($provided_variables, $schema['expected_vars'])),
+            'missing' => array_values(array_diff($schema['expected_vars'], $provided_variables)),
+        ]);
 
         if ($errors !== []) {
             throw InvalidDisplayVariablesException::passedToDisplay(static::class, $errors);

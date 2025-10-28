@@ -16,10 +16,15 @@ use function sprintf;
 class InvalidDisplayVariablesException extends InvalidArgumentException
 {
     /**
-     * @param string[] $errors
+     * @param array{unexpected?: list<string>, missing?: list<string>} $error_groups
      */
-    public static function passedToDisplay(string $view_class, array $errors): static
+    public static function passedToDisplay(string $view_class, array $error_groups): static
     {
+        $errors = [];
+        foreach ($error_groups as $key => $var_names) {
+            $errors[] = ucfirst($key). ' vars: '.json_encode($var_names);
+        }
+
         return new static(
             sprintf(
                 "Invalid variables provided to %s::display()\n%s",

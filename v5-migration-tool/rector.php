@@ -6,6 +6,7 @@ use Ingenerator\KohanaView\ViewModel\NestedChildView;
 use Ingenerator\KohanaView\ViewModel\NestedParentView;
 use Ingenerator\KohanaView\ViewModel\PageContentView;
 use Ingenerator\KohanaView\ViewModel\PageLayoutView;
+use Ingenerator\KohanaViewV5MigrationTool\Rector\DisableCustomVarValidationRector;
 use Ingenerator\KohanaViewV5MigrationTool\Rector\FixPhpDocPropertiesWithoutDollarPrefixRector;
 use Ingenerator\KohanaViewV5MigrationTool\Rector\MigrateComputedPropertiesToAsymmetricVisibilityRector;
 use Ingenerator\KohanaViewV5MigrationTool\Rector\MigrateComputedPropertiesToPropertyHooksRector;
@@ -36,4 +37,5 @@ return RectorConfig::configure()
         MigrateComputedPropertiesToAsymmetricVisibilityRector::class,
         MigrateComputedPropertiesToPropertyHooksRector::class,
         MigrateDisplayVariablesToNativePropertiesRector::class,
+        DisableCustomVarValidationRector::class,
     ]);

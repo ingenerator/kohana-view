@@ -61,14 +61,8 @@ abstract class AbstractViewModel implements ViewModel
      */
     public function display(array $variables): void
     {
-        $this->display_var_schema ??= $this->parseViewVarSchema();
+        $variables = $this->mergeDefaultsAndValidateVariables($variables);
 
-        // Merge in defaults for any optional properties before validating
-        $variables = [...$this->display_var_schema['defaults'], ...$variables];
-
-        if ($errors = $this->validateDisplayVariables($variables)) {
-            throw InvalidDisplayVariablesException::passedToDisplay(static::class, $errors);
-        }
         // Clear any cached computed properties
         $this->cache = [];
         try {
@@ -80,13 +74,14 @@ abstract class AbstractViewModel implements ViewModel
         }
     }
 
-    /**
-     * @return string[] of errors
-     */
-    protected function validateDisplayVariables(array $variables): array
+    private function mergeDefaultsAndValidateVariables(array $variables): array
     {
-        // @todo remove / rename this method, and migrate an `#[Override]` onto the child classes to force review / remove
         $this->display_var_schema ??= $this->parseViewVarSchema();
+
+        // Merge in defaults for any optional properties before validating
+        $variables = [...$this->display_var_schema['defaults'], ...$variables];
+
+        // Then validate they provided all / only properties that are expected
         $errors = [];
         $provided_variables = array_keys($variables);
         if ($unexpected = array_diff($provided_variables, $this->display_var_schema['expected_vars'])) {
@@ -97,7 +92,11 @@ abstract class AbstractViewModel implements ViewModel
             $errors[] = 'Missing vars: '.json_encode(array_values($missing));
         }
 
-        return $errors;
+        if ($errors !== []) {
+            throw InvalidDisplayVariablesException::passedToDisplay(static::class, $errors);
+        }
+
+        return $variables;
     }
 
     private function parseViewVarSchema(): array

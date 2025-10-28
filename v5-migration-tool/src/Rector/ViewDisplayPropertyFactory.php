@@ -27,6 +27,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
 use Rector\CodeQuality\NodeFactory\TypedPropertyFactory as RectorTypedPropertyFactory;
+use Rector\CodeQuality\Rector\FunctionLike\SimplifyUselessVariableRector;
 use Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 
@@ -39,6 +40,7 @@ class ViewDisplayPropertyFactory
         private readonly PhpDocInfoFactory $phpDocInfoFactory,
         private readonly PhpDocInfoPrinter $phpDocPrinter,
         private readonly VarTagRemover $varTagRemover,
+        private readonly SimplifyUselessVariableRector $simplifyUselessVariables,
     ) {
     }
 
@@ -106,9 +108,8 @@ class ViewDisplayPropertyFactory
                     && $subNode->var->name->name === 'variables'
                     && $subNode->dim->value === $propertyName
                 ) {
-                    // We can't reliably tell whether the method actually needs a variable (or if it could e.g.
-                    // be refactored to an immediate return) but it's anyway simpler for the syntax to replace the
-                    // property reference with a local variable which can always be refactored out later.
+                    // It's tricky to tell here whether the method actually needs a variable - the simplest thing is to
+                    // start with one and then run another Rector to refactor it out to a direct return if possible.
                     $isCached = true;
 
                     return new Variable('__cached_result__');
@@ -118,6 +119,11 @@ class ViewDisplayPropertyFactory
                 return null;
             },
         );
+
+        if ($isCached) {
+            // Remove any unnecessary variables in the getter
+            $this->simplifyUselessVariables->refactor($varMethod);
+        }
 
         return $isCached;
     }

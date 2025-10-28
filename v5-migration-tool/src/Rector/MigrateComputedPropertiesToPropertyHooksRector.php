@@ -19,7 +19,6 @@ final class MigrateComputedPropertiesToPropertyHooksRector extends AbstractRecto
 {
     public function __construct(
         private readonly AbstractViewModelClassFilter $classFilter,
-
         private readonly PhpDocInfoFactory $phpDocInfoFactory,
         private readonly PhpDocDynamicPropertyManager $dynamicPropertyManager,
         private readonly ViewDisplayPropertyFactory $viewPropertyFactory,

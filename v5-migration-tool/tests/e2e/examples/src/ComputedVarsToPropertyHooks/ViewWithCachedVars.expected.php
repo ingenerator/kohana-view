@@ -16,8 +16,7 @@ class ViewWithCachedVars extends AbstractViewModel
     }
     protected function var_complex_var()
     {
-        $__cached_result__ = new stdClass();
-        return $__cached_result__;
+        return new stdClass();
     }
 
     protected function var_looping_var()

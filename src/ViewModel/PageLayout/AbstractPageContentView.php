@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Ingenerator\KohanaView\ViewModel\PageLayout;
 
 use Ingenerator\KohanaView\ViewModel\NestedParentView;
+use RuntimeException;
 
 /**
  * Provides a base class for all views that are intended to be the main view on a page, to
@@ -13,13 +14,15 @@ use Ingenerator\KohanaView\ViewModel\NestedParentView;
  *
  * This also allows the page content view to have access to the containing page - for example
  * to set the title or otherwise interact with the <head> and <meta> parts of the page.
- *
- * @property-read NestedParentView $page
  */
 abstract class AbstractPageContentView extends AbstractNestedChildView
 {
-    public function var_page(): NestedParentView
+    public NestedParentView $page {
+        get => $this->getUltimatePageView();
+    }
+
+    final protected function var_page(): never
     {
-        return $this->getUltimatePageView();
+        throw new RuntimeException('Call to legacy '.__METHOD__);
     }
 }

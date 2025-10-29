@@ -13,29 +13,30 @@ use Ingenerator\KohanaView\ViewModel\NestedParentView;
  *
  * It is commonly used together with a AbstractPageContentView or NestedChildView but note you can always
  * still create an instance of this page layout and display any html string directly for simpler cases.
- *
- * @property-read string $body_html The content to display in the body HTML area
- * @property-read string $title The page title
  */
 abstract class AbstractPageLayoutView extends AbstractViewModel implements NestedParentView
 {
-    protected array $variables = [
-        'body_html' => null,
-        'title' => null,
-    ];
+    /**
+     * The content to display in the body HTML area.
+     */
+    public protected(set) string $body_html;
+    /**
+     * The page title.
+     */
+    public protected(set) string $title;
 
     public function setTitle(string $title): void
     {
-        $this->variables['title'] = $title;
+        $this->title = $title;
     }
 
     public function setBodyHTML(string $html): void
     {
-        $this->variables['body_html'] = $html;
+        $this->body_html = $html;
     }
 
-    public function setChildHtml($html): void
+    public function setChildHtml(string $html): void
     {
-        $this->variables['body_html'] = $html;
+        $this->body_html = $html;
     }
 }

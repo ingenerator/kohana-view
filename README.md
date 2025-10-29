@@ -56,20 +56,18 @@ functionality. View classes can be named anything you like, with or without name
 //application/classes/View/Hello/WorldView.php
 namespace View\Hello;
 
-/**
- * @property-read string  $name       automatically returned from the $variables array
- * @property-read boolean $is_morning automatically returned from the var_is_morning method
- */
 class WorldView extends \Ingenerator\KohanaView\ViewModel\AbstractViewModel
 {
-    protected $variables = [
-        'name' => NULL,
-    ];
-
-    protected function var_is_morning()
-    {
-        $date = new \DateTime;
-        return ($date->format('H') < 12);
+    /**
+     * The `name` variable will be passed into the view's `->display()` method. 
+     */
+    public protected(set) string $name;
+    
+    /**
+     * The `is_morning` property will be computed on each access   
+     */
+    public bool $is_morning {
+       get => new \DateTimeImmutable()->format('H') < 12; 
     }
 
 }
@@ -173,10 +171,6 @@ You may want to extend from the provided `AbstractIntermediateLayoutView`, `Abst
 <?php
 namespace View\Layout;
 
-/**
- * @property-read string $body_html
- * @propery-read  string $title
- */
 class SitePageTemplateView extends Ingenerator\KohanaView\ViewModel\PageLayout\AbstractPageLayoutView
 {
 }
@@ -186,21 +180,16 @@ class SitePageTemplateView extends Ingenerator\KohanaView\ViewModel\PageLayout\A
 <?php
 namespace View\Layout;
 
-/**
- * @property-read ViewModel $sidebar  
- */
 class ContentWithSidebarLayoutView extends Ingenerator\KohanaView\ViewModel\PageLayout\AbstractIntermediateLayoutView
 {
-    public function __construct(SitePageTemplateView $page, ViewModel $sidebar) 
+    public function __construct(
+       SitePageTemplateView $page,
+       public readonly ViewModel $sidebar
+    ) 
     {
         parent::__construct($page);
-        $this->sidebar = $sidebar;
     }
-    
-    protected function var_sidebar()
-    {
-        return $this->sidebar;
-    }
+
 }
 ```
 
@@ -217,21 +206,19 @@ class SidebarView extends Ingenerator\KohanaView\ViewModel\AbstractViewModel
 ```php
 namespace View\Layout;
 
-/**
- * @property-read SitePageTemplateView $page 
- */
 class SitePageContentView extends Ingenerator\KohanaView\ViewModel\PageLayout\AbstractPageContentView {
 
-  #[\Override]
-  protected function var_page(): SitePageTemplateView {
-    /*
-     * $view->page will be the top-level parent view. The generic AbstractPageContentView types this as any
-     * NestedParentView - if you know that your site will always inject a SitePageTemplateView then you can
-     * extend this view variable with the correct type to allow autocompletion in your templates.
-     */ 
-    $page = parent::var_page();
-    assert($page instanceof SitePageTemplateView, 'Expected to be within a SitePageTemplateView, got ' . $page::class);
-    return $page;    
+  /**
+   * $view->page will be the top-level parent view. The generic AbstractPageContentView types this as any
+   * NestedParentView - if you know that your site will always inject a SitePageTemplateView then you can
+   * extend this view variable with the correct type to allow autocompletion in your templates.
+   */ 
+  public SitePageTemplateView $page {
+    get => {
+       $page = parent::$page::get();
+       assert($page instanceof SitePageTemplateView, 'Expected to be within a SitePageTemplateView, got ' . $page::class);
+       return $page;
+    }
   }
 }
 ```
@@ -241,14 +228,9 @@ class SitePageContentView extends Ingenerator\KohanaView\ViewModel\PageLayout\Ab
 <?php
 namespace View\Pages;
 
-/**
- * @property-read string $name
- */
 class HelloWorldView extends View\Layout\SitePageContentView
 {
-  protected $variables = [
-    'name' => NULL
-  ];
+  public protected(set) string $name;
   
 }
 ```
@@ -320,36 +302,80 @@ class Controller_Welcome extends Controller // Look, extend any controller! No m
 Advanced examples
 -----------------
 
-### Default variables
+### `display()` properties and default variables
 
-As standard, Views require that the array passed to `AbstractViewModel->display()` contains values for all defined variables.
-This is to ensure that the view model is always in the correct state even if it is rendered multiple times (as often happens
-with partials and sub-views).
+Anything that extends AbstractViewModel will enforce that the array passed to `AbstractViewModel->display()` contains 
+values for all properties that are "view model properties". This is to ensure that the view model is always in the 
+correct state even if it is rendered multiple times (as often happens with partials and sub-views).
 
-You can define optional view variables by populating the `$default_variables` array in your ViewModel. Note that these 
-defaults **will be reassigned** to the `$variables` array on every call to `->display()` to ensure that they are always in
-expected state.
+By default, these are any properties that are:
+
+* public (at least for reading)
+* not promoted properties from the class constructor
+* do not have property hooks
+
+You can customise this by tagging properties with the `ViewModelProperty` attribute.
+
+You can also use the `ViewModelProperty` attribute to mark that a property **can** be passed into `display()` but can
+also be left with a default value. The default **will be reassigned** on every call to `->display()` to ensure that 
+the property is always in expected state.
 
 ```php
-class View_Something extends AbstractViewModel {
-  protected $default_variables = [
-    'title' => 'My page title',
-  ];
+use Ingenerator\KohanaView\ViewModelProperty;
 
-  protected $variables = [
-    'caption' => NULL
-  ];
+class View_Something extends AbstractViewModel {
+ 
+  /**
+   * `caption` MUST be included in `->display($variables)` 
+   */
+  public protected(set) string $caption;
+
+  /**
+   * `title` MAY be included in `->display($variables)`. If not, it will be reset to 'My page title'.
+   */
+  #[ViewModelProperty(is_displayale: true, is_optional: true)]  
+  public protected(set) string $title = 'My page title';
+  
+  /**
+   * `internal` MUST be included in `->display($variables)` - but it will not be directly available in the template
+   * Note that it must be PROTECTED not PRIVATE to allow AbstractViewModel::display to populate it. 
+   */
+  #[ViewModelProperty(is_displayable: true)]
+  protected string $internal;
+  
+  /**
+   * `some_var` MUST NOT be included in `->display($variables)` because it is explicitly marked.
+   * Without the ViewModelProperty attribute this would be marked as displayable since it is public.
+   */
+  #[ViewModelProperty(is_displayable: false)]
+  public readonly string $some_var;
+  
+  /**
+   * `now` MUST NOT be included in `->display($variables)` because it has hooks 
+   */
+  public DateTimeImmutable $now {
+    get => new DateTimeImmutable()
+  }
+  
+  /**
+   * `link` MUST NOT be included in `->display($variables)` because it is a promoted property
+   */
+  public function __construct(
+     public readonly LinkBuilder $link
+  ) {
+    
+  }
 
 }
 
 print $view->title;    // 'My page title'
 print $view->caption;  // ''
 
-$view->display(['caption' => 'Something', 'title' => 'A title']);
+$view->display(['caption' => 'Something', 'title' => 'A title', 'internal'=> 'foo']);
 print $view->title;    // 'A title'
 print $view->caption;  // 'Something'
 
-$view->display(['caption' => 'Something else']);
+$view->display(['caption' => 'Something else', 'internal'=> 'foo']);
 print $view->title;    // 'My page title'
 print $view->caption;  // 'Something else'
 
@@ -357,34 +383,39 @@ print $view->caption;  // 'Something else'
 
 ### Caching variables
 
-Views that extend `AbstractViewModel` expose all the variables in their `$variables` array and also any dynamic
-variables provided by `var_variable_name` methods. The `$variables` array takes precedence over dynamic methods which
-means you can also use it as a cache for calculated variables that only need to be calculated once for each view
-rendering:
+You may have a computed view variable (e.g. from a property hook) that you only want to recompute if the underlying view 
+data has changed. Views that extend `AbstractViewModel` can solve this with the `->getCached()` helper method.
+
+The variables array is cleared with every call to `display`, so values cached in this way will be cleared every time you
+provide new view data (eg if rendering a view in a loop).
 
 ```php
 <?php
-class View_That_Does_Work {
-  protected $variables = [
-    'user_email' => ''
-  ];
+class View_That_Does_Work extends \Ingenerator\KohanaView\ViewModel\AbstractViewModel {
 
-  protected function var_user_activity()
+  public protected(set) string $user_email;
+  
+  public array $user_activity {
+    get => $this->getCached(__PROPERTY__, $this->loadUserActivity(...))
+  }  
+  
+  public function __construct (
+     private readonly DatabaseAdapter $database
+  ) {    
+  }
+
+  private function loadUserActivity(): array
   {
     $activity = [];
     foreach ($this->database->loadActivityForUser($this->user_email) as $activity) {
       $activity[] = (string) $activity;
     }
-    $this->variables['user_activity'] = $activity;
-    // Future usage of $view->user_activity will now get the value cached in the variables array without calling
-    // this method again.
     return $activity;
+    // Future usage of $view->user_activity will now get the value cached in the variables array without calling
+    // this method again until the next ->display() call.
   }
 }
 ```
-
-The variables array is cleared with every call to `display`, so values cached in this way will be cleared every time you
-provide new view data (eg if rendering a view in a loop).
 
 ### Rendering nested views (partials)
 
@@ -398,10 +429,9 @@ For example:
 
 ```php
 <?php
-class View_Container {
-  protected $variables = [
-    'users' => [],
-  ];
+class View_Container extends \Ingenerator\KohanaView\ViewModel\AbstractViewModel {
+
+  public protected(set) array $users;
 
   public function __construct(View_User_FaceWidget $face_widget)
   {

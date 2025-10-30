@@ -23,10 +23,10 @@ use function count;
 final class MigrateComputedPropertiesToAsymmetricVisibilityRector extends AbstractRector
 {
     public function __construct(
-        private readonly AbstractViewModelClassFilter $classFilter,
-        private readonly PhpDocInfoFactory $phpDocInfoFactory,
+        private readonly ViewModelClassFilter         $classFilter,
+        private readonly PhpDocInfoFactory            $phpDocInfoFactory,
         private readonly PhpDocDynamicPropertyManager $dynamicPropertyManager,
-        private readonly ViewModelClassUpdater $viewClassUpdater,
+        private readonly ViewModelClassUpdater        $viewClassUpdater,
     ) {
     }
 

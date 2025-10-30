@@ -20,11 +20,11 @@ use function in_array;
 final class MigrateComputedPropertiesToPropertyHooksRector extends AbstractRector
 {
     public function __construct(
-        private readonly AbstractViewModelClassFilter $classFilter,
-        private readonly PhpDocInfoFactory $phpDocInfoFactory,
+        private readonly ViewModelClassFilter         $classFilter,
+        private readonly PhpDocInfoFactory            $phpDocInfoFactory,
         private readonly PhpDocDynamicPropertyManager $dynamicPropertyManager,
-        private readonly ViewDisplayPropertyFactory $viewPropertyFactory,
-        private readonly ViewModelClassUpdater $viewModelUpdater,
+        private readonly ViewDisplayPropertyFactory   $viewPropertyFactory,
+        private readonly ViewModelClassUpdater        $viewModelUpdater,
     ) {
     }
 

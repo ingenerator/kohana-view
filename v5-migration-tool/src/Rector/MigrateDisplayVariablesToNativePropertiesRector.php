@@ -28,12 +28,12 @@ use function count;
 final class MigrateDisplayVariablesToNativePropertiesRector extends AbstractRector
 {
     public function __construct(
-        private readonly AbstractViewModelClassFilter $classFilter,
-        private readonly PhpDocInfoFactory $phpDocInfoFactory,
+        private readonly ViewModelClassFilter         $classFilter,
+        private readonly PhpDocInfoFactory            $phpDocInfoFactory,
         private readonly PhpDocDynamicPropertyManager $dynamicPropertyManager,
-        private readonly ViewDisplayPropertyFactory $propertyFactory,
-        private readonly ViewModelClassUpdater $viewModelUpdater,
-        private readonly BuilderFactory $builderFactory,
+        private readonly ViewDisplayPropertyFactory   $propertyFactory,
+        private readonly ViewModelClassUpdater        $viewModelUpdater,
+        private readonly BuilderFactory               $builderFactory,
     ) {
     }
 

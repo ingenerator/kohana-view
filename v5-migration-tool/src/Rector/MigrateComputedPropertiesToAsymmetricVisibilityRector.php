@@ -8,6 +8,7 @@ use PhpParser\Comment\Doc;
 use PhpParser\Modifiers;
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
@@ -23,10 +24,11 @@ use function count;
 final class MigrateComputedPropertiesToAsymmetricVisibilityRector extends AbstractRector
 {
     public function __construct(
-        private readonly ViewModelClassFilter         $classFilter,
-        private readonly PhpDocInfoFactory            $phpDocInfoFactory,
+        private readonly ViewModelClassFilter $classFilter,
+        private readonly PhpDocInfoFactory $phpDocInfoFactory,
         private readonly PhpDocDynamicPropertyManager $dynamicPropertyManager,
-        private readonly ViewModelClassUpdater        $viewClassUpdater,
+        private readonly ViewModelClassUpdater $viewClassUpdater,
+        private readonly PropertyDeclarationResolver $propertyResolver,
     ) {
     }
 
@@ -88,8 +90,8 @@ final class MigrateComputedPropertiesToAsymmetricVisibilityRector extends Abstra
                 continue;
             }
 
-            $propertyNode = $node->getProperty($propertyName);
-            assert($propertyNode instanceof Property);
+            $propertyNode = $this->propertyResolver->getPropertyDeclaration($node, $propertyName);
+            assert($propertyNode !== null);
 
             $phpDocToRemove[] = $propertyTag = $phpDocPropertyDeclarations[$propertyName] ?? null;
 
@@ -121,8 +123,8 @@ final class MigrateComputedPropertiesToAsymmetricVisibilityRector extends Abstra
         $candidateMethods = [];
         foreach ($varMethods as $varMethod) {
             $propertyName = preg_replace('/^var_/', '', $varMethod->name->toString());
-            $existingProp = $class->getProperty($propertyName);
-            if ( ! $existingProp instanceof Property) {
+            $existingProp = $this->propertyResolver->getPropertyDeclaration($class, $propertyName);
+            if ($existingProp === null) {
                 // Don't have a property yet with this name, so this is more than asymmetric visibility
                 continue;
             }
@@ -164,18 +166,20 @@ final class MigrateComputedPropertiesToAsymmetricVisibilityRector extends Abstra
             && $statement->expr->name->name === $propertyName;
     }
 
-    private function makePropertyPublicProtectedSet(Property $propertyNode): void
+    private function makePropertyPublicProtectedSet(Param|Property $propertyNode): void
     {
-        $propertyNode->flags = (
-            $propertyNode->flags
-            // Turn off existing protected & private visibility flags
+        // Turn off existing visibility modifiers
+        $flags = $propertyNode->flags
             & ~Modifiers::PROTECTED
             & ~Modifiers::PRIVATE
-            & ~Modifiers::PRIVATE_SET
-        )
-            // Make it protected set (needs to be protected so the base view class can access it for display)
-            | Modifiers::PROTECTED_SET
-            // And make it public
-            | Modifiers::PUBLIC;
+            & ~Modifiers::PRIVATE_SET;
+
+        if ($propertyNode instanceof Param && $propertyNode->isPromoted()) {
+            // Promoted properties become public readonly
+            $propertyNode->flags = $flags | Modifiers::PUBLIC | Modifiers::READONLY;
+        } else {
+            // Direct properties become public protected set (needs to be protected so the base view class can access it for display)
+            $propertyNode->flags = $flags | Modifiers::PROTECTED_SET | Modifiers::PUBLIC;
+        }
     }
 }

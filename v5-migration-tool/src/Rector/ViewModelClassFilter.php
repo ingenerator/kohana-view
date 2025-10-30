@@ -23,7 +23,7 @@ final readonly class ViewModelClassFilter
     {
         $classReflection = $this->reflectionResolver->resolveClassReflection($node);
 
-        if (!$classReflection instanceof ClassReflection) {
+        if ( ! $classReflection instanceof ClassReflection) {
             return false;
         }
 
@@ -34,16 +34,22 @@ final readonly class ViewModelClassFilter
     {
         $classReflection = $this->reflectionResolver->resolveClassReflection($node);
 
-        if (!$classReflection instanceof ClassReflection) {
+        if ( ! $classReflection instanceof ClassReflection) {
             return false;
         }
+        if ($classReflection->is(ViewModel::class)) {
+            return true;
+        }
+        if ($classReflection->is(TemplateSpecifyingViewModel::class)) {
+            return true;
+        }
+        if ($classReflection->is(TemplateSpecifyingViewModel::class)) {
+            return true;
+        }
+        if ($classReflection->is(Renderer::class)) {
+            return true;
+        }
 
-        return (
-            $classReflection->is(ViewModel::class)
-            || $classReflection->is(TemplateSpecifyingViewModel::class)
-            || $classReflection->is(TemplateSpecifyingViewModel::class)
-            || $classReflection->is(Renderer::class)
-            || $classReflection->is(TemplateManager::class)
-        );
+        return $classReflection->is(TemplateManager::class);
     }
 }

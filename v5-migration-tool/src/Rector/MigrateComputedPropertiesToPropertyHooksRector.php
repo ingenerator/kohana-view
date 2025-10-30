@@ -8,7 +8,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -20,11 +19,12 @@ use function in_array;
 final class MigrateComputedPropertiesToPropertyHooksRector extends AbstractRector
 {
     public function __construct(
-        private readonly ViewModelClassFilter         $classFilter,
-        private readonly PhpDocInfoFactory            $phpDocInfoFactory,
+        private readonly ViewModelClassFilter $classFilter,
+        private readonly PhpDocInfoFactory $phpDocInfoFactory,
         private readonly PhpDocDynamicPropertyManager $dynamicPropertyManager,
-        private readonly ViewDisplayPropertyFactory   $viewPropertyFactory,
-        private readonly ViewModelClassUpdater        $viewModelUpdater,
+        private readonly ViewDisplayPropertyFactory $viewPropertyFactory,
+        private readonly ViewModelClassUpdater $viewModelUpdater,
+        private readonly PropertyDeclarationResolver $propertyDeclarationResolver,
     ) {
     }
 
@@ -120,7 +120,7 @@ final class MigrateComputedPropertiesToPropertyHooksRector extends AbstractRecto
         $candidateMethods = [];
         foreach ($varMethods as $varMethod) {
             $propertyName = preg_replace('/^var_/', '', $varMethod->name->toString());
-            if ($class->getProperty($propertyName) instanceof Property) {
+            if ($this->propertyDeclarationResolver->hasPropertyDeclaration($class, $propertyName)) {
                 // Already have a native property with this name
                 continue;
             }

@@ -12,6 +12,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\ArrowFunction;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
@@ -126,8 +127,26 @@ class ViewDisplayPropertyFactory
         );
 
         if ($isCached) {
-            // Remove any unnecessary variables in the getter
+            // Remove any unnecessary variables in the getter.
+            $this->simplifyUselessVariables->configure(['only_direct_assign' => false]);
             $this->simplifyUselessVariables->refactor($varMethod);
+
+            // NB the Rector will only do anything if there is more than one
+            // statement in the method. It seems like if there are multiple statements it assumes the var is required
+            // even though by definition it can't be.
+            // @todo: rector bug?
+
+            if (count($varMethod->stmts) === 1) {
+                $statement = array_first($varMethod->stmts);
+                if ($statement instanceof Return_
+                    && $statement->expr instanceof Assign
+                    && $statement->expr->var instanceof Variable
+                    && $statement->expr->var->name === '__cached_result__'
+                ) {
+                    // Inline the result of the assignment
+                    $statement->expr = $varMethod->stmts[0]->expr->expr;
+                }
+            }
         }
 
         return $isCached;

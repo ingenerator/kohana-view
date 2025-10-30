@@ -33,6 +33,14 @@ class ViewWithCachedVars extends AbstractViewModel
         return $this->variables['mapping_var'];
     }
 
+    protected function var_with_inline_caching()
+    {
+        return $this->variables['with_inline_caching'] = array_map(
+            fn(int $k) => $k ^ 10,
+            [1, 2, 3, 4],
+        );
+    }
+
     private function formatRow(int $row): array
     {
         return ['index' => $row];

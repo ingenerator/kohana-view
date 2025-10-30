@@ -10,15 +10,15 @@ use Rector\Rector\AbstractRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationBasedOnParentClassMethodRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 use function assert;
 
 final class AddKohanaViewReturnTypesRector extends AbstractRector
 {
     public function __construct(
-        private readonly ViewModelClassFilter                                   $classFilter,
-        private readonly AddReturnTypeDeclarationBasedOnParentClassMethodRector $chainedRector
-    )
-    {
+        private readonly ViewModelClassFilter $classFilter,
+        private readonly AddReturnTypeDeclarationBasedOnParentClassMethodRector $chainedRector,
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -72,7 +72,7 @@ final class AddKohanaViewReturnTypesRector extends AbstractRector
     public function refactor(Node $node): ?Node
     {
         assert($node instanceof Class_);
-        if (!$this->classFilter->implementsAnyKohanaViewInterface($node)) {
+        if ( ! $this->classFilter->implementsAnyKohanaViewInterface($node)) {
             // Not an AbstractViewModel
             return null;
         }

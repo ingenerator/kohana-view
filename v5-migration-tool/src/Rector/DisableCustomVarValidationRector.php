@@ -24,7 +24,7 @@ final class DisableCustomVarValidationRector extends AbstractRector
     public function __construct(
         private readonly ViewModelClassFilter $classFilter,
         private readonly PhpAttributeAnalyzer $phpAttributeAnalyzer,
-        private readonly BuilderFactory       $builderFactory,
+        private readonly BuilderFactory $builderFactory,
     ) {
     }
 

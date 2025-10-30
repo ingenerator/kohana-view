@@ -39,5 +39,5 @@ return RectorConfig::configure()
         MigrateComputedPropertiesToPropertyHooksRector::class,
         MigrateDisplayVariablesToNativePropertiesRector::class,
         DisableCustomVarValidationRector::class,
-        AddKohanaViewReturnTypesRector::class
+        AddKohanaViewReturnTypesRector::class,
     ]);

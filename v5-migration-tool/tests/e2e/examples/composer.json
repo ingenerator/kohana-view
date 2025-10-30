@@ -2,19 +2,15 @@
   "require": {
     "ingenerator/kohana-view": "*@dev"
   },
-  "repositories": [
-    {
-      "type": "path",
-      "url": "../../../../",
-      "options": {
-        "symlink": false
-      }
-    },
-    {
+  "require-dev": {
+    "ingenerator/kohana-view-v5-migration-tool": "*@dev"
+  },
+  "repositories": {
+    "ingen-packages": {
       "type": "composer",
       "url": "https://php-packages.ingenerator.com"
     }
-  ],
+  },
   "extra": {
     "installer-paths": {
       "vendor/{$vendor}/{$name}": [

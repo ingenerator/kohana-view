@@ -1,4 +1,5 @@
 {
+  "name": "ingenerator/kohana-view-v5-migration-tool",
   "require": {
     "php": "8.4.*",
     "rector/rector": "^2.2",

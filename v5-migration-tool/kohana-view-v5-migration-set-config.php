@@ -15,25 +15,15 @@ use Ingenerator\KohanaViewV5MigrationTool\Rector\MigrateDisplayVariablesToNative
 use Rector\Config\RectorConfig;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 
-$project_base_dir = getcwd();
-
-return RectorConfig::configure()
-    ->withPaths([$project_base_dir])
-    ->withSkip([
-        $project_base_dir.'/vendor',
-    ])
-    ->withRootFiles()
-    ->withImportNames(
-        removeUnusedImports: true,
-    )
-    ->withConfiguredRule(
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->ruleWithConfiguration(
         RenameClassRector::class,
         [
             PageContentView::class => NestedChildView::class,
             PageLayoutView::class => NestedParentView::class,
         ],
-    )
-    ->withRules([
+    );
+    $rectorConfig->rules([
         FixPhpDocPropertiesWithoutDollarPrefixRector::class,
         MigrateComputedPropertiesToAsymmetricVisibilityRector::class,
         MigrateComputedPropertiesToPropertyHooksRector::class,
@@ -41,3 +31,4 @@ return RectorConfig::configure()
         DisableCustomVarValidationRector::class,
         AddKohanaViewReturnTypesRector::class,
     ]);
+};

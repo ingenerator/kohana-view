@@ -84,8 +84,9 @@ class EndToEndWithExampleFilesTest extends TestCase
             overwriteNewerFiles: true,
         );
         self::configureComposerRepository('kohana-view', __DIR__.'/../../../');
-        self::configureComposerRepository('kohana-view-tool', __DIR__.'/../../');
         self::runInWorkingDir(['composer', 'install']);
+        $migration_tool_path = realpath(__DIR__.'/../../');
+        self::runInWorkingDir([$migration_tool_path.'/configure']);
     }
 
     private static function configureComposerRepository(string $name, string $path): void

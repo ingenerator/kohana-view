@@ -2,9 +2,6 @@
   "require": {
     "ingenerator/kohana-view": "*@dev"
   },
-  "require-dev": {
-    "ingenerator/kohana-view-v5-migration-tool": "*@dev"
-  },
   "repositories": {
     "ingen-packages": {
       "type": "composer",

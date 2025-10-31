@@ -12,6 +12,7 @@ use Ingenerator\KohanaViewV5MigrationTool\Rector\FixPhpDocPropertiesWithoutDolla
 use Ingenerator\KohanaViewV5MigrationTool\Rector\MigrateComputedPropertiesToAsymmetricVisibilityRector;
 use Ingenerator\KohanaViewV5MigrationTool\Rector\MigrateComputedPropertiesToPropertyHooksRector;
 use Ingenerator\KohanaViewV5MigrationTool\Rector\MigrateDisplayVariablesToNativePropertiesRector;
+use Ingenerator\KohanaViewV5MigrationTool\Rector\UseKohanaViewNewTemplateEscapingRector;
 use Rector\Config\RectorConfig;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 
@@ -30,5 +31,6 @@ return static function (RectorConfig $rectorConfig): void {
         MigrateDisplayVariablesToNativePropertiesRector::class,
         DisableCustomVarValidationRector::class,
         AddKohanaViewReturnTypesRector::class,
+        UseKohanaViewNewTemplateEscapingRector::class,
     ]);
 };

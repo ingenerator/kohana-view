@@ -15,8 +15,11 @@ use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
 use View\Test\CustomView;
+use View\Test\InnerView;
+use View\Test\OuterView;
 use View\Test\SomeModel;
 
+use function assert;
 use function constant;
 use function dirname;
 use function file_get_contents;
@@ -160,6 +163,74 @@ class ViewModelIntegrationTest extends TestCase
         $this->assertSame(
             'View with &lt;p&gt;Stuff&amp;Things&lt;/p&gt;, <p>Stuff&Things</p>',
             $this->getHTMLRenderer($dependencies)->render($view)
+        );
+    }
+
+    public function test_it_recursively_renders_nested_views(): void
+    {
+        $this->givenFileWithContent(
+            'module/classes/View/Test/OuterView.php',
+            <<<'PHP'
+                <?php
+                namespace View\Test;
+
+                class OuterView extends \Ingenerator\KohanaView\ViewModel\AbstractViewModel
+                {
+
+                    public function __construct(
+                        public readonly InnerView $inner_view,
+                        public readonly string $title = 'My title',
+                    )
+                    {
+                    }
+                }
+                PHP
+        );
+
+        $this->givenFileWithContent(
+            'module/views/test/outer.php',
+            <<<'PHP'
+                <h4><?=$view->title;?></h4>
+                <div><?=$view->inner_view;?></div>
+                PHP
+        );
+
+        $this->givenFileWithContent(
+            'module/classes/View/Test/InnerView.php',
+            <<<'PHP'
+                <?php
+                namespace View\Test;
+
+                class InnerView extends \Ingenerator\KohanaView\ViewModel\AbstractViewModel
+                {
+
+                    public function __construct(
+                        public readonly string $foo = 'From the inside',
+                    )
+                    {
+                    }
+                }
+                PHP
+        );
+
+        $this->givenFileWithContent(
+            'module/views/test/inner.php',
+            '<p><?=$view->foo;?></p>'
+        );
+
+        $dependencies = $this->givenDependenciesBootstrapped();
+
+        /** @noinspection PhpUndefinedClassInspection */
+        $inner = new InnerView();
+        /** @noinspection PhpUndefinedClassInspection */
+        $outer = new OuterView($inner);
+        assert($outer instanceof ViewModel);
+        $this->assertSame(
+            <<<'HTML'
+                <h4>My title</h4>
+                <div><p>From the inside</p></div>
+                HTML,
+            $this->getHTMLRenderer($dependencies)->render($outer)
         );
     }
 

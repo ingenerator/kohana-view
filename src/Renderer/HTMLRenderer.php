@@ -79,6 +79,10 @@ class HTMLRenderer implements Renderer
             return $value->renderSafeHtml();
         }
 
+        if ($value instanceof ViewModel) {
+            return $this->render($value);
+        }
+
         return HTML::chars($value);
     }
 }

@@ -430,8 +430,12 @@ class View_That_Does_Work extends \Ingenerator\KohanaView\ViewModel\AbstractView
 The containing view model should expose a reference to the view model for the partial, which might be passed in as a
 constructor dependency, created by a dynamic variable method, or injected in some other way.
 
-View models don't have any reference to the renderer, so they cannot render the partial directly - instead this should
-happen in the template using the current renderer that is provided as a variable inside the template scope.
+View models don't have any reference to the renderer, so they cannot render the partial directly. Instead, this happens
+when the template is rendered. The simplest way to do this is to simply `<?=$view->child_view;?>` - this will 
+automatically detect that the child_view is a ViewModel instance and render it.
+
+Alternatively, the current `Renderer` is provided as the `$renderer` variable inside the template scope, allowing you
+to call `$renderer->render()` yourself.
 
 For example:
 
@@ -456,7 +460,6 @@ class View_Container extends \Ingenerator\KohanaView\ViewModel\AbstractViewModel
 ```php
 <?php
 //application/views/container.php
-use function Ingenerator\KohanaView\OutputValue\raw;
 /**
  * @var \View_Container                               $view
  * @var \Ingenerator\KohanaView\Renderer\HTMLRenderer $renderer
@@ -464,7 +467,7 @@ use function Ingenerator\KohanaView\OutputValue\raw;
 ?>
 <?php foreach($view->users as $user):?>
   <?php $view->face_widget->display(['user' => $user]);?>
-  <?=raw($renderer->render($view)); // Note rendering unescaped HTML ?>
+  <?=$view->face_widget; // Note the rendered HTML for the partial will not be re-escaped ?>
 <?php endforeach; ?>
 ```
 

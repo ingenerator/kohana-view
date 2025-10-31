@@ -222,6 +222,22 @@ class HTMLRendererTest extends TestCase
         $this->assertSame($expect, $this->newSubject()->escape($value));
     }
 
+    public function testItEscapesViewModelsByRenderingThem(): void
+    {
+        $inner_view = new class implements ViewModel {
+            public $foo = 'From the inside';
+
+            public function display(array $variables): void
+            {
+            }
+        };
+        $this->givenTemplateForViewClass($inner_view, '<p><?=$view->foo;?></p>');
+        $this->assertSame(
+            '<p>From the inside</p>',
+            $this->newSubject()->escape($inner_view),
+        );
+    }
+
     protected function setUp(): void
     {
         $this->old_error_reporting = error_reporting();

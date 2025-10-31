@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
+use Ingenerator\KohanaView\CoreTemplateCompiler;
 use Ingenerator\KohanaView\Renderer\HTMLRenderer;
 use Ingenerator\KohanaView\Renderer\PageLayoutRenderer;
-use Ingenerator\KohanaView\TemplateCompiler;
 use Ingenerator\KohanaView\TemplateManager\CFSTemplateManager;
 use Ingenerator\KohanaView\ViewTemplateSelector;
 
@@ -32,7 +32,7 @@ return [
         'template' => [
             'compiler' => [
                 '_settings' => [
-                    'class' => TemplateCompiler::class,
+                    'class' => CoreTemplateCompiler::class,
                     'arguments' => [],
                     'shared' => true,
                 ],

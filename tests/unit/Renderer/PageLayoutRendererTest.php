@@ -202,4 +202,9 @@ class SimpleRendererStub implements Renderer
 
         throw new UnexpectedValueException('Don\'t know how to render '.$view::class);
     }
+
+    public function escape(mixed $value): string
+    {
+        return (string) $value;
+    }
 }

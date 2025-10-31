@@ -142,7 +142,12 @@ class ViewModelIntegrationTest extends TestCase
 
         $this->givenFileWithContent(
             'module/views/test/custom.php',
-            'View with <?=$view->html_string;?>, <?=raw($view->html_string);?>'
+            <<<'PHP'
+                <?php
+                use function Ingenerator\KohanaView\OutputValue\raw;
+                ?>
+                View with <?=$view->html_string;?>, <?=raw($view->html_string);?>
+                PHP
         );
 
         $dependencies = $this->givenDependenciesBootstrapped();

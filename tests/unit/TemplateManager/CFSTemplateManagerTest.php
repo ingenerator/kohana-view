@@ -11,7 +11,6 @@ use Ingenerator\KohanaView\TemplateManager;
 use Ingenerator\KohanaView\TemplateManager\CFSTemplateManager;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
-use Override;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 use test\mock\CFSWrapper\SingleDirectoryCFSWrapperMock;
@@ -175,17 +174,11 @@ class CFSTemplateManagerTest extends TestCase
     }
 }
 
-class SpyingTemplateCompiler extends TemplateCompiler
+class SpyingTemplateCompiler implements TemplateCompiler
 {
     public const COMPILED_OUTPUT = 'compiled template content';
     protected $compiled = [];
 
-    /** @noinspection PhpMissingParentConstructorInspection */
-    public function __construct()
-    {
-    }
-
-    #[Override]
     public function compile($source): string
     {
         $this->compiled[] = $source;

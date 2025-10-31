@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Ingenerator\KohanaView\Renderer;
 
+use HTML;
 use Ingenerator\KohanaView\Exception\TemplateNotFoundException;
+use Ingenerator\KohanaView\OutputValue\UnescapedSafeHtmlContent;
 use Ingenerator\KohanaView\Renderer;
 use Ingenerator\KohanaView\TemplateManager;
 use Ingenerator\KohanaView\ViewModel;
@@ -69,5 +71,14 @@ class HTMLRenderer implements Renderer
         if ($anon_capture($view, $this, $template_path) === false) {
             throw TemplateNotFoundException::forFullPath($template_path);
         }
+    }
+
+    public function escape(mixed $value): string
+    {
+        if ($value instanceof UnescapedSafeHtmlContent) {
+            return $value->renderSafeHtml();
+        }
+
+        return HTML::chars($value);
     }
 }

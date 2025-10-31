@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Ingenerator\KohanaViewV5MigrationTool\Rector;
 
 use Ingenerator\KohanaView\Renderer;
+use Ingenerator\KohanaView\Renderer\PageLayoutRenderer;
 use Ingenerator\KohanaView\TemplateManager;
 use Ingenerator\KohanaView\TemplateSpecifyingViewModel;
 use Ingenerator\KohanaView\ViewModel;
@@ -47,6 +48,9 @@ final readonly class ViewModelClassFilter
             return true;
         }
         if ($classReflection->is(Renderer::class)) {
+            return true;
+        }
+        if ($classReflection->is(PageLayoutRenderer::class)) {
             return true;
         }
 

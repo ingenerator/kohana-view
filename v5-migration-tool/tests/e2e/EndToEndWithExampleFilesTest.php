@@ -60,7 +60,7 @@ class EndToEndWithExampleFilesTest extends TestCase
     {
         self::$fs = new Filesystem();
         self::initWorkingDirectory();
-        self::runInWorkingDir(['vendor/bin/rector']);
+        self::runInWorkingDir(['vendor/bin/rector', '--clear-cache']);
     }
 
     private static function initWorkingDirectory(): void

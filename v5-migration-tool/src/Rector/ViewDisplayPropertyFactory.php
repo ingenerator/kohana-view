@@ -181,6 +181,10 @@ class ViewDisplayPropertyFactory
 
     private function findSingleReturnExpression(ClassMethod $method): false|Expr
     {
+        if ($method->stmts === null) {
+            return false;
+        }
+
         if (count($method->stmts) !== 1) {
             return false;
         }

@@ -24,6 +24,7 @@ use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use test\mock\ViewModel\ViewModelDummy;
+use UnexpectedValueException;
 
 use function error_reporting;
 use function Ingenerator\KohanaView\OutputValue\raw;
@@ -33,7 +34,7 @@ use function uniqid;
 
 class HTMLRendererTest extends TestCase
 {
-    protected TemplateManagerSpy $template_manager;
+    protected TemplateManager $template_manager;
 
     protected ViewTemplateSelectorSpy $template_selector;
 
@@ -51,29 +52,25 @@ class HTMLRendererTest extends TestCase
     public function test_it_selects_template_for_view(): void
     {
         $view = new ViewModelDummy();
+        $this->givenTemplateForViewClass($view, 'Anything');
         $this->newSubject()->render($view);
         $this->template_selector->assertCalledOnceWith($view);
     }
 
-    public function test_it_locates_required_template(): void
-    {
-        $this->newSubject()->render(new ViewModelDummy());
-        $this->template_manager->assertCalledOnceWith(ViewTemplateSelectorSpy::FIXED_TEMPLATE_NAME);
-    }
-
     public function test_it_returns_template_output_string(): void
     {
-        $this->givenTemplate('Any <?="string";?>');
+        $view = new ViewModelDummy();
+        $this->givenTemplateForViewClass($view, 'Any <?="string";?>');
         $this->assertSame(
             'Any string',
-            $this->newSubject()->render(new ViewModelDummy()),
+            $this->newSubject()->render($view),
         );
     }
 
     public function test_it_provides_view_as_variable_in_template_scope(): void
     {
-        $this->givenTemplate('View:<?=spl_object_hash($view);?>');
         $view = new ViewModelDummy();
+        $this->givenTemplateForViewClass($view, 'View:<?=spl_object_hash($view);?>');
         $this->assertSame(
             'View:'.spl_object_hash($view),
             $this->newSubject()->render($view),
@@ -82,33 +79,38 @@ class HTMLRendererTest extends TestCase
 
     public function test_it_provides_renderer_as_variable_in_template_scope(): void
     {
-        $this->givenTemplate('Renderer:<?=spl_object_hash($renderer);?>');
+        $view = new ViewModelDummy();
+        $this->givenTemplateForViewClass($view, 'Renderer:<?=spl_object_hash($renderer);?>');
         $subject = $this->newSubject();
         $this->assertSame(
             'Renderer:'.spl_object_hash($subject),
-            $subject->render(new ViewModelDummy()),
+            $subject->render($view),
         );
     }
 
     public function test_it_does_not_provide_access_to_this_in_template_scope(): void
     {
-        $this->givenTemplate(
+        $view = new ViewModelDummy();
+        $this->givenTemplateForViewClass(
+            $view,
             '<?=isset($this) ? \'Unexpected $this: \'.get_class($this).\':\'.spl_object_hash($this) : \'OK, no $this\';?>',
         );
         $this->assertSame(
             'OK, no $this',
-            $this->newSubject()->render(new ViewModelDummy()),
+            $this->newSubject()->render($view),
         );
     }
 
     public function test_it_does_not_provide_access_to_any_unexpected_variables_in_template_scope(): void
     {
-        $this->givenTemplate(
+        $view = new ViewModelDummy();
+        $this->givenTemplateForViewClass(
+            $view,
             '<?=implode("\n", array_keys(get_defined_vars()));?>',
         );
         $this->assertSame(
             "view\nrenderer\ntemplate",
-            $this->newSubject()->render(new ViewModelDummy()),
+            $this->newSubject()->render($view),
         );
     }
 
@@ -122,9 +124,10 @@ class HTMLRendererTest extends TestCase
     {
         $ob_level_before = ob_get_level();
         $this->expectOutputRegex('/^$/');
-        $this->givenTemplate('Stuff <?="that works";?> then <?php throw new \InvalidArgumentException("dammit");?>');
+        $view = new ViewModelDummy();
+        $this->givenTemplateForViewClass($view, 'Stuff <?="that works";?> then <?php throw new \InvalidArgumentException("dammit");?>');
         try {
-            $this->newSubject()->render(new ViewModelDummy());
+            $this->newSubject()->render($view);
             $this->fail('Expected exception to bubble from the template rendering phase');
         } catch (InvalidArgumentException $e) {
             $this->assertSame('dammit', $e->getMessage(), 'Ensure it is the expected exception');
@@ -134,8 +137,8 @@ class HTMLRendererTest extends TestCase
 
     public function test_it_can_render_same_template_multiple_times_with_same_or_different_views(): void
     {
-        $this->givenTemplate('Number<?=$view->number;?>');
         $view_1 = new NumberViewModel();
+        $this->givenTemplateForViewClass($view_1, 'Number<?=$view->number;?>');
         $view_2 = new NumberViewModel();
         $subject = $this->newSubject();
         $output = [];
@@ -151,22 +154,26 @@ class HTMLRendererTest extends TestCase
 
     public function test_it_generates_error_if_template_is_not_found(): void
     {
-        $this->template_manager->setTemplatePath(vfsStream::url('/path/to/undefined/file'));
+        $view = new ViewModelDummy();
+        $this->template_selector->registerTemplate($view::class, '/path/to/undefined/file');
+        $subject = $this->newSubject();
 
         $this->expectException(ErrorException::class);
         $this->expectExceptionMessage('path/to/undefined/file');
-
-        $this->newSubject()->render(new ViewModelDummy());
+        $subject->render($view);
     }
 
     public function test_it_throws_if_inclusion_fails_even_with_error_reporting_off(): void
     {
+        $view = new ViewModelDummy();
+        $this->template_selector->registerTemplate($view::class, '/path/to/undefined/file');
+        $subject = $this->newSubject();
+
         error_reporting(0);
-        $this->template_manager->setTemplatePath(vfsStream::url('/path/to/undefined/file'));
 
         $this->expectException(TemplateNotFoundException::class);
         $this->expectExceptionMessage('path/to/undefined/file');
-        $this->newSubject()->render(new ViewModelDummy());
+        $subject->render($view);
     }
 
     public static function provider_escape(): iterable
@@ -219,9 +226,18 @@ class HTMLRendererTest extends TestCase
     {
         $this->old_error_reporting = error_reporting();
         $this->template_selector = new ViewTemplateSelectorSpy();
-        $this->template_manager = new TemplateManagerSpy();
         $this->vfs_root = vfsStream::setup('templates');
-        $this->givenTemplate('Default');
+        $this->template_manager = new readonly class($this->vfs_root->url()) implements TemplateManager {
+            public function __construct(
+                private string $base_path)
+            {
+            }
+
+            public function getPath(string $template_name): string
+            {
+                return $this->base_path.'/'.$template_name;
+            }
+        };
     }
 
     protected function tearDown(): void
@@ -237,56 +253,42 @@ class HTMLRendererTest extends TestCase
         );
     }
 
-    protected function givenTemplate($content): void
+    private function givenTemplateForViewClass(ViewModel $view, string $content): void
     {
         $filename = uniqid('test-template').'.php';
+        $this->template_selector->registerTemplate($view::class, $filename);
         $file = new vfsStreamFile($filename);
         $file->setContent($content);
         $this->vfs_root->addChild($file);
-        $this->template_manager->setTemplatePath($file->url());
     }
 }
 
 class ViewTemplateSelectorSpy extends ViewTemplateSelector
 {
-    public const FIXED_TEMPLATE_NAME = 'selected_template';
-
     protected $calls = [];
+
+    private array $template_map = [];
+
+    public function registerTemplate(string $class, string $filename): void
+    {
+        $this->template_map[$class] = $filename;
+    }
 
     #[Override]
     public function getTemplateName(ViewModel $view): string
     {
         $this->calls[] = $view;
+        $template = $this->template_map[$view::class] ?? '';
+        if ($template === '') {
+            throw new UnexpectedValueException('No template mocked for '.$view::class);
+        }
 
-        return static::FIXED_TEMPLATE_NAME;
+        return $template;
     }
 
     public function assertCalledOnceWith(ViewModel $view): void
     {
         Assert::assertSame([$view], $this->calls);
-    }
-}
-
-class TemplateManagerSpy implements TemplateManager
-{
-    protected $calls = [];
-    protected $template_path;
-
-    public function setTemplatePath($path): void
-    {
-        $this->template_path = $path;
-    }
-
-    public function getPath($template_name): string
-    {
-        $this->calls[] = $template_name;
-
-        return $this->template_path;
-    }
-
-    public function assertCalledOnceWith($template_name): void
-    {
-        Assert::assertSame([$template_name], $this->calls);
     }
 }
 

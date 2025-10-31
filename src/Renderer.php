@@ -12,4 +12,6 @@ namespace Ingenerator\KohanaView;
 interface Renderer
 {
     public function render(ViewModel $view): string;
+
+    public function escape(mixed $value): string;
 }

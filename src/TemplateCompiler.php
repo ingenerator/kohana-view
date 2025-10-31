@@ -7,40 +7,34 @@ namespace Ingenerator\KohanaView;
 use Ingenerator\KohanaView\Exception\InvalidTemplateContentException;
 use InvalidArgumentException;
 
+use function array_key_exists;
 use function array_merge;
 use function preg_match;
 use function preg_replace_callback;
-use function strlen;
-use function substr;
+use function sprintf;
 use function trim;
 
 /**
  * The TemplateCompiler takes a plain PHP template string and processes it to add automatic variable escaping within
- * PHP short echo tags, before returning the compiled template. You can optionally prefix your variables to mark that
- * they should not be escaped, or manually echo them from a full PHP code block.
+ * PHP short echo tags, before returning the compiled template.
  *
  * For example, the template:
  *
  *    <h1><?=$view->title;?></h1>
- *    <p><?=!$partial;?></p>
- *    <?php echo $stuff;?>
  *
  * Will compile to:
  *
- *    <h1><?=HTML::chars($view->title);?></h1>
- *    <p><?=$partial;?></p>
- *    <?php echo $stuff;?>
- *
- * The raw output prefix and escape method are configurable via the options array passed to the constructor.
+ *    <h1><?=$renderer->escape($view->title);?></h1>
  */
 class TemplateCompiler
 {
-    protected array $options = [
-        'escape_method' => 'HTML::chars',
-    ];
+    protected array $options = [];
 
     public function __construct(array $options = [])
     {
+        if (array_key_exists('escape_method', $options)) {
+            throw new InvalidArgumentException('The escape_method option has been removed, escaping is now a renderer concern');
+        }
         $this->options = array_merge($this->options, $options);
     }
 
@@ -70,24 +64,23 @@ class TemplateCompiler
     {
         $var = trim($matches[1]);
         $terminator = $matches[2];
-        $escape_method = $this->options['escape_method'];
 
-        if ($this->startsWith($var, 'raw(')) {
-            // Use a plain php echo
-            $compiled = '<?php echo('.substr($var, strlen('raw(')).';';
-        } elseif ($this->startsWith($var, '//')) {
+        if (str_starts_with($var, '//')) {
             // Echo an empty string to prevent the comment causing a parse error
             $compiled = "<?='';$var;";
-        } elseif ($this->startsWith($var, $escape_method)) {
+        } elseif (str_starts_with($var, 'HTML::chars')) {
             throw InvalidTemplateContentException::containsImplicitDoubleEscape(
-                $escape_method,
+                'HTML::chars',
                 $matches[0]
             );
-        } elseif ($this->startsWith($var, '!')) {
+        } elseif (str_starts_with($var, '!')) {
             throw InvalidTemplateContentException::hasLegacyRawEscapePrefix($matches[0]);
+        } elseif (str_starts_with($var, '$renderer->escape(')) {
+            // They are already escaping, no need to escape again
+            $compiled = '<?='.$var.';';
         } else {
-            // Escape the value before echoing
-            $compiled = "<?={$escape_method}($var);";
+            // Escape the value (if required) before echoing
+            $compiled = sprintf('<?=$renderer->escape(%s);', $var);
         }
 
         if ($terminator === '?>') {
@@ -97,8 +90,4 @@ class TemplateCompiler
         return $compiled;
     }
 
-    protected function startsWith(string $string, string $prefix): bool
-    {
-        return str_starts_with($string, $prefix);
-    }
 }

@@ -79,6 +79,7 @@ customise this.
 ```php
 <?php
 //application/views/hello/hello_world.php
+use function Ingenerator\KohanaView\OutputValue\raw;
 /**
  * @var \View\Hello\WorldView                         $view
  * @var \Ingenerator\KohanaView\Renderer\HTMLRenderer $renderer
@@ -238,6 +239,7 @@ class HelloWorldView extends View\Layout\SitePageContentView
 ```php
 <?php
 //application/views/site_page_template.php
+use function Ingenerator\KohanaView\OutputValue\raw;
 /**
  * @var \View\Layout\SitePageTemplateView $view
  * @var \Ingenerator\KohanaView\Renderer\HTMLRenderer $renderer
@@ -252,6 +254,7 @@ class HelloWorldView extends View\Layout\SitePageContentView
 ```php
 <?php
 //application/views/content_with_sidebar_layout.php
+use function Ingenerator\KohanaView\OutputValue\raw;
 /**
  * @var \View\Layout\ContentWithSidebarLayout $view
  * @var \Ingenerator\KohanaView\Renderer\HTMLRenderer $renderer
@@ -448,6 +451,7 @@ class View_Container extends \Ingenerator\KohanaView\ViewModel\AbstractViewModel
 ```php
 <?php
 //application/views/container.php
+use function Ingenerator\KohanaView\OutputValue\raw;
 /**
  * @var \View_Container                               $view
  * @var \Ingenerator\KohanaView\Renderer\HTMLRenderer $renderer

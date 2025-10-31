@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace test\unit\Renderer;
 
 use ErrorException;
+use HTML;
 use Ingenerator\KohanaView\Exception\TemplateNotFoundException;
+use Ingenerator\KohanaView\OutputValue\UnescapedHtmlSafeString;
+use Ingenerator\KohanaView\OutputValue\UnescapedSafeHtmlContent;
 use Ingenerator\KohanaView\Renderer;
 use Ingenerator\KohanaView\Renderer\HTMLRenderer;
 use Ingenerator\KohanaView\TemplateManager;
@@ -18,10 +21,12 @@ use org\bovigo\vfs\vfsStreamDirectory;
 use org\bovigo\vfs\vfsStreamFile;
 use Override;
 use PHPUnit\Framework\Assert;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use test\mock\ViewModel\ViewModelDummy;
 
 use function error_reporting;
+use function Ingenerator\KohanaView\OutputValue\raw;
 use function ob_get_level;
 use function spl_object_hash;
 use function uniqid;
@@ -61,7 +66,7 @@ class HTMLRendererTest extends TestCase
         $this->givenTemplate('Any <?="string";?>');
         $this->assertSame(
             'Any string',
-            $this->newSubject()->render(new ViewModelDummy())
+            $this->newSubject()->render(new ViewModelDummy()),
         );
     }
 
@@ -71,7 +76,7 @@ class HTMLRendererTest extends TestCase
         $view = new ViewModelDummy();
         $this->assertSame(
             'View:'.spl_object_hash($view),
-            $this->newSubject()->render($view)
+            $this->newSubject()->render($view),
         );
     }
 
@@ -81,29 +86,29 @@ class HTMLRendererTest extends TestCase
         $subject = $this->newSubject();
         $this->assertSame(
             'Renderer:'.spl_object_hash($subject),
-            $subject->render(new ViewModelDummy())
+            $subject->render(new ViewModelDummy()),
         );
     }
 
     public function test_it_does_not_provide_access_to_this_in_template_scope(): void
     {
         $this->givenTemplate(
-            '<?=isset($this) ? \'Unexpected $this: \'.get_class($this).\':\'.spl_object_hash($this) : \'OK, no $this\';?>'
+            '<?=isset($this) ? \'Unexpected $this: \'.get_class($this).\':\'.spl_object_hash($this) : \'OK, no $this\';?>',
         );
         $this->assertSame(
             'OK, no $this',
-            $this->newSubject()->render(new ViewModelDummy())
+            $this->newSubject()->render(new ViewModelDummy()),
         );
     }
 
     public function test_it_does_not_provide_access_to_any_unexpected_variables_in_template_scope(): void
     {
         $this->givenTemplate(
-            '<?=implode("\n", array_keys(get_defined_vars()));?>'
+            '<?=implode("\n", array_keys(get_defined_vars()));?>',
         );
         $this->assertSame(
             "view\nrenderer\ntemplate",
-            $this->newSubject()->render(new ViewModelDummy())
+            $this->newSubject()->render(new ViewModelDummy()),
         );
     }
 
@@ -164,6 +169,52 @@ class HTMLRendererTest extends TestCase
         $this->newSubject()->render(new ViewModelDummy());
     }
 
+    public static function provider_escape(): iterable
+    {
+        return [
+            'plain string with no escapable stuff' => [
+                'foobar',
+                'foobar',
+            ],
+            'plain string with HTML characters' => [
+                'I am <injected>things</injected>',
+                'I am &lt;injected&gt;things&lt;/injected&gt;',
+            ],
+            'numbers' => [
+                15,
+                '15',
+            ],
+            'Explicitly marked as safe with a class' => [
+                new UnescapedHtmlSafeString('I am <p>rendered from known safe strings</p>'),
+                'I am <p>rendered from known safe strings</p>',
+            ],
+            'Marked as safe via the raw function' => [
+                raw('I am <p>rendered from known safe strings</p>'),
+                'I am <p>rendered from known safe strings</p>',
+            ],
+            'Custom class that provides html content' => [
+                // For example a DTO for a simple view component
+                new readonly class('Things & Stuff') implements UnescapedSafeHtmlContent {
+                    public function __construct(public string $caption)
+                    {
+                    }
+
+                    public function renderSafeHtml(): string
+                    {
+                        return '<div class="panel"><h4>'.HTML::chars($this->caption).'</h4></div>';
+                    }
+                },
+                '<div class="panel"><h4>Things &amp; Stuff</h4></div>',
+            ],
+        ];
+    }
+
+    #[DataProvider('provider_escape')]
+    public function testItEscapesValuesUnlessTheyAreMarkedAsSafe(mixed $value, string $expect): void
+    {
+        $this->assertSame($expect, $this->newSubject()->escape($value));
+    }
+
     protected function setUp(): void
     {
         $this->old_error_reporting = error_reporting();
@@ -182,7 +233,7 @@ class HTMLRendererTest extends TestCase
     {
         return new HTMLRenderer(
             $this->template_selector,
-            $this->template_manager
+            $this->template_manager,
         );
     }
 

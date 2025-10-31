@@ -4,10 +4,15 @@ declare(strict_types=1);
 
 namespace test\unit\ViewModel;
 
+use Attribute;
 use DateTimeImmutable;
+use Ingenerator\KohanaView\Attribute\DisplayVariableAttribute;
+use Ingenerator\KohanaView\Attribute\InternalDisplayVariable;
+use Ingenerator\KohanaView\Attribute\OptionalDisplayVariable;
+use Ingenerator\KohanaView\Attribute\RequiredDisplayVariable;
 use Ingenerator\KohanaView\Exception\InvalidDisplayVariablesException;
+use Ingenerator\KohanaView\Exception\InvalidViewDefinitionException;
 use Ingenerator\KohanaView\ViewModel\AbstractViewModel;
-use Ingenerator\KohanaView\ViewModelProperty;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
@@ -31,6 +36,42 @@ class AbstractViewModelTest extends TestCase
         $this->assertSame('execution-1', $subject->calculated_var, 'Reuses cached variable');
         $subject->display([]);
         $this->assertSame('execution-2', $subject->calculated_var, 'Cache resets after call to display()');
+    }
+
+    public static function provider_invalid_prop_tagging(): array
+    {
+        return [
+            'multiple tags' => [
+                new class extends AbstractViewModel {
+                    #[RequiredDisplayVariable]
+                    #[OptionalDisplayVariable]
+                    public string $foo;
+                },
+                'Expected only one Ingenerator\KohanaView\Attribute\DisplayVariableAttribute per property but got 2',
+            ],
+            'optional with no default' => [
+                new class extends AbstractViewModel {
+                    #[OptionalDisplayVariable]
+                    public string $foo;
+                },
+                'was tagged as Ingenerator\KohanaView\Attribute\OptionalDisplayVariable, but has no default value',
+            ],
+            'custom attribute with conflicting can & must states' => [
+                new class extends AbstractViewModel {
+                    #[InvalidCustomDisplayVariableAttribute]
+                    public string $foo;
+                },
+                'Attribute test\unit\ViewModel\InvalidCustomDisplayVariableAttribute marked that property must be provided but can not be provided',
+            ],
+        ];
+    }
+
+    #[DataProvider('provider_invalid_prop_tagging')]
+    public function test_its_display_throws_on_invalid_property_tagging(AbstractViewModel $subject, string $expect_msg): void
+    {
+        $this->expectException(InvalidViewDefinitionException::class);
+        $this->expectExceptionMessage($expect_msg);
+        $subject->display([]);
     }
 
     public static function provider_populate_known_props(): iterable
@@ -57,7 +98,7 @@ class AbstractViewModelTest extends TestCase
     {
         $subject = new class extends AbstractViewModel {
             public protected(set) ?string $some_defined_var = null;
-            #[ViewModelProperty(is_displayable: true, is_optional: true)]
+            #[OptionalDisplayVariable]
             public protected(set) mixed $some_defaulted_var = 'default value';
         };
 
@@ -75,9 +116,9 @@ class AbstractViewModelTest extends TestCase
     {
         $subject = new class extends AbstractViewModel {
             public protected(set) ?string $a = null;
-            #[ViewModelProperty(is_displayable: true, is_optional: false)]
+            #[RequiredDisplayVariable]
             public protected(set) ?string $b = null;
-            #[ViewModelProperty(is_displayable: true, is_optional: true)]
+            #[OptionalDisplayVariable]
             public protected(set) bool $c = false;
         };
 
@@ -114,8 +155,8 @@ class AbstractViewModelTest extends TestCase
                 'Unexpected vars: ["some_promoted_var"]',
             ],
             'cannot display non-display property' => [
-                [...$valid_display, 'non_displayable_prop' => 'cannot be displayed'],
-                'Unexpected vars: ["non_displayable_prop"]',
+                [...$valid_display, 'internal_display_prop' => 'cannot be displayed'],
+                'Unexpected vars: ["internal_display_prop"]',
             ],
             'cannot display computed property' => [
                 [...$valid_display, 'computed_virtual' => 'cannot set directly'],
@@ -148,10 +189,10 @@ class AbstractViewModelTest extends TestCase
             public protected(set) ?string $some_defined_var = null;
 
             // Can override default behaviour with the ViewModelProperty attribute
-            #[ViewModelProperty(is_displayable: false)]
-            public protected(set) string $non_displayable_prop;
+            #[InternalDisplayVariable]
+            public protected(set) string $internal_display_prop;
 
-            #[ViewModelProperty(is_displayable: true)]
+            #[RequiredDisplayVariable]
             private readonly string $tagged_private;
 
             // Cannot ->display() a non-public prop unless it is tagged
@@ -192,7 +233,7 @@ class TestViewModel extends AbstractViewModel
     }
 
     private int $number_times_calculated = 0;
-    #[ViewModelProperty(is_displayable: true, is_optional: true)]
+    #[OptionalDisplayVariable]
     public protected(set) mixed $some_defaulted_var = 'default value';
 
     /**
@@ -203,5 +244,19 @@ class TestViewModel extends AbstractViewModel
     protected function var_some_dynamic_var(): string
     {
         return 'expected dynamic';
+    }
+}
+
+#[Attribute(Attribute::TARGET_PROPERTY)]
+class InvalidCustomDisplayVariableAttribute implements DisplayVariableAttribute
+{
+    public function canPassToDisplay(): bool
+    {
+        return false;
+    }
+
+    public function mustPassToDisplay(): bool
+    {
+        return true;
     }
 }

@@ -317,51 +317,56 @@ By default, these are any properties that are:
 * not promoted properties from the class constructor
 * do not have property hooks
 
-You can customise this by tagging properties with the `ViewModelProperty` attribute.
+You can customise this by tagging properties with one of the `DisplayVariableAttribute` attributes.
 
-You can also use the `ViewModelProperty` attribute to mark that a property **can** be passed into `display()` but can
+You can also use a `DisplayVariableAttribute` to mark that a property **can** be passed into `display()` but can
 also be left with a default value. The default **will be reassigned** on every call to `->display()` to ensure that 
 the property is always in expected state.
 
 ```php
-use Ingenerator\KohanaView\ViewModelProperty;
+use Ingenerator\KohanaView\Attribute\InternalDisplayVariable;
+use Ingenerator\KohanaView\Attribute\OptionalDisplayVariable;
+use Ingenerator\KohanaView\Attribute\RequiredDisplayVariable;
 
 class View_Something extends AbstractViewModel {
  
   /**
-   * `caption` MUST be included in `->display($variables)` 
+   * `caption` MUST be included in `->display($variables)`
+   * The #[RequiredDisplayVariable] attribute is implicit because this is a simple public-readable property 
    */
   public protected(set) string $caption;
 
   /**
    * `title` MAY be included in `->display($variables)`. If not, it will be reset to 'My page title'.
    */
-  #[ViewModelProperty(is_displayale: true, is_optional: true)]  
+  #[OptionalDisplayVariable]  
   public protected(set) string $title = 'My page title';
   
   /**
    * `internal` MUST be included in `->display($variables)` - but it will not be directly available in the template
    * Note that it must be PROTECTED not PRIVATE to allow AbstractViewModel::display to populate it. 
    */
-  #[ViewModelProperty(is_displayable: true)]
+  #[RequiredDisplayVariable]
   protected string $internal;
   
   /**
    * `some_var` MUST NOT be included in `->display($variables)` because it is explicitly marked.
    * Without the ViewModelProperty attribute this would be marked as displayable since it is public.
    */
-  #[ViewModelProperty(is_displayable: false)]
+  #[InternalDisplayVariable]
   public readonly string $some_var;
   
   /**
-   * `now` MUST NOT be included in `->display($variables)` because it has hooks 
+   * `now` MUST NOT be included in `->display($variables)`
+   * The #[InternalDisplayVariable] attribute is implicit because the property has hooks.
    */
   public DateTimeImmutable $now {
     get => new DateTimeImmutable()
   }
   
   /**
-   * `link` MUST NOT be included in `->display($variables)` because it is a promoted property
+   * `link` MUST NOT be included in `->display($variables)`
+   * The #[InternalDisplayVariable] attribute is implicit because this is a promoted property
    */
   public function __construct(
      public readonly LinkBuilder $link

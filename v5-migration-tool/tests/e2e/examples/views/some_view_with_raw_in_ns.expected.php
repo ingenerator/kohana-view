@@ -1,4 +1,6 @@
 <?php
+// Anomaly, but there might be a NS declaration in a view - it's not illegal.
+namespace My\Application\View\Template;
 use function Ingenerator\KohanaView\OutputValue\raw;
 
 /**
@@ -6,4 +8,3 @@ use function Ingenerator\KohanaView\OutputValue\raw;
  */
 ?>
 <h1><?=raw($view->label_html);?></h1>
-<p><?=raw('other things');?></p>

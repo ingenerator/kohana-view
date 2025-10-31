@@ -2,7 +2,7 @@
 
 namespace My\Application\DisplayVarsToNativeProperties;
 
-use Ingenerator\KohanaView\ViewModelProperty;
+use Ingenerator\KohanaView\Attribute\OptionalDisplayVariable;
 use Ingenerator\KohanaView\ViewModel\AbstractViewModel;
 
 /**
@@ -19,7 +19,7 @@ class WithComplexTypes extends AbstractViewModel
     /**
      * @var TSomeType
      */
-    #[ViewModelProperty(is_displayable: true, is_optional: true)]
+    #[OptionalDisplayVariable]
     public protected(set) mixed $info_list = [];
 
 }

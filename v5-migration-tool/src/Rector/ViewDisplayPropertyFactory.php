@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Ingenerator\KohanaViewV5MigrationTool\Rector;
 
-use Ingenerator\KohanaView\ViewModelProperty;
+use Ingenerator\KohanaView\Attribute\OptionalDisplayVariable;
 use PhpParser\Builder\Property as PropertyBuilder;
 use PhpParser\BuilderFactory;
 use PhpParser\Comment\Doc;
@@ -64,10 +64,7 @@ class ViewDisplayPropertyFactory
         if ($hasDefaultValue) {
             $builder->setDefault($defaultValue);
             $builder->addAttribute(
-                $this->builderFactory->attribute(
-                    new FullyQualified(ViewModelProperty::class),
-                    ['is_displayable' => true, 'is_optional' => true],
-                ),
+                $this->builderFactory->attribute(new FullyQualified(OptionalDisplayVariable::class)),
             );
         }
 

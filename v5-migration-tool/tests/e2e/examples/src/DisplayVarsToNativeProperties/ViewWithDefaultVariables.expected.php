@@ -2,13 +2,13 @@
 
 namespace My\Application\OptionalDisplayVariables;
 
-use Ingenerator\KohanaView\ViewModelProperty;
+use Ingenerator\KohanaView\Attribute\OptionalDisplayVariable;
 use Ingenerator\KohanaView\ViewModel\AbstractViewModel;
 
 class ViewWithDefaultVariables extends AbstractViewModel
 {
-    #[ViewModelProperty(is_displayable: true, is_optional: true)]
+    #[OptionalDisplayVariable]
     public protected(set) string $some = 'thing';
-    #[ViewModelProperty(is_displayable: true, is_optional: true)]
+    #[OptionalDisplayVariable]
     public protected(set) mixed $other = false;
 }

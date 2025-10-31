@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace test\unit;
 
+use Ingenerator\KohanaView\CoreTemplateCompiler;
 use Ingenerator\KohanaView\Exception\InvalidTemplateContentException;
 use Ingenerator\KohanaView\TemplateCompiler;
 use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
 
-class TemplateCompilerTest extends TestCase
+class CoreTemplateCompilerTest extends TestCase
 {
-    protected $options = [];
+    protected array $options = [];
 
     public function test_it_is_initialisable(): void
     {
@@ -232,6 +233,6 @@ class TemplateCompilerTest extends TestCase
 
     protected function newSubject(): TemplateCompiler
     {
-        return new TemplateCompiler($this->options);
+        return new CoreTemplateCompiler($this->options);
     }
 }

@@ -8,6 +8,7 @@ use Ingenerator\KohanaView\ViewModel\PageContentView;
 use Ingenerator\KohanaView\ViewModel\PageLayoutView;
 use Ingenerator\KohanaViewV5MigrationTool\Rector\AddKohanaViewReturnTypesRector;
 use Ingenerator\KohanaViewV5MigrationTool\Rector\DisableCustomVarValidationRector;
+use Ingenerator\KohanaViewV5MigrationTool\Rector\DropAbstractViewModelConstructorRector;
 use Ingenerator\KohanaViewV5MigrationTool\Rector\FixPhpDocPropertiesWithoutDollarPrefixRector;
 use Ingenerator\KohanaViewV5MigrationTool\Rector\MigrateComputedPropertiesToAsymmetricVisibilityRector;
 use Ingenerator\KohanaViewV5MigrationTool\Rector\MigrateComputedPropertiesToPropertyHooksRector;
@@ -32,5 +33,6 @@ return static function (RectorConfig $rectorConfig): void {
         DisableCustomVarValidationRector::class,
         AddKohanaViewReturnTypesRector::class,
         UseKohanaViewNewTemplateEscapingRector::class,
+        DropAbstractViewModelConstructorRector::class,
     ]);
 };

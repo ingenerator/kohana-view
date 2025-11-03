@@ -54,11 +54,6 @@ abstract class AbstractViewModel implements ViewModel
 {
     private array $cache = [];
 
-    public function __construct()
-    {
-        // @todo remove the constructor when we have a rector to remove the parent::__construct call
-    }
-
     /**
      * Set the data to be rendered in the view - note this does not actually render the view.
      */

@@ -1,9 +1,25 @@
 ## Unreleased
 
+## 5.0.0-alpha (2025-11-03)
+
 * Add a migration tool to assist with upgrading existing projects to 5.x
-  See [v5-migration-tool/UPGRADING-to-5.x.md](v5-migration-tool/UPGRADING-to-5.x.md)
+  See [v5-migration-tool/UPGRADING-to-5.x.md](v5-migration-tool/UPGRADING-to-5.x.md) for full details of the tool
+  and of the breaking changes in this release.
+* BREAKING: Drop using `protected $variables` and `protected $default_variables`
+  in `AbstractViewModel` implementations to define display variables, in favour of 
+  using explicit property declarations.
+* BREAKING: Drop using `protected function var_xxx` in `AbstractViewModel` 
+  implementations to define computed variables, in favour of using explicit 
+  property hooks.
+* BREAKING: Drop support for custom `validateDisplayVariables` in
+  `AbstractViewModel` implementations.
 * BREAKING: Drop PageContentView and PageLayoutView interfaces in favour
   of the newer / more generic NestedChildView and NestedParentView.
+* BREAKING: Add strict parameter and return types to all interfaces.
+* BREAKING: Move responsibility for escaping to the renderer, make `raw()`
+  an actual (namespaced) function instead of compiling it out of templates.
+* BREAKING: `AbstractViewModel` no longer has a constructor - `parent::__construct()` calls
+  will need to be removed.
 * Reorganise file structure and move to composer (PSR-4) autoloading instead of Kohana CFS 
 * Upgrade to PHPUnit 12.x
 * Drop support for PHP < 8.4

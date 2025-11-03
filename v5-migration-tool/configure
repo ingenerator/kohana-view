@@ -1,0 +1,133 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+use Ingenerator\KohanaViewV5MigrationTool\KohanaViewV5Migration;
+use PhpParser\BuilderFactory;
+use PhpParser\Node;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Stmt\Return_;
+use PhpParser\NodeTraverser;
+use PhpParser\NodeVisitor\CloningVisitor;
+use PhpParser\NodeVisitorAbstract;
+use PhpParser\ParserFactory;
+use PhpParser\PrettyPrinter\Standard;
+
+error_reporting(\E_ALL);
+ini_set('display_errors', '1');
+set_error_handler(
+    fn ($errno, $errstr, $errfile, $errline) => throw new ErrorException(
+        $errstr, $errno, $errno, $errfile, $errline,
+    ),
+);
+
+new readonly class(__DIR__, getcwd()) {
+    public function __construct(
+        private string $tool_dir,
+        private string $working_dir,
+    ) {
+    }
+
+    public function __invoke(): void
+    {
+        echo "Preparing to run migration in {$this->working_dir} using {$this->tool_dir}\n";
+        $this->run(
+            'composer',
+            'config',
+            'repositories.kohana-view-v5-migration',
+            json_encode([
+                'type' => 'path',
+                'url' => $this->tool_dir,
+            ]),
+        );
+        echo "Installing tool to project\n";
+        $this->run(
+            'composer',
+            'require',
+            '--dev',
+            'ingenerator/kohana-view-v5-migration-tool:*@dev',
+            '--ignore-platform-reqs',
+        );
+
+        echo "Loading project autoloader\n";
+        require_once $this->working_dir.'/vendor/autoload.php';
+
+        // We want to use Rector's own php-parser vendor, as we don't know if the project has it installed directly
+        // This is hacky but it's only for this configuration script
+        echo "Loading Rector preload\n";
+        require_once $this->working_dir.'/vendor/rector/rector/preload.php';
+
+        $rector_config = $this->working_dir.'/rector.php';
+        echo "Updating Rector configuration in $rector_config\n";
+        $this->addSetToRectorConfig($rector_config);
+
+        echo "All done - run vendor/bin/rector to run the migration\n";
+        echo "Remember to revert the composer and rector config changes on completion\n";
+    }
+
+    private function run(string ...$command_parts): void
+    {
+        $command = implode(' ', [
+            escapeshellcmd(array_shift($command_parts)),
+            ...array_map(fn ($p) => escapeshellarg($p), $command_parts),
+            '2>&1',
+        ]);
+        exec($command, $output, $return);
+        if ($return !== 0) {
+            throw new RuntimeException(
+                sprintf(
+                    "Command `%s` failed with code %s:\n\nOutput: %s\n",
+                    $command,
+                    $return,
+                    implode("\n", $output),
+                ),
+            );
+        }
+    }
+
+    private function addSetToRectorConfig(string $rector_config_path): void
+    {
+        $parser = new ParserFactory()->createForNewestSupportedVersion();
+        $printer = new Standard();
+
+        $original_ast = $parser->parse(file_get_contents($rector_config_path));
+        $original_tokens = $parser->getTokens();
+
+        $traverser = new NodeTraverser();
+        $traverser->addVisitor(new CloningVisitor());
+        $traverser->addVisitor(
+            new class extends NodeVisitorAbstract {
+                public function leaveNode(Node $node)
+                {
+                    if ( ! $node instanceof Return_) {
+                        return null;
+                    }
+
+                    $factory = new BuilderFactory();
+                    $node->expr = $factory->methodCall(
+                        $node->expr,
+                        'withSets',
+                        [
+                            new Array_([
+                                new ClassConstFetch(
+                                    new FullyQualified(KohanaViewV5Migration::class),
+                                    'SET_PATH',
+                                ),
+                            ]),
+                        ],
+                    );
+
+                    return $node;
+                }
+            },
+        );
+        $ast = $traverser->traverse($original_ast);
+
+        $config = $printer->printFormatPreserving($ast, $original_ast, $original_tokens);
+
+        assert(file_put_contents($rector_config_path, $config) !== false, 'Write config');
+    }
+}();

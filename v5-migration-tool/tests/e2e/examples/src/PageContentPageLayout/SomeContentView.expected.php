@@ -7,7 +7,7 @@ use Ingenerator\KohanaView\ViewModel\PageLayout\AbstractPageContentView;
 use My\Application\SomeCustomClass;
 
 /**
- * @property-read \Ingenerator\KohanaView\ViewModel\NestedParentView $page
+ * @property-read NestedParentView $page
  */
 class SomeContentView extends AbstractPageContentView
 {

@@ -1,0 +1,36 @@
+<?php
+
+declare(strict_types=1);
+
+use Ingenerator\KohanaView\ViewModel\NestedChildView;
+use Ingenerator\KohanaView\ViewModel\NestedParentView;
+use Ingenerator\KohanaView\ViewModel\PageContentView;
+use Ingenerator\KohanaView\ViewModel\PageLayoutView;
+use Ingenerator\KohanaViewV5MigrationTool\Rector\AddKohanaViewReturnTypesRector;
+use Ingenerator\KohanaViewV5MigrationTool\Rector\DisableCustomVarValidationRector;
+use Ingenerator\KohanaViewV5MigrationTool\Rector\FixPhpDocPropertiesWithoutDollarPrefixRector;
+use Ingenerator\KohanaViewV5MigrationTool\Rector\MigrateComputedPropertiesToAsymmetricVisibilityRector;
+use Ingenerator\KohanaViewV5MigrationTool\Rector\MigrateComputedPropertiesToPropertyHooksRector;
+use Ingenerator\KohanaViewV5MigrationTool\Rector\MigrateDisplayVariablesToNativePropertiesRector;
+use Ingenerator\KohanaViewV5MigrationTool\Rector\UseKohanaViewNewTemplateEscapingRector;
+use Rector\Config\RectorConfig;
+use Rector\Renaming\Rector\Name\RenameClassRector;
+
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->ruleWithConfiguration(
+        RenameClassRector::class,
+        [
+            PageContentView::class => NestedChildView::class,
+            PageLayoutView::class => NestedParentView::class,
+        ],
+    );
+    $rectorConfig->rules([
+        FixPhpDocPropertiesWithoutDollarPrefixRector::class,
+        MigrateComputedPropertiesToAsymmetricVisibilityRector::class,
+        MigrateComputedPropertiesToPropertyHooksRector::class,
+        MigrateDisplayVariablesToNativePropertiesRector::class,
+        DisableCustomVarValidationRector::class,
+        AddKohanaViewReturnTypesRector::class,
+        UseKohanaViewNewTemplateEscapingRector::class,
+    ]);
+};

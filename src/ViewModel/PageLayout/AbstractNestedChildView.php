@@ -13,7 +13,6 @@ abstract class AbstractNestedChildView extends AbstractViewModel implements Nest
     public function __construct(
         protected NestedParentView $parent_view,
     ) {
-        parent::__construct();
     }
 
     public function getParentView(): NestedParentView

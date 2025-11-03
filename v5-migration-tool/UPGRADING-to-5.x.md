@@ -294,3 +294,10 @@ use function Ingenerator\KohanaView\OutputValue\raw;
 <h1><?=raw($view->label);?> Heading</h1>
 <div><?=$view->content_view;?></div>
 ```
+
+### `AbstractViewModel` no longer has a constructor
+
+Any extending classes will need to remove `parent::__construct()` calls (unless they extend an intermediate class
+that defines a constructor).
+
+The migration tool will attempt to detect and remove these redundant calls.

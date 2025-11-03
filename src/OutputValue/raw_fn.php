@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Ingenerator\KohanaView\OutputValue;
 
-function raw(string $value): UnescapedHtmlSafeString
+function raw(?string $value): UnescapedHtmlSafeString
 {
-    return new UnescapedHtmlSafeString($value);
+    return new UnescapedHtmlSafeString($value ?? '');
 }

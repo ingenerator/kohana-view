@@ -48,7 +48,8 @@
     "require": {
         "composer/installers": "^1.12 || ^2.0",
         "php": "~8.4.0",
-        "ingenerator/kohana-core": "^4.9.0"
+        "ingenerator/kohana-core": "^4.9.0",
+        "psr/cache": "^3.0"
     },
     "require-dev": {
         "kohana/koharness": "dev-master",
@@ -57,7 +58,8 @@
         "phpunit/phpunit": "^12.3.15",
         "friendsofphp/php-cs-fixer": "^3.88",
         "rector/rector": "^2.2",
-        "ingenerator/risky-rector-rules": "dev-main@dev"
+        "ingenerator/risky-rector-rules": "dev-main@dev",
+        "symfony/cache": "^7.3"
     },
     "suggest": {
         "ingenerator/kohana-dependencies": "Dependency Injection container for Kohana 3.x"

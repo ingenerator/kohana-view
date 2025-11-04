@@ -1,5 +1,9 @@
 ## Unreleased
 
+## 5.0.0-alpha2 (2025-11-04)
+
+* Refactor parsing AbstractViewModel schemas and support optionally caching them in a psr/cache implementation.
+
 ## 5.0.0-alpha (2025-11-03)
 
 * Add a migration tool to assist with upgrading existing projects to 5.x

@@ -44,6 +44,24 @@ project. Kohana-view doesn't require one in particular, but comes with configura
 using that container, so if you're using something else (really, don't try and do it all inline in PHP) then fetch
 dependencies from your container however required.
 
+### Caching ViewModel schemas
+
+The library needs to parse your AbstractViewModel classes to validate the variables passed to display (see below).
+
+While it will work "out of the box", we strongly recommend registering a suitable psr/cache implementation to avoid any
+performance issues from the use of Reflection at runtime. For example, you could `composer require symfony/cache` and 
+add something like this to your bootstrap:
+
+```php
+// bootstrap.php
+\Ingenerator\KohanaView\ViewModel\DisplaySchema\ViewDisplaySchemaProviderInstance::init(
+    cache: match(Kohana::$environment) {
+        Kohana::DEVELOPMENT => new \Symfony\Component\Cache\Adapter\ArrayAdapter(),
+        default => new \Symfony\Component\Cache\Adapter\ApcuAdapter(),
+    }
+);
+```
+
 Creating your first view
 ------------------------
 

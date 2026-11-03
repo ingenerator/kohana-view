@@ -2,7 +2,7 @@
 
 // Set up temporary directories for the app
 // These need to exist and be writable, though we do very little with them
-(function () {
+(function (): void {
     $mkdir = function (string $dir): string {
         if ( ! mkdir($dir, recursive: TRUE)) {
             throw new RuntimeException('Could not create temporary directory in '.$dir);

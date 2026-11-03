@@ -87,7 +87,7 @@ class DropAbstractViewModelConstructorRector extends AbstractRector
         }
 
         $parentReflection = $classReflection->getParentClass();
-        while ($parentReflection) {
+        while ($parentReflection instanceof ClassReflection) {
             if ($parentReflection->hasMethod('__construct')) {
                 // A parent class does have a constructor so we need to call it
                 return true;

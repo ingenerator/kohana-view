@@ -100,7 +100,7 @@ class ViewDisplayPropertyFactory
         $isCached = false;
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable(
             $varMethod->stmts,
-            function (Node $subNode) use ($propertyName, &$isCached): ?Variable {
+            static function (Node $subNode) use ($propertyName, &$isCached): ?Variable {
                 if (
                     $subNode instanceof ArrayDimFetch
                     && $subNode->var instanceof PropertyFetch

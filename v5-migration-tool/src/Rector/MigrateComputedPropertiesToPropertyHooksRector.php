@@ -115,7 +115,7 @@ final class MigrateComputedPropertiesToPropertyHooksRector extends AbstractRecto
     {
         $varMethods = array_filter(
             $class->getMethods(),
-            fn (ClassMethod $m): bool => str_starts_with($m->name->toString(), 'var_'),
+            static fn (ClassMethod $m): bool => str_starts_with($m->name->toString(), 'var_'),
         );
         $candidateMethods = [];
         foreach ($varMethods as $varMethod) {
@@ -136,7 +136,7 @@ final class MigrateComputedPropertiesToPropertyHooksRector extends AbstractRecto
         $varMethodsCalled = [];
         $this->traverseNodesWithCallable(
             $classNode->stmts,
-            function (Node $subnode) use (&$varMethodsCalled): void {
+            static function (Node $subnode) use (&$varMethodsCalled): void {
                 if (
                     $subnode instanceof MethodCall
                     && str_starts_with($subnode->name->toString(), 'var_')
@@ -155,7 +155,7 @@ final class MigrateComputedPropertiesToPropertyHooksRector extends AbstractRecto
 
         return array_filter(
             $classNode->getMethods(),
-            fn (ClassMethod $classMethod): bool => str_starts_with($classMethod->name->toString(), 'var_')
+            static fn (ClassMethod $classMethod): bool => str_starts_with($classMethod->name->toString(), 'var_')
                 && ! in_array($classMethod->name->toString(), $varMethodsCalled, true)
                 && ! $classMethod->isPublic(),
         );

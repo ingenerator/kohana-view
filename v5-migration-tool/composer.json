@@ -2,7 +2,8 @@
   "name": "ingenerator/kohana-view-v5-migration-tool",
   "require": {
     "php": "8.4.*",
-    "rector/rector": "^2.2",
+    "rector/rector": "2.2.7",
+    "phpstan/phpstan": "2.1.32",
     "symfony/polyfill-php85": "^1.33"
   },
   "require-dev": {

@@ -65,7 +65,7 @@ class EndToEndWithExampleFilesTest extends TestCase
 
     private static function initWorkingDirectory(): void
     {
-        // self::$fs->remove(self::$working_dir);
+        self::$fs->remove(self::getWorkingDir());
         foreach (self::providerExampleFiles() as $file) {
             self::$fs->copy($file['source_path'], $file['working_path'], overwriteNewerFiles: true);
         }

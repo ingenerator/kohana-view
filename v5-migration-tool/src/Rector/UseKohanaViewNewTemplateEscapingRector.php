@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Ingenerator\KohanaViewV5MigrationTool\Rector;
 
-use Override;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\FuncCall;
@@ -14,16 +13,15 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\InlineHTML;
-use PhpParser\Node\Stmt\Namespace_;
-use Rector\PhpParser\Node\CustomNode\FileWithoutNamespace;
+use Rector\PhpParser\Node\FileNode;
 use Rector\PostRector\Collector\UseNodesToAddCollector;
 use Rector\Rector\AbstractRector;
 use Rector\StaticTypeMapper\PhpParser\FullyQualifiedNodeMapper;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
+use RuntimeException;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
-use function assert;
 use function count;
 
 class UseKohanaViewNewTemplateEscapingRector extends AbstractRector
@@ -59,40 +57,47 @@ class UseKohanaViewNewTemplateEscapingRector extends AbstractRector
         );
     }
 
-    public function beforeTraverse(array $nodes): ?array
+    private function doesFileStartWithPhp(FileNode $node): bool
     {
-        $this->fileStartsWithPhp = $this->doesFileStartWithPhp($nodes);
-        $this->hasAlreadyAddedImport = false;
-
-        return parent::beforeTraverse($nodes);
-    }
-
-    private function doesFileStartWithPhp(array $nodes): bool
-    {
-        if ($nodes === []) {
+        if ($node->stmts === []) {
             return false;
         }
 
-        $firstNode = array_first($nodes);
-        if ($firstNode instanceof Namespace_) {
-            return true;
-        }
+        $firstNode = array_first($node->stmts);
 
-        if ($firstNode instanceof FileWithoutNamespace) {
-            return $firstNode->stmts !== [] && ! array_first($firstNode->stmts) instanceof InlineHTML;
-        }
-
-        return false;
+        return ! $firstNode instanceof InlineHTML;
     }
 
     public function getNodeTypes(): array
     {
-        return [FuncCall::class];
+        return [
+            FileNode::class,
+            FuncCall::class,
+        ];
     }
 
+    /**
+     * @param FileNode|FuncCall $node
+     */
     public function refactor(Node $node): ?Node
     {
-        assert($node instanceof FuncCall);
+        return match (true) {
+            $node instanceof FileNode => $this->refactorFileNode($node),
+            $node instanceof FuncCall => $this->refactorFuncCallNode($node),
+            default => throw new RuntimeException('Unexpected node type: '.$node::class),
+        };
+    }
+
+    private function refactorFileNode(FileNode $node): ?Node
+    {
+        $this->hasAlreadyAddedImport = false;
+        $this->fileStartsWithPhp = $this->doesFileStartWithPhp($node);
+
+        return $node;
+    }
+
+    private function refactorFuncCallNode(FuncCall $node): ?Node
+    {
         if ( ! $node->name instanceof Name) {
             return null;
         }

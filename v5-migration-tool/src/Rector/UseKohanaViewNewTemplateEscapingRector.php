@@ -59,7 +59,6 @@ class UseKohanaViewNewTemplateEscapingRector extends AbstractRector
         );
     }
 
-    #[Override]
     public function beforeTraverse(array $nodes): ?array
     {
         $this->fileStartsWithPhp = $this->doesFileStartWithPhp($nodes);

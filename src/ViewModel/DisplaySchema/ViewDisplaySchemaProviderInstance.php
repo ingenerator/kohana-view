@@ -47,7 +47,7 @@ final class ViewDisplaySchemaProviderInstance
         self::$provider ??= new CoreDisplaySchemaProvider();
 
         $cached = self::$cache?->getItem('vds.'.hash('sha1', $model_class));
-        if ($cached && $cached->isHit()) {
+        if ($cached instanceof CacheItemInterface && $cached->isHit()) {
             return $cached->get();
         }
 

@@ -1,5 +1,7 @@
 ## Unreleased
 
+* Support PHP 8.5 and 8.6 
+
 ## 5.0.0-alpha2 (2025-11-04)
 
 * Refactor parsing AbstractViewModel schemas and support optionally caching them in a psr/cache implementation.

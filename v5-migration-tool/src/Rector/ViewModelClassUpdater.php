@@ -48,7 +48,7 @@ final readonly class ViewModelClassUpdater
 
     private function insertNewProperties(Class_ $class, Property ...$newProperties): void
     {
-        $firstMethodIndex = array_find_key($class->stmts, fn (Node $n): bool => $n instanceof ClassMethod);
+        $firstMethodIndex = array_find_key($class->stmts, static fn (Node $n): bool => $n instanceof ClassMethod);
 
         if ($firstMethodIndex === null) {
             // No methods in this view class - just insert the new properties at the end of the class

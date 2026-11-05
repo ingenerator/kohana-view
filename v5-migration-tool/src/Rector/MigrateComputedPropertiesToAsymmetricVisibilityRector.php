@@ -118,7 +118,7 @@ final class MigrateComputedPropertiesToAsymmetricVisibilityRector extends Abstra
     {
         $varMethods = array_filter(
             $class->getMethods(),
-            fn (ClassMethod $m): bool => str_starts_with($m->name->toString(), 'var_'),
+            static fn (ClassMethod $m): bool => str_starts_with($m->name->toString(), 'var_'),
         );
         $candidateMethods = [];
         foreach ($varMethods as $varMethod) {

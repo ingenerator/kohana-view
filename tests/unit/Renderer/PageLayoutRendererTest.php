@@ -19,7 +19,7 @@ use test\mock\ViewModel\PageLayout\DummyPageContentView;
 use test\mock\ViewModel\PageLayout\DummyPageLayoutView;
 use UnexpectedValueException;
 
-use function spl_object_hash;
+use function spl_object_id;
 
 class PageLayoutRendererTest extends TestCase
 {
@@ -173,14 +173,14 @@ class SimpleRendererStub implements Renderer
     public function registerViews($views): void
     {
         foreach ($views as $key => $view) {
-            $hash = spl_object_hash($view);
+            $hash = spl_object_id($view);
             $this->expected_views[$hash] = $key;
         }
     }
 
     public function render(ViewModel $view): string
     {
-        $hash = spl_object_hash($view);
+        $hash = spl_object_id($view);
         Assert::assertArrayHasKey(
             $hash,
             $this->expected_views,

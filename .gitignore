@@ -1,4 +1,5 @@
 /composer.lock
+/patches.lock.json
 /vendor
 /modules
 .phpunit.result.cache

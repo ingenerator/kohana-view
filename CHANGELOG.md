@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 5.0.0 (2026-11-10)
+
 * Support PHP 8.5 and 8.6 
 
 ## 5.0.0-alpha2 (2025-11-04)

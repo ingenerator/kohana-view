@@ -32,6 +32,8 @@ use function ob_get_level;
 use function spl_object_id;
 use function uniqid;
 
+use const PHP_VERSION_ID;
+
 class HTMLRendererTest extends TestCase
 {
     protected TemplateManager $template_manager;
@@ -159,7 +161,13 @@ class HTMLRendererTest extends TestCase
         $subject = $this->newSubject();
 
         $this->expectException(ErrorException::class);
-        $this->expectExceptionMessage('path/to/undefined/file');
+        if (PHP_VERSION_ID < 80600) {
+            $this->expectExceptionMessage('path/to/undefined/file');
+        } else {
+            $this->expectExceptionMessage(
+                'include(): Failed to open stream: "org\bovigo\vfs\vfsStreamWrapper::stream_open" call failed'
+            );
+        }
         $subject->render($view);
     }
 

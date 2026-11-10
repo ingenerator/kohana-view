@@ -1,10 +1,11 @@
 <?php
 
+declare(strict_types=1);
 
-use PhpCsFixer\Finder;
 use PhpCsFixer\Config;
-use PhpCsFixer\Runner\Parallel\ParallelConfigFactory;
+use PhpCsFixer\Finder;
 use PhpCsFixer\Fixer\Phpdoc\PhpdocSeparationFixer;
+use PhpCsFixer\Runner\Parallel\ParallelConfigFactory;
 
 $finder = new Finder()
     ->in(__DIR__)
@@ -15,17 +16,20 @@ return new Config()
     ->setParallelConfig(ParallelConfigFactory::detect())
     ->setRiskyAllowed(true)
     ->setRules([
-        '@PHP84Migration' => true,
-        '@PHP82Migration:risky' => true,
+        '@PHP8x4Migration' => true,
+        '@PHP8x2Migration:risky' => true,
         '@PHPUnit10x0Migration:risky' => true,
         // --- Initial set taken from Behat/Behat
         '@Symfony' => true,
         '@Symfony:risky' => true,
         'concat_space' => false, // override Symfony
-        'global_namespace_import' => [ //override Symfony
+        'global_namespace_import' => [ // override Symfony
             'import_classes' => true,
             'import_constants' => true,
             'import_functions' => true,
+        ],
+        'declare_strict_types' => [
+            'strategy' => 'add_when_missing',
         ],
         'phpdoc_separation' => [ // override Symfony
             'groups' => [
@@ -34,8 +38,8 @@ return new Config()
                 ...PhpdocSeparationFixer::OPTION_GROUPS_DEFAULT,
             ],
         ],
-        'single_line_throw' => false, //override Symfony
-        'yoda_style' => false, //override Symfony
+        'single_line_throw' => false, // override Symfony
+        'yoda_style' => false, // override Symfony
         // --- Custom inGenerator overrides
         'not_operator_with_space' => true, // ensure space either side of the `!` operator
         'phpdoc_no_alias_tag' => false, // Don't convert `@property-read` to `@property`

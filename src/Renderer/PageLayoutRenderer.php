@@ -59,7 +59,7 @@ class PageLayoutRenderer
 
     protected function shouldUseLayout(): bool
     {
-        return $this->use_layout ?? ! ($this->current_request && $this->current_request->is_ajax());
+        return $this->use_layout ?? ! $this->current_request instanceof Request || ! $this->current_request->is_ajax();
     }
 
     /**

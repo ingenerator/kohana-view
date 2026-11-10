@@ -55,7 +55,7 @@ final class CoreDisplaySchemaProvider implements ViewModelDisplaySchemaProvider
                     count($attributes),
                     $property->getDeclaringClass()->getName(),
                     $property->getName(),
-                    implode(',', array_map(fn (ReflectionAttribute $a): string => $a->getName(), $attributes)),
+                    implode(',', array_map(static fn (ReflectionAttribute $a): string => $a->getName(), $attributes)),
                 ),
             );
         }

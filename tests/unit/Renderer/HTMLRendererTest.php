@@ -29,8 +29,10 @@ use UnexpectedValueException;
 use function error_reporting;
 use function Ingenerator\KohanaView\OutputValue\raw;
 use function ob_get_level;
-use function spl_object_hash;
+use function spl_object_id;
 use function uniqid;
+
+use const PHP_VERSION_ID;
 
 class HTMLRendererTest extends TestCase
 {
@@ -70,9 +72,9 @@ class HTMLRendererTest extends TestCase
     public function test_it_provides_view_as_variable_in_template_scope(): void
     {
         $view = new ViewModelDummy();
-        $this->givenTemplateForViewClass($view, 'View:<?=spl_object_hash($view);?>');
+        $this->givenTemplateForViewClass($view, 'View:<?=spl_object_id($view);?>');
         $this->assertSame(
-            'View:'.spl_object_hash($view),
+            'View:'.spl_object_id($view),
             $this->newSubject()->render($view),
         );
     }
@@ -80,10 +82,10 @@ class HTMLRendererTest extends TestCase
     public function test_it_provides_renderer_as_variable_in_template_scope(): void
     {
         $view = new ViewModelDummy();
-        $this->givenTemplateForViewClass($view, 'Renderer:<?=spl_object_hash($renderer);?>');
+        $this->givenTemplateForViewClass($view, 'Renderer:<?=spl_object_id($renderer);?>');
         $subject = $this->newSubject();
         $this->assertSame(
-            'Renderer:'.spl_object_hash($subject),
+            'Renderer:'.spl_object_id($subject),
             $subject->render($view),
         );
     }
@@ -93,7 +95,7 @@ class HTMLRendererTest extends TestCase
         $view = new ViewModelDummy();
         $this->givenTemplateForViewClass(
             $view,
-            '<?=isset($this) ? \'Unexpected $this: \'.get_class($this).\':\'.spl_object_hash($this) : \'OK, no $this\';?>',
+            '<?=isset($this) ? \'Unexpected $this: \'.get_class($this).\':\'.spl_object_id($this) : \'OK, no $this\';?>',
         );
         $this->assertSame(
             'OK, no $this',
@@ -159,7 +161,13 @@ class HTMLRendererTest extends TestCase
         $subject = $this->newSubject();
 
         $this->expectException(ErrorException::class);
-        $this->expectExceptionMessage('path/to/undefined/file');
+        if (PHP_VERSION_ID < 80600) {
+            $this->expectExceptionMessage('path/to/undefined/file');
+        } else {
+            $this->expectExceptionMessage(
+                'include(): Failed to open stream: "org\bovigo\vfs\vfsStreamWrapper::stream_open" call failed'
+            );
+        }
         $subject->render($view);
     }
 
